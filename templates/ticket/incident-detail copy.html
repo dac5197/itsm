@@ -1,0 +1,207 @@
+{% extends 'base\main_header.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Incident</title>
+</head>
+<body>
+    <br>
+    {% block content %}
+        <div class="container">
+            <form id="inc-form" method="POST">
+                {% csrf_token %}
+                <div class="bg-light mb-3">
+                    <div class="card-header">
+                        <h3>{{incident.number}}</h3>
+                        <button class="btn btn-primary" id="save_stay" data-action="save_stay" type="submit"><strong>Save and Stay</strong></button>
+                        <button class="btn btn-primary"data-action="save_return"><strong>Save and Return</strong></button>
+                        <button class="btn btn-info" data-action="resolve"><strong>Resolve</strong></button>
+                    </div>
+                    <div class="card-body">
+
+                        <div class="box-element">
+                            <div class="row">                    
+                                <div class="col-lg-6">
+                                    <label for="number"><strong>Number:</strong></label>
+                                    <div class="form-field">
+                                        {{form.number|add_class:'form-control'}}
+                                        <!--
+                                            <input required class="form-control" type="text" name="number" value="{{incident.number}}" readonly>
+                                        -->
+                                    </div>
+                                    <label for="customer"><strong>Customer:</strong></label>
+                                    <div class="form-field">
+                                        <input required class="form-control" type="text" name="customer" value="{{incident.customer}}">
+                                    </div>
+                                    <label for="phone"><strong>Phone:</strong></label>
+                                    <div class="form-field">
+                                        <input required class="form-control" type="text" name="phone" value="{{incident.customer.phone}}">
+                                    </div>
+                                    <label for="location"><strong>Location:</strong></label>
+                                    <div class="form-field">
+                                        <input required class="form-control" type="text" name="location" value="{{incident.customer.location}}">
+                                    </div>
+                                    <label for="created"><strong>Created:</strong></label>
+                                    <div class="form-field">
+                                        <input required class="form-control" type="text" name="created" value="{{incident.created|date:'m-d-Y H:i'}}" readonly>
+                                    </div>
+                                    <label for="updated"><strong>Updated:</strong></label>
+                                    <div class="form-field">
+                                        <input required class="form-control" type="text" name="updated" value="{{incident.updated|date:'m-d-Y H:i'}}" readonly>
+                                    </div>
+                                    <label for="delegates"><strong>Active:</strong></label>
+                                    <div class="form-field">
+                                        <input required class="form-control" type="text" name="delegates" value="{{incident.active}}" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <label for="status"><strong>Status:</strong></label>
+                                    <div class="form-field">
+                                        <select class="form-control" name="status">
+                                            {% for choice in status_select_choices %}
+                                                {% if choice == incident.status %}
+                                                    <option value="{{choice.id}}" selected>{{choice.value}}</option>
+                                                {% else %}
+                                                    <option value="{{choice.id}}">{{choice.value}}</option>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </select>
+                                        <!--<input required class="form-control" type="text" name="status" value="{{incident.status}}">-->
+                                    </div>
+                                    <label for="priority"><strong>Priority:</strong></label>
+                                    <div class="form-field">
+                                        <select class="form-control" name="priority">
+                                            {% for choice in priority_select_choices %}
+                                                {% if choice == incident.priority %}
+                                                    <option value="{{choice.id}}" selected>{{choice.name}}</option>
+                                                {% else %}
+                                                    <option value="{{choice.id}}">{{choice.name}}</option>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <label for="assign-group"><strong>Assignment Group:</strong></label>
+                                    <div class="form-field">
+                                        <select class="form-control" name="assignment_group">
+                                            {% for choice in assignment_group_select_choices %}
+                                                {% if choice == incident.assignment_group %}
+                                                    <option value="{{choice.id}}" selected>{{choice.name}}</option>
+                                                {% else %}
+                                                    <option value="{{choice.id}}">{{choice.name}}</option>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <label for="assignee"><strong>Assignee:</strong></label>
+                                    <div class="form-field">
+                                        <input required class="form-control" type="text" name="assignee" value="{{incident.assignee}}">
+                                    </div>
+                                    <!-- Work in progress
+                                    <label for="app-system-ci"><strong>App / System CI:</strong></label>
+                                    <div class="form-field">
+                                        <input required class="form-control bg-warning " type="text" name="app-system-ci">
+                                    </div>
+                                    <label for="device-ci"><strong>Device CI:</strong></label>
+                                    <div class="form-field">
+                                        <input required class="form-control bg-warning " type="text" name="device-ci">
+                                    </div>
+                                    <label for="category"><strong>Category:</strong></label>
+                                    <div class="form-field">
+                                        <input required class="form-control bg-warning " type="text" name="category">
+                                    </div>
+                                    <label for="category-sub1"><strong>Subcategory:</strong></label>
+                                    <div class="form-field">
+                                        <input required class="form-control bg-warning " type="text" name="category-sub1">
+                                    </div>
+                                    -->
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="box-element">
+                                    <label for="desc-short"><strong>Short Description:</strong></label>
+                                    <div class="form-field">
+                                        <input required class="form-control" type="text" name="desc_short" value="{{incident.desc_short}}">
+                                    </div>
+                                    <label for="desc-long"><strong>Detailed Description:</strong></label>
+                                    <div class="form-field">
+                                        <textarea class="form-control" rows="4" name="desc_long" value="{{incident.desc_long}}"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="box-element">
+                                    <label for="resolved"><strong>Resolved:</strong></label>
+                                    <div class="form-field">
+                                        <input required class="form-control" type="text" name="resolved" value="{{incident.resolved|date:'m-d-Y H:i'}}" readonly>
+                                    </div>
+                                    <label for="resolution"><strong>Resolution:</strong></label>
+                                    <div class="form-field">
+                                        <textarea class="form-control" rows="4" name="resolution" value="{{incident.resolution}}"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <h3>Work Notes</h3>
+        <script type="text/javascript">
+
+            var form = document.getElementById('inc-form')
+
+            document.getElementById('save_stay').addEventListener('click', function(e) {
+                submitFormData()
+            })
+
+            function submitFormData() {
+
+                var incFormData = {
+                    'ticket_type' : 'Incident',
+                    'customer' : form.customer.value,
+                    'phone' : form.phone.value,
+                    'location' : form.location.value,
+                    'desc_short' : form.desc_short.value,
+                    'desc_long' : form.desc_long.value,
+                    'priority' : form.priority.value,
+                    'status' : form.status.value,
+                    'assignment_group' : form.assignment_group.value,
+                    'assignee' : form.assignee.value,
+                    'closed' : '{{incident.closed}}',
+                    'created' : form.created.value,
+                    'updated' : form.updated.value,
+                    'active' : '{{incident.active}}',
+                    'number' : form.number.value,
+                    'resolved' : form.resolved.value,
+                    'resolution' : form.resolution.value
+                }
+                console.log('inc-form=', incFormData)
+                var url = '/ticket/incident-detail/INC0000028'
+                fetch(url, {
+                    method:'POST',
+                    headers:{
+                        'Content-Type':'application/json',
+                        'X-CSRFToken':csrftoken,
+                    },
+                    body:JSON.stringify({'form':incFormData})
+                })
+                .then((response) => response.json())
+                .then((data) => console.log(data))
+            }
+
+        </script>
+    {% endblock %}
+</body>
+</html>
