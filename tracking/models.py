@@ -15,10 +15,9 @@ class WorkNote(models.Model):
     customer_visible = models.BooleanField(default=False)
     created = models.DateTimeField(default=timezone.now, null=False, blank=False)
     changed_data = models.TextField(null=True, blank=True)
-    changed_json = models.JSONField(null=True, blank=True)
 
 class FieldChange(models.Model):
-    work_note_id = models.ForeignKey(WorkNote, on_delete=models.SET_NULL, null=True, blank=True)
+    work_note_id = models.ForeignKey(WorkNote, on_delete=models.CASCADE, null=True, blank=True)
     field = models.CharField(max_length=25, null=True, blank=True)
     old_value = models.CharField(max_length=100, null=True, blank=True)
     new_value = models.CharField(max_length=100, null=True, blank=True)

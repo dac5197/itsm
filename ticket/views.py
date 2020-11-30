@@ -145,7 +145,7 @@ def incident_detail(request, number):
             work_note = None
 
             if changes:
-                work_note = WorkNote.objects.create(foreign_sysID=instance.sysID, changed_data=changes, changed_json=json.dumps(changes))
+                work_note = WorkNote.objects.create(foreign_sysID=instance.sysID, changed_data=changes)
             
             wn_form = WorkNoteForm(request.POST)
             wn_instance = wn_form.save(commit=False)
