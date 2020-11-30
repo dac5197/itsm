@@ -1,3 +1,4 @@
+from django.core.paginator import Paginator
 from django.shortcuts import get_object_or_404, redirect, render
 from django.http import JsonResponse
 
@@ -10,8 +11,9 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_api.serializers import IncidentSerializer
 
-from .models import *
+from .filters import *
 from .forms import *
+from .models import *
 from .utils import *
 
 from access.models import *
@@ -23,7 +25,9 @@ from tracking.utils import *
 
 def incident(request):
     form = IncidentForm()
-    context = {'form' : form}
+    context = {
+        'form' : form
+        }
 
     return render(request, 'ticket/incident.html', context)
 
@@ -125,3 +129,27 @@ def incident_detail(request, number):
             return redirect('incident-detail', number=number) 
 
     return render(request, 'ticket/incident-detail.html', context)
+
+
+def incident_search(request):
+
+    form = IncidentForm()
+
+    incidents = Incident.objects.all()
+
+    inc_filter = IncidentFilter(request.GET, queryset=incidents)
+    incidents = inc_filter.qs
+
+    paginator = Paginator(incidents, 10)
+
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    context = {
+        'form' : form,
+        'filter' : inc_filter,
+        'incidents' : incidents,
+        'page_obj' : page_obj,
+        }
+
+    return render(request, 'ticket/incident-search.html', context)
