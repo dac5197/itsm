@@ -1,6 +1,8 @@
 from django import forms
 from django.forms import ModelForm
 
+from crispy_forms.helper import FormHelper
+
 from .models import *
 from .utils import *
 
@@ -27,7 +29,7 @@ class IncidentForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
-
+        
         #self.helper.add_input(Submit('submit', 'Submit', css_class='btn-primary'))
         self.helper.form_method = 'POST'
 
@@ -49,13 +51,4 @@ class IncidentForm(forms.ModelForm):
         #Remove select default (empty label) option
         self.fields['priority'].empty_label = None
 
-    def clean(self):
-        cleaned_data = super().clean()
-        status = cleaned_data.get('status')
-        resolved = get_status_resolved(id=1)
-        resolution = cleaned_data.get('resolution')
-
-        if not resolution and status == resolved:
-            msg = forms.ValidationError('This field is required')
-            self.add_error('resolution', msg)
 
