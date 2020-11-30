@@ -203,9 +203,9 @@
 
                                         <table class="table table-sm table-hover w-auto table-borderless">
 
-                                            {% for change in note.fieldchange_set.all %}
+                                            {% for change in note.fieldchange_set.all|dictsort:"field.lower" %}
                                                 <tr>
-                                                    <th scope="row">{{change.field}}</th>
+                                                    <th scope="row">{{change.field|title}}</th>
                                                     <th>:</th>
                                                     <td>{{change.old_value}}</td>
                                                     <td>

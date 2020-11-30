@@ -26,5 +26,8 @@ class Watcher(models.Model):
     ticket_type = models.ForeignKey(TicketType, on_delete=models.SET_NULL, null=True, blank=True)
     watch_fields = ArrayField(models.CharField(max_length=25, default=[], blank=True))
 
+    def __str__(self):
+        return f"Watcher - {self.ticket_type}"
+
 class History(models.Model):
     pass

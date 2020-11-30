@@ -40,10 +40,8 @@ def incident_create(request):
     #Save new incident
     incident.save()
     
-    work_note = WorkNote.objects.create(foreign_sysID=incident.sysID)
-    created_dict = get_created_dict()
-    for key, value in created_dict.items():
-            FieldChange.objects.create(work_note_id=work_note, field=key, old_value=value['old_value'], new_value=value['new_value'])
+    #Create work note
+    work_note = create_work_note(obj=incident, newly_created=True)
 
     inc_detail_url = 'incident-detail/' + incident.number
     return redirect(inc_detail_url)
@@ -78,35 +76,13 @@ def incident_detail(request, number):
         
         
         if form.is_valid():
-            #print("INC form is valid")
-            #print(f"120 inc: {vars(incident2)}")
             instance = form.save(commit=False)
-            #print(f"122 ins: {vars(instance)}")
             instance.ticket_type = TicketType.objects.get(id=1)
-            work_note_changes = get_object_notes(instance, id=1)
-            #print(f"CHANGED: {work_note_changes}")
-            changes = compare_field_changes(work_note_data, work_note_changes)
-
-            work_note = None
-
-            if changes:
-                work_note = WorkNote.objects.create(foreign_sysID=instance.sysID, changed_data=changes)
-            
-            wn_form = WorkNoteForm(request.POST)
-            wn_instance = wn_form.save(commit=False)
-
-            if wn_instance.notes:
-                if work_note == None:
-                    work_note = WorkNote.objects.create(foreign_sysID=instance.sysID) 
-                work_note.notes = wn_instance.notes
-                work_note.customer_visible = wn_instance.customer_visible
-                work_note.save()
-
-            for change, value in changes.items():
-                print(f"change: {change}")
-                print(f"value: {value['old_value']}")
-                FieldChange.objects.create(work_note_id=work_note, field=change, old_value=value['old_value'], new_value=value['new_value'])
+         
+            #Set updated field to NOW            
             instance.updated = timezone.now()
+
+            #Get the resolved status for the ticket 
             status_resolved = get_status_resolved(id=1)
 
             #If ticket was reopened (changed from 'Resolved' to another status), then increment reopened value by 1
@@ -114,30 +90,38 @@ def incident_detail(request, number):
                 instance.reopened += 1
 
             if ('resolve' in request.POST or instance.status == status_resolved) and instance.resolution:
-                print('resolve')
-                #instance.resolution.required = True
-                #form.fields['resolution'].required = True
+                #Resolve ticket if resolve submit button was clicked OR status was set to "resolved" AND text was entered in resolution textbox
                 instance.resolved = timezone.now()
                 instance.status = get_status_resolved(id=1)
                 instance.save()
+
+                #Create work note
+                work_note_changes = get_object_notes(instance, id=1)
+                changes = compare_field_changes(work_note_data, work_note_changes)
+                work_note = create_work_note(obj=instance, request=request, changes=changes)
+
+
                 return redirect('incident-detail', number=number) 
             else:
+                #If ticket is not being resolved, then clear the data from the resolved field
                 if instance.status != get_status_resolved(id=1):
                     instance.resolved = None
             
             instance.save()
 
+            #Create work note
+            work_note_changes = get_object_notes(instance, id=1)
+            changes = compare_field_changes(work_note_data, work_note_changes)
+            work_note = create_work_note(obj=instance, request=request, changes=changes)
+
+            #Redirect url based on submit button
             if 'save_stay' in request.POST:
-                print('save and stay')
                 return redirect('incident-detail', number=number) 
             elif 'save_return' in request.POST:
-                print('save and return')
                 return redirect('incident')
 
         else:
             print(form.errors)
             return redirect('incident-detail', number=number) 
-
-
 
     return render(request, 'ticket/incident-detail.html', context)
