@@ -21,16 +21,63 @@
                 <div class="box-element">
                     <form method="GET">
                         <div class="row">                    
-                            <div class="col-lg-12">
-                                
-                                {{filter.form}}
-                                    
-                                
+                            <div class="col-lg-4">
+                                <label for="{{filter.form.number.id_for_label}}"><strong>{{filter.form.number.label}}:</strong></label>
+                                <div class="form-field">
+                                    {{filter.form.number|add_class:'form-control'}}
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <label for="{{filter.form.status.id_for_label}}"><strong>{{filter.form.status.label}}:</strong></label>
+                                <div class="form-field">
+                                    {{filter.form.status|add_class:'form-control'}}
+                                </div>
+                            </div> 
+                            <div class="col-lg-4">
+                                <label for="{{filter.form.priority.id_for_label}}"><strong>{{filter.form.priority.label}}:</strong></label>
+                                <div class="form-field">
+                                    {{filter.form.priority|add_class:'form-control'}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">   
+                            <div class="col-lg-7">
+                                <label for="{{filter.form.customer.id_for_label}}"><strong>{{filter.form.customer.label}}:</strong></label>
+                                <div class="form-field">
+                                    {{filter.form.customer|add_class:'form-control'}}
+                                </div>
+                            </div>
+                            <div class="col-lg-2">
+                                <label for="{{filter.form.phone.id_for_label}}"><strong>{{filter.form.phone.label}}:</strong></label>
+                                <div class="form-field">
+                                    {{filter.form.phone|add_class:'form-control'}}
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <label for="{{filter.form.location.id_for_label}}"><strong>{{filter.form.location.label}}:</strong></label>
+                                <div class="form-field">
+                                    {{filter.form.location|add_class:'form-control'}}
+                                </div>
                             </div>
                         </div>
                         <div class="row">                    
+                            <div class="col-lg-4">
+                                <label for="{{filter.form.assignment_group.id_for_label}}"><strong>{{filter.form.assignment_group.label}}:</strong></label>
+                                <div class="form-field">
+                                    {{filter.form.assignment_group|add_class:'form-control'}}
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <label for="{{filter.form.assignee.id_for_label}}"><strong>{{filter.form.assignee.label}}:</strong></label>
+                                <div class="form-field">
+                                    {{filter.form.assignee|add_class:'form-control'}}
+                                </div>
+                            </div> 
+                        </div>
+                        <div class="row">                    
                             <div class="col-lg-12">
-                                <button class="btn btn-primary" name="search" value="search" type="submit">Search</button>
+                                <button class="btn btn-primary" name="search" value="search" type="submit"><strong>Search</strong></button>
+                                <a class="btn btn-info" href="{% url 'incident-search' %}"><strong>Clear</strong></a>
                             </div>
                         </div>
                     </form>
@@ -39,15 +86,29 @@
                 <div class="box-element">
                     <div class="row">                    
                         <div class="col-lg-12">
-                            <table class="table table-sm table-hover w-auto">
+                            <table class="table table-sm table-hover w-auto border-bottom">
                                 <tr>
                                     <th>Number</th>
                                     <th>Status</th>
+                                    <th>Priority</th>
+                                    <th>Created</th>
+                                    <th>Resolved</th>
+                                    <th>Customer</th>
+                                    <th>Assignment Group</th>
+                                    <th>Assignee</th>
+                                    <th>Desc Short</th>
                                 </tr>
                                 {% for inc in page_obj %}
                                     <tr>
                                         <td><a href="/ticket/incident-detail/{{inc.number}}">{{inc.number}}</a></td>
                                         <td>{{inc.status}}</td>
+                                        <td>{{inc.priority}}</td>
+                                        <td>{{inc.created}}</td>
+                                        <td>{{inc.resolved}}</td>
+                                        <td>{{inc.customer}}</td>
+                                        <td>{{inc.assignment_group}}</td>
+                                        <td>{{inc.assignee}}</td>
+                                        <td>{{inc.desc_short}}</td>
                                     </tr>
                                 {% endfor %}
                             </table>

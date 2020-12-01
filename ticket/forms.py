@@ -40,6 +40,7 @@ class IncidentForm(forms.ModelForm):
 
         #Set values for status select fields from database
         self.fields['status'].choices = get_status_choices(id=1)
+        self.fields['priority'].choices = get_priority_choices()
         self.fields['assignment_group'].choices = get_assignment_group_choices()
 
         #Set required fields

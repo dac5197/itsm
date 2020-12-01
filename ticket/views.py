@@ -134,11 +134,15 @@ def incident_detail(request, number):
 def incident_search(request):
 
     form = IncidentForm()
-
     incidents = Incident.objects.all()
-
     inc_filter = IncidentFilter(request.GET, queryset=incidents)
-    incidents = inc_filter.qs
+
+    #Set search results to filter queryset if search args passed in GET
+    #Else set queryset to blank
+    if request.GET:
+        incidents = inc_filter.qs
+    else:
+        incidents = ''
 
     paginator = Paginator(incidents, 10)
 

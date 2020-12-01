@@ -45,7 +45,7 @@ def get_status_choices(id):
 
 def get_priority_choices():
     priorities = Priority.objects.all().order_by('value')
-    choices = [(priority.id, priority.value) for priority in priorities]
+    choices = [(priority.id, priority.name) for priority in priorities]
     return choices
 
 def get_assignment_group_choices():

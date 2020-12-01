@@ -5,6 +5,7 @@ from django.utils import timezone
 from base.models import SysID
 from access.models import Customer, Group, Location
 
+#Increment ticket numbers when object is created
 def increment_ticket_number(prefix, id):
     number = prefix + str(id).zfill(7)
     return number
