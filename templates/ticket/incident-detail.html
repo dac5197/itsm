@@ -1,0 +1,274 @@
+{% extends 'base\main_header.html' %}
+{% load static %}
+{% load tracking_tags %}
+{% load widget_tweaks %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Incident</title>
+</head>
+<body>
+    <br>
+    {% block content %}
+        <form id="inc-form" method="POST">
+            <div class="container bg-light mb-3 shadow">
+            {% csrf_token %}
+                <div class="card-header">
+                    <h3>{{incident.number}}</h3>
+                    <button class="btn btn-primary" name="save_stay" value="save_stay" type="submit"><strong>Save and Stay</strong></button>
+                    <button class="btn btn-primary" name="save_return" value="save_return" type="submit"><strong>Save and Return</strong></button>
+                    <button class="btn btn-info" name="resolve" value="resolve" type="submit"><strong>Resolve</strong></button>
+                </div>
+                <div class="card-body">
+
+                    <div class="box-element">
+                        <div class="row">                    
+                            <div class="col-lg-6">
+                                <label for="{{form.number.id_for_label}}"><strong>{{form.number.label}}:</strong></label>
+                                <div class="form-field">
+                                    {{form.number|add_class:'form-control'}}
+                                </div>
+                                <label for="{{form.customer.id_for_label}}"><strong>{{form.customer.label}}:</strong></label>
+                                <div class="form-field">
+                                    {{form.customer|add_class:'form-control'}}
+                                </div>
+                                <label for="{{form.phone.id_for_label}}"><strong>{{form.phone.label}}:</strong></label>
+                                <div class="form-field">
+                                    {{form.phone|add_class:'form-control'}}
+                                </div>
+                                <label for="{{form.location.id_for_label}}"><strong>{{form.location.label}}:</strong></label>
+                                <div class="form-field">
+                                    {{form.location|add_class:'form-control'}}
+                                </div>
+                                <label for="{{form.created.id_for_label}}"><strong>{{form.created.label}}:</strong></label>
+                                <div class="form-field">
+                                    {{form.created|add_class:'form-control'}}
+                                </div>
+                                <label for="{{form.updated.id_for_label}}"><strong>{{form.updated.label}}:</strong></label>
+                                <div class="form-field">
+                                    {{form.updated|add_class:'form-control'}}
+                                </div>
+                                <label for="{{form.active.id_for_label}}"><strong>{{form.active.label}}:</strong></label>
+                                <div class="form-field">
+                                    {{form.active|add_class:'form-control'}}
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <label for="{{form.status.id_for_label}}"><strong>{{form.status.label}}:</strong></label>
+                                <div class="form-field">
+                                    {{form.status|add_class:'form-control'}}
+                                </div>
+                                <label for="{{form.priority.id_for_label}}"><strong>{{form.priority.label}}:</strong></label>
+                                <div class="form-field">
+                                    {{form.priority|add_class:'form-control'}}
+                                </div>
+                                <label for="{{form.assignment_group.id_for_label}}"><strong>{{form.assignment_group.label}}:</strong></label>
+                                <div class="form-field">
+                                    {{form.assignment_group|add_class:'form-control'}}
+                                </div>
+                                <label for="{{form.assignee.id_for_label}}"><strong>{{form.assignee.label}}:</strong></label>
+                                <div class="form-field">
+                                    {{form.assignee|add_class:'form-control'}}
+                                </div>
+                                <!-- Work in progress
+                                <label for="app-system-ci"><strong>App / System CI:</strong></label>
+                                <div class="form-field">
+                                    <input required class="form-control bg-warning " type="text" name="app-system-ci">
+                                </div>
+                                <label for="device-ci"><strong>Device CI:</strong></label>
+                                <div class="form-field">
+                                    <input required class="form-control bg-warning " type="text" name="device-ci">
+                                </div>
+                                <label for="category"><strong>Category:</strong></label>
+                                <div class="form-field">
+                                    <input required class="form-control bg-warning " type="text" name="category">
+                                </div>
+                                <label for="category-sub1"><strong>Subcategory:</strong></label>
+                                <div class="form-field">
+                                    <input required class="form-control bg-warning " type="text" name="category-sub1">
+                                </div>
+                                -->
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="box-element">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <label for="{{form.desc_short.id_for_label}}"><strong>{{form.desc_short.label}}:</strong></label>
+                                <div class="form-field">
+                                    {{form.desc_short|add_class:'form-control'}}
+                                </div>
+                                <label for="{{form.desc_long.id_for_label}}"><strong>{{form.desc_long.label}}:</strong></label>
+                                <div class="form-field">
+                                    {{form.desc_long|add_class:'form-control'}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="box-element">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <label for="{{form.resolved.id_for_label}}"><strong>{{form.resolved.label}}:</strong></label>
+                                <div class="form-field">
+                                    {{form.resolved|add_class:'form-control'}}
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <label for="{{form.resolved.id_for_reopened}}"><strong>{{form.reopened.label}}:</strong></label>
+                                <div class="form-field">
+                                    {{form.reopened|add_class:'form-control'}}
+                                </div>
+                            </div>
+                            <div class="col-lg-12">    
+                                <label for="{{form.resolution.id_for_label}}"><strong>{{form.resolution.label}}:</strong></label>
+                                <div class="form-field">
+                                    {{form.resolution|add_class:'form-control'}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>                
+            </div>
+            <div class="container bg-light mb-3 shadow">
+                <div class="card-header">
+                    <h3>Work Notes</h3>
+                </div>
+                <div class="card-body">
+                    <div class="form-field">
+                        <div class="box-element">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class=" form-inline">
+                                    <label for="{{wn_form.customer_visible.id_for_label}}"><strong>{{wn_form.customer_visible.label}}:</strong></label>
+                                    <div class="form-field">
+                                        {{wn_form.customer_visible|add_class:'form-control'}}
+                                    </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <label for="{{wn_form.notes.id_for_label}}"><strong>{{wn_form.notes.label}}:</strong></label>
+                                    <div class="form-field">
+                                        {{wn_form.notes|add_class:'form-control'}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                        {% for note in work_notes %}
+                            {% if note.notes != None  %}
+                                {% if note.customer_visible == True %}
+                                <div class="box-customer-visible">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="note-header">
+                                                <div style="flex: 2"><p>User</p></div>
+                                                <div style="flex: 2"><p>{{note.created}}</p></div>
+                                            </div>
+                                            
+                                                <div style="flex: 2; white-space: pre-wrap; word-break: keep-all;">{{note.notes}}</div>
+                                        
+                                        </div>
+                                    </div>
+                                </div>
+                                <br>
+                                {% else %}
+                                <div class="box-element">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="note-header">
+                                                <div style="flex: 2"><p>User</p></div>
+                                                <div style="flex: 2"><p>{{note.created}}</p></div>
+                                            </div>
+                                            
+                                                <div style="flex: 2; white-space: pre-wrap; word-break: keep-all;">{{note.notes}}</div>
+                                        
+                                        </div>
+                                    </div>
+                                </div>
+                                <br>
+                                {% endif %}
+                            {% endif %}
+                            <div class="box-element">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="note-header">
+                                            <div style="flex: 2"><p>User</p></div>
+                                            <div style="flex: 2"><p>{{note.created}}</p></div>
+                                        </div>
+
+                                        <table class="table table-sm table-hover w-auto table-borderless">
+
+                                            {% for change in note.fieldchange_set.all|dictsort:"field.lower" %}
+                                                <tr>
+                                                    <th scope="row">{{change.field|title}}</th>
+                                                    <th>:</th>
+                                                    <td>{{change.old_value}}</td>
+                                                    <td>
+                                                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-right" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                            <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
+                                                        </svg>
+                                                    </td>
+                                                    <td>{{change.new_value}}</td>
+                                                </tr>
+                                            {% endfor %}
+                                            
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <br>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </form>
+
+
+        <script type="text/javascript">
+
+            var form = document.getElementById('inc-form')
+            form.addEventListener('submit', function(e) {
+                console.log('status:', form.status.value)
+                console.log('resolution:', form.resolution.value)
+                if (form.status.value == '4'  && form.resolution.value == "") {
+                    
+
+                    alert("Resolution is required for resolving ticket.")
+                    e.preventDetault()
+
+                }
+            })
+
+            //Enable expanded textarea
+            //Code copied from: https://alistapart.com/article/expanding-text-areas-made-elegant/
+            function makeExpandingArea(container) {
+                var area = container.querySelector('textarea');
+                var span = container.querySelector('span');
+                if (area.addEventListener) {
+                area.addEventListener('input', function() {
+                    span.textContent = area.value;
+                }, false);
+                span.textContent = area.value;
+                } else if (area.attachEvent) {
+                // IE8 compatibility
+                area.attachEvent('onpropertychange', function() {
+                    span.innerText = area.value;
+                });
+                span.innerText = area.value;
+                }
+            // Enable extra CSS
+            container.className += "active";
+            }var areas = document.querySelectorAll('.expandingArea');
+            var l = areas.length;while (l--) {
+                makeExpandingArea(areas[l]);
+            }
+
+        </script>
+    {% endblock %}
+</body>
+</html>
