@@ -1,7 +1,9 @@
 from django.db.models import Q
+from django.forms import DateInput
 
 import django_filters
-from django_filters import DateFilter, CharFilter, MultipleChoiceFilter
+from django_filters import DateFilter, CharFilter, MultipleChoiceFilter, DateTimeFilter, DateTimeFromToRangeFilter, RangeFilter, DateFilter, NumberFilter
+from django_filters.widgets import RangeWidget
 
 from .models import *
 from .utils import *
@@ -16,6 +18,12 @@ class IncidentFilter(django_filters.FilterSet):
     assignment_group = CharFilter(field_name='assignment_group__name', lookup_expr='icontains', label='Assignment Group')
     customer = CharFilter(method='customer_all_fields_filter')
     location = CharFilter(method='location_all_fields_filter')
+    created = DateFilter(field_name='created', lookup_expr='icontains', label='Created', widget=DateInput(attrs={'type': 'date'}))
+    created_range = DateTimeFromToRangeFilter(field_name='created', lookup_expr='icontains', label='Created Range', widget=RangeWidget(attrs={'type': 'datetime-local'}))
+    resolved = DateFilter(field_name='resolved', lookup_expr='icontains', label='Resolved', widget=DateInput(attrs={'type': 'date'}))
+    resolved_range = DateTimeFromToRangeFilter(field_name='resolved', lookup_expr='icontains', label='Resolved Range', widget=RangeWidget(attrs={'type': 'datetime-local'}))
+    reopened = NumberFilter(field_name='reopened', lookup_expr='exact', label='Reopened')
+    reopened_range = RangeFilter(field_name='reopened', lookup_expr='icontains', label='Reopened Range')
 
     #Set choices for select fields
     status = MultipleChoiceFilter(choices=get_status_choices(id=1))
