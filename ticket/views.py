@@ -1,6 +1,8 @@
 from django.core.paginator import Paginator
+from django.apps import apps
 from django.shortcuts import get_object_or_404, redirect, render
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
+
 
 import datetime
 import json
@@ -78,7 +80,6 @@ def incident_detail(request, number):
     if request.method == 'POST':
         form = IncidentForm(request.POST, instance=incident)        
         
-        
         if form.is_valid():
             instance = form.save(commit=False)
             instance.ticket_type = TicketType.objects.get(id=1)
@@ -134,6 +135,7 @@ def incident_detail(request, number):
 def incident_search(request):
 
     form = IncidentForm()
+
     incidents = Incident.objects.all()
     inc_filter = IncidentFilter(request.GET, queryset=incidents)
 
@@ -149,6 +151,11 @@ def incident_search(request):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
+    if 'export' in request.GET:
+        print(incidents)
+
+        export_query_to_csv(queryset=incidents, qs_type='incident')
+
     context = {
         'form' : form,
         'filter' : inc_filter,
@@ -157,3 +164,68 @@ def incident_search(request):
         }
 
     return render(request, 'ticket/incident-search.html', context)
+
+
+MODEL_APP_DICT = {
+		'tickettype' : 'ticket',
+		'customer' : 'access',
+		'location' : 'access',
+		'priority' : 'ticket', 
+		'status' : 'ticket',
+		'group' : 'access',		
+	}
+
+def export_csv(request):
+    obj_type="incident"
+    timestamp = format(timezone.now(), 'U')
+    file_name = f"{obj_type}-{timestamp}.csv"
+    
+    incidents = Incident.objects.all()
+    inc_filter = IncidentFilter(request.GET, queryset=incidents)
+
+    #Set search results to filter queryset if search args passed in GET
+    #Else set queryset to blank
+    queryset = inc_filter.qs
+    print(queryset)
+    print(queryset.model._meta.fields)
+    
+    #queryset.filter._meta.fields
+    field_names = [field.name for field in queryset.model._meta.fields if not (field.name == 'id' or field.name == 'sysID' or field.name == 'ticket_ptr')]
+    print(field_names)
+    
+    # Create the HttpResponse object with the appropriate CSV header.
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = f'attachment; filename={file_name}'
+
+    writer = csv.writer(response)
+
+    writer.writerow(field_names)  # write the header
+    '''
+    for instance in queryset.values(*field_names):
+        writer.writerow([getattr(instance, field) for field in field_names])
+
+    '''
+    #return response
+    for instance in queryset.values():
+        print(f'instance: {instance}')
+        value_list = []
+        for field, value in instance.items():
+            #print(f'field: {field} --- value: {value}')
+            if not (field == 'id' or field == 'sysID_id' or field == 'ticket_ptr_id'):
+                if '_id' in field:
+                    f_name = field.replace('_id', '')
+                    f_name = f_name.replace('_', '')
+                    f_name = f_name.replace('assignmentgroup', 'group')
+                    f_name = f_name.replace('assignee', 'customer')
+
+                    if value:
+                        model = apps.get_model(MODEL_APP_DICT[f_name], f_name)
+                        obj = model.objects.get(id=value)
+                        value = obj
+
+                value_list.append(value)
+            
+        print(f'value_list: {value_list}')
+        writer.writerow(value_list)
+    return response
+    #return render(request, 'ticket/incident-search.html')

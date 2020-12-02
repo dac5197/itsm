@@ -165,48 +165,68 @@
                         </div>
                     </div>
                     <br>
-                    <!-- Show search count -->
-                    <p>{{page_obj.start_index}} - {{page_obj.end_index}} of {{page_obj.paginator.count}}</p>
-                    <ul class="pagination pagination-sm">
-                        {% if page_obj.has_previous %}
-                            <!-- Show First and Previous links if not on first page -->
-                            <li class="page-item">
-                                <a class="page-link" href="?page=1">&laquo; First</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="?page={{ page_obj.previous_page_number }}">&lsaquo; Previous</a>
-                            </li>
-                        {% endif %}
-                            
-
-                        {% for i in page_obj.paginator.page_range %}
-                            <!-- Show active page -->
-                            {% if page_obj.number == i %}
-                                <li class="page-item active"><a class="page-link" href="#">{{ i }}<span class="sr-only">(current)</span></a></li>
-                            {% else %}
-                                <li class="page-item">
-                                    <!-- Show current page and +-3 pages -->
-                                    {% if i|add:"-3" <= page_obj.number and page_obj.number <= i|add:"3" %}
-                                    <a class="page-link" href="?page={{ i }}">{{ i }}</a>
-
-                                    <!-- Shows every 10th page and the last page -->
-                                    {% elif i|divisibleby:"10" or i == page_obj.paginator.num_pages %}
-                                        <a class="page-link" href="?page={{ i }}">{{ i }}</a>
+                    <div class="row">                    
+                        <div class="col-lg-2">
+                            <!-- Show search count -->
+                            <p>{{page_obj.start_index}} - {{page_obj.end_index}} of {{page_obj.paginator.count}}</p>
+                        </div>
+                    </div>
+                    <div class="row"> 
+                        <div class="col-lg-10">
+                            <div class="d-flex justify-content-start">
+                                <ul class="pagination pagination-sm">
+                                    {% if page_obj.has_previous %}
+                                        <!-- Show First and Previous links if not on first page -->
+                                        <li class="page-item">
+                                            <a class="page-link" href="?page=1">&laquo; First</a>
+                                        </li>
+                                        <li class="page-item">
+                                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}">&lsaquo; Previous</a>
+                                        </li>
                                     {% endif %}
-                                </li>
-                            {% endif %}
-                        {% endfor %}
-                
-                        {% if page_obj.has_next %}
-                            <!-- Show Next and Last links if not on last page -->
-                            <li class="page-item">
-                                <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next &rsaquo;</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last &raquo;</a>
-                            </li>
-                        {% endif %}
-                    </ul>
+                                        
+
+                                    {% for i in page_obj.paginator.page_range %}
+                                        <!-- Show active page -->
+                                        {% if page_obj.number == i %}
+                                            <li class="page-item active"><a class="page-link" href="#">{{ i }}<span class="sr-only">(current)</span></a></li>
+                                        {% else %}
+                                            <li class="page-item">
+                                                <!-- Show current page and +-3 pages -->
+                                                {% if i|add:"-3" <= page_obj.number and page_obj.number <= i|add:"3" %}
+                                                <a class="page-link" href="?page={{ i }}">{{ i }}</a>
+
+                                                <!-- Shows every 10th page and the last page -->
+                                                {% elif i|divisibleby:"10" or i == page_obj.paginator.num_pages %}
+                                                    <a class="page-link" href="?page={{ i }}">{{ i }}</a>
+                                                {% endif %}
+                                            </li>
+                                        {% endif %}
+                                    {% endfor %}
+                            
+                                    {% if page_obj.has_next %}
+                                        <!-- Show Next and Last links if not on last page -->
+                                        <li class="page-item">
+                                            <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next &rsaquo;</a>
+                                        </li>
+                                        <li class="page-item">
+                                            <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last &raquo;</a>
+                                        </li>
+                                    {% endif %}
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-lg-2">
+                            <div class="d-flex justify-content-end">
+                                <form method="GET">
+                                    <a class="btn btn-primary btn-sm" href="{% url 'export-csv' %}"><strong>Export</strong></a>
+                                    <!--
+                                    <button class="btn btn-primary btn-sm" name="export" value="export" type="submit"><strong>Export</strong></button>
+                                    -->
+                                </form>
+                            </div>
+                        </div>
+                    </div>  
                 </div>
             </div>
         </div>
