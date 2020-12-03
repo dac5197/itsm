@@ -146,8 +146,8 @@ def incident_search(request):
     else:
         incidents = ''
 
-    paginator = Paginator(incidents, 10)
-
+    #Setup paginator
+    paginator = Paginator(incidents.order_by('id'), 10)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
@@ -163,8 +163,6 @@ def incident_search(request):
         }
 
     return render(request, 'ticket/incident-search.html', context)
-
-
 
 
 def export_csv(queryset, obj_type):
@@ -206,7 +204,7 @@ def export_csv(queryset, obj_type):
     #Write header row
     writer.writerow(field_names)  
 
-    #Build list for row values for each instance in the queryset
+    #Build and write rows for each instance in the queryset
     for instance in queryset.values():
 
         value_list = []
@@ -231,7 +229,7 @@ def export_csv(queryset, obj_type):
                         obj = model.objects.get(id=value)
                         value = obj
 
-                #Add value to list
+                #Add value to list (row)
                 value_list.append(value)
             
         #Write row
