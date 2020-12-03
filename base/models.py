@@ -18,3 +18,8 @@ class SysID(models.Model):
 class Attachment(models.Model):
     foreign_sysID = models.ForeignKey(SysID, on_delete=models.CASCADE, null=True, blank=True)
     document = models.FileField(upload_to='attachments/')
+    created = models.DateTimeField(auto_now_add=True)
+
+    @property
+    def doc_name(self):
+        return os.path.basename(self.file.name)
