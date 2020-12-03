@@ -10,7 +10,7 @@ from access.models import Customer, Group, Location
 # Create your models here.
 
 class WorkNote(models.Model):
-    foreign_sysID = models.ForeignKey(SysID, on_delete=models.SET_NULL, null=True, blank=True)
+    foreign_sysID = models.ForeignKey(SysID, on_delete=models.CASCADE, null=False, blank=False)
     notes = models.TextField(null=True, blank=True)
     customer_visible = models.BooleanField(default=False)
     created = models.DateTimeField(default=timezone.now, null=False, blank=False)
