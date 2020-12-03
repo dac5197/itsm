@@ -14,3 +14,7 @@ class SysID(models.Model):
     @classmethod
     def add_new(cls):
         return cls.objects.create().id
+
+class Attachment(models.Model):
+    foreign_sysID = models.ForeignKey(SysID, on_delete=models.CASCADE, null=True, blank=True)
+    document = models.FileField(upload_to='attachments/')
