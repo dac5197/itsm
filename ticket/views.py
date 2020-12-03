@@ -19,6 +19,7 @@ from .models import *
 from .utils import *
 
 from access.models import *
+from base.models import *
 from tracking.forms import *
 from tracking.models import *
 from tracking.utils import *
@@ -69,11 +70,15 @@ def incident_detail(request, number):
     priority_select_choices = get_priority_choices()
     assignment_group_select_choices = get_assignment_group_choices()
 
+    #Get attachments
+    attachments = Attachment.objects.filter(foreign_sysID=incident.sysID).order_by('-id')
+    print(attachments)
     context = {
         'incident' : incident,
         'form' : form,
         'wn_form' : wn_form,
-        'work_notes' : work_notes
+        'work_notes' : work_notes,
+        'attachments' : attachments,
     }
 
     ### POST ###
