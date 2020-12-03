@@ -17,10 +17,20 @@
             <div class="container bg-light mb-3 shadow">
             {% csrf_token %}
                 <div class="card-header">
-                    <h3>{{incident.number}}</h3>
-                    <button class="btn btn-primary" name="save_stay" value="save_stay" type="submit"><strong>Save and Stay</strong></button>
-                    <button class="btn btn-primary" name="save_return" value="save_return" type="submit"><strong>Save and Return</strong></button>
-                    <button class="btn btn-info" name="resolve" value="resolve" type="submit"><strong>Resolve</strong></button>
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="d-flex justify-content-start">
+                                <h3>{{incident.number}}</h3>
+                            </div>
+                        </div>
+                        <div class="col-lg-8">
+                            <div class="d-flex justify-content-end">
+                                <button class="btn btn-primary mx-1" name="save_stay" value="save_stay" type="submit"><strong>Save and Stay</strong></button>
+                                <button class="btn btn-primary mx-1" name="save_return" value="save_return" type="submit"><strong>Save and Return</strong></button>
+                                <button class="btn btn-info mx-1" name="resolve" value="resolve" type="submit"><strong>Resolve</strong></button>
+                            </div>
+                        </div>
+                    </div>  
                 </div>
                 <div class="card-body">
 
