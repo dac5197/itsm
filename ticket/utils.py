@@ -1,4 +1,5 @@
 import csv
+
 from django.utils import timezone
 from django.utils.dateformat import format
 
@@ -93,3 +94,4 @@ def export_query_to_csv(queryset, qs_type='items', **override):
 
         for row in queryset.values(*field_names):
             writer.writerow([field_value(row, field) for field in field_names])
+

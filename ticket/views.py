@@ -151,10 +151,9 @@ def incident_search(request):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
+    #If export button -> export data to csv
     if 'export' in request.GET:
-        print(incidents)
-
-        export_query_to_csv(queryset=incidents, qs_type='incident')
+        return export_csv(queryset=incidents, obj_type='incident')
 
     context = {
         'form' : form,
@@ -166,7 +165,13 @@ def incident_search(request):
     return render(request, 'ticket/incident-search.html', context)
 
 
-MODEL_APP_DICT = {
+
+
+def export_csv(queryset, obj_type):
+
+    #Dictionary of 'model name : app name'
+    #Used for apps.get_model function
+    MODEL_APP_DICT = {
 		'tickettype' : 'ticket',
 		'customer' : 'access',
 		'location' : 'access',
@@ -175,57 +180,63 @@ MODEL_APP_DICT = {
 		'group' : 'access',		
 	}
 
-def export_csv(request):
-    obj_type="incident"
+    #Ignore these fields in queryset
+    EXCLUDE_FIELDS = ['id','sysID','ticket_ptr']
+    EXCLUDE_FIELD_NAMES = ['id','sysID_id','ticket_ptr_id']
+
+    #For forieign keys where the name is different than the model
+    FK_REPLACE_FIELD_NAMES = {
+        'assignment_group' : 'group',
+        'assignee' : 'customer',
+    }
+
+    #Set export filename
     timestamp = format(timezone.now(), 'U')
     file_name = f"{obj_type}-{timestamp}.csv"
-    
-    incidents = Incident.objects.all()
-    inc_filter = IncidentFilter(request.GET, queryset=incidents)
 
-    #Set search results to filter queryset if search args passed in GET
-    #Else set queryset to blank
-    queryset = inc_filter.qs
-    print(queryset)
-    print(queryset.model._meta.fields)
-    
-    #queryset.filter._meta.fields
-    field_names = [field.name for field in queryset.model._meta.fields if not (field.name == 'id' or field.name == 'sysID' or field.name == 'ticket_ptr')]
-    print(field_names)
-    
-    # Create the HttpResponse object with the appropriate CSV header.
+    #Get field names
+    #Ignore field names in EXCLUDE_FIELDS list
+    field_names = [field.name for field in queryset.model._meta.fields if not (field.name in EXCLUDE_FIELDS)]
+
+    # Create the HttpResponse object with CSV header.
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = f'attachment; filename={file_name}'
-
     writer = csv.writer(response)
 
-    writer.writerow(field_names)  # write the header
-    '''
-    for instance in queryset.values(*field_names):
-        writer.writerow([getattr(instance, field) for field in field_names])
+    #Write header row
+    writer.writerow(field_names)  
 
-    '''
-    #return response
+    #Build list for row values for each instance in the queryset
     for instance in queryset.values():
-        print(f'instance: {instance}')
+
         value_list = []
         for field, value in instance.items():
-            #print(f'field: {field} --- value: {value}')
-            if not (field == 'id' or field == 'sysID_id' or field == 'ticket_ptr_id'):
-                if '_id' in field:
-                    f_name = field.replace('_id', '')
-                    f_name = f_name.replace('_', '')
-                    f_name = f_name.replace('assignmentgroup', 'group')
-                    f_name = f_name.replace('assignee', 'customer')
 
+            #Ignore fields in the EXCLUDE_FIELD_NAMES dict
+            if not (field in EXCLUDE_FIELD_NAMES):
+                #If value in a foriegn key (ends with '_id')
+                if '_id' in field:
+
+                    #Remove '_id' from end of string
+                    f_name = field.replace('_id', '')
+                    
+                    #If field name is different than the model name, then replace it
+                    if f_name in FK_REPLACE_FIELD_NAMES:
+                        f_name = f_name.replace(f_name, FK_REPLACE_FIELD_NAMES[f_name])
+
+                    #Get value from model
                     if value:
+                        f_name = f_name.replace('_', '')
                         model = apps.get_model(MODEL_APP_DICT[f_name], f_name)
                         obj = model.objects.get(id=value)
                         value = obj
 
+                #Add value to list
                 value_list.append(value)
             
-        print(f'value_list: {value_list}')
+        #Write row
         writer.writerow(value_list)
+
     return response
-    #return render(request, 'ticket/incident-search.html')
+    
+

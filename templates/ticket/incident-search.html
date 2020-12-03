@@ -14,12 +14,13 @@
     {% block content %}
         <div class="container bg-light mb-3 shadow">
         {% csrf_token %}
+        <form method="GET">
             <div class="card-header">
                 <h3>Incident Search</h3>
             </div>
             <div class="card-body">
                 <div class="box-element">
-                    <form method="GET">
+                    
                         <div class="row">                    
                             <div class="col-lg-4">
                                 <label for="{{filter.form.number.id_for_label}}"><strong>{{filter.form.number.label}}:</strong></label>
@@ -128,7 +129,7 @@
                                 <a class="btn btn-info" href="{% url 'incident-search' %}"><strong>Clear</strong></a>
                             </div>
                         </div>
-                    </form>
+                    
                 </div>
                 <br>
                 <div class="box-element">
@@ -218,18 +219,15 @@
                         </div>
                         <div class="col-lg-2">
                             <div class="d-flex justify-content-end">
-                                <form method="GET">
-                                    <a class="btn btn-primary btn-sm" href="{% url 'export-csv' %}"><strong>Export</strong></a>
-                                    <!--
-                                    <button class="btn btn-primary btn-sm" name="export" value="export" type="submit"><strong>Export</strong></button>
-                                    -->
-                                </form>
+                                <button class="btn btn-primary btn-sm" name="export" value="export" type="submit"><strong>Export</strong></button>
                             </div>
                         </div>
                     </div>  
                 </div>
             </div>
+        </form>
         </div>
+    
     {% endblock %}
 </body>
 </html>
