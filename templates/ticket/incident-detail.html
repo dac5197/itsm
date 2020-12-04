@@ -149,7 +149,7 @@
                     </div>
                 </div>                
             </div>
-            
+
             <!--
                 Attachments
             -->
@@ -187,9 +187,9 @@
                             <td>
                                 <button class="btn btn-outline-danger btn-sm remove-attachment" id="remove-attachment" name="remove" value="remove" 
                                 data-toggle="modal" data-target="#RemoveAttachmentModalCenter" 
-                                data-attachmentid="{{attachment.id}}" data-attachmentname="{{attachment.doc_name}}" data-ticketnumber="{{incident.number}}"
+                                data-attachmentid="{{attachment.id}}" data-attachmentname="{{attachment.doc_name}}" data-ticketnumber="{{incident.number}}" data-url="incident-detail"
                                 type="button" title="Remove"
-                                onclick="removeAttachment(this.getAttribute('data-attachmentid'), this.getAttribute('data-attachmentname'), this.getAttribute('data-ticketnumber'))">
+                                onclick="removeAttachment(this.getAttribute('data-attachmentid'), this.getAttribute('data-attachmentname'), this.getAttribute('data-ticketnumber'), this.getAttribute('data-url'))">
                                     <svg font-size="large" width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-x" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                                         <path fill-rule="evenodd" d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
                                     </svg>
@@ -364,9 +364,9 @@
             //Get attachment id, attachment name, and ticket number from link click
             //Set remove attachment model body to show filename
             //Set the 'Continue' button link parameters with attachment id and ticket number
-            function removeAttachment(attachmentID, attachmentName, ticketNumber) {
+            function removeAttachment(attachmentID, attachmentName, number, url) {
                 document.getElementById('remove-attachment-filename').innerText = attachmentName
-                document.getElementById('remove-attachment-continue').href = '/remove-attachment/'+attachmentID+'/'+ticketNumber
+                document.getElementById('remove-attachment-continue').href = '/remove-attachment/'+attachmentID+'/'+number+'/'+url
             }
 
             //Make Resolution field required when resolving ticket by either setting Status to Resolved or clicking on the Resolved button

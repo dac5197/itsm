@@ -85,3 +85,4 @@ def add_attachment(request, obj):
         Attachment.objects.create(foreign_sysID=obj.sysID, document=attachment_instance.document)
         attachment_wn_dict = {'Attachments': {'old_value': 'Add', 'new_value': attachment_instance}}
         create_work_note(obj=obj, changes=attachment_wn_dict, attachment=True)
+

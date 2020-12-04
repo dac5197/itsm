@@ -4,6 +4,8 @@ from django.shortcuts import render, redirect
 
 from .models import *
 
+from tracking.utils import create_work_note
+
 # Create your views here.
 
 def home(request):
@@ -14,7 +16,7 @@ def create_sysid(request):
     return sys_id
 
 #Remove attachment from ticket:
-def remove_attachment(request, id, number):
+def remove_attachment(request, id, number, url):
     attachment = Attachment.objects.get(id=id)
     
     #Delete attachment from media/attachments
@@ -23,8 +25,13 @@ def remove_attachment(request, id, number):
     else:
         print("The file does not exist") 
 
+    #Create work note
+    #attachment_wn_dict = {'Attachments': {'old_value': 'Remove', 'new_value': attachment.doc_name}}
+    #create_work_note(obj=obj, changes=attachment_wn_dict, attachment=True)
+
     #Delete attachment object
     attachment.delete()
 
     #Then redirect back to ticket
-    return redirect('incident-detail', number=number) 
+    return redirect(url, number=number) 
+
