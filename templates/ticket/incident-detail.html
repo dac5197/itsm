@@ -28,7 +28,7 @@
                                 <button class="btn btn-primary mx-1" name="save_stay" value="save_stay" type="submit"><strong>Save and Stay</strong></button>
                                 <button class="btn btn-primary mx-1" name="save_return" value="save_return" type="submit"><strong>Save and Return</strong></button>
                                 <button class="btn btn-info mx-1" name="resolve" value="resolve" type="submit"><strong>Resolve</strong></button>
-                                <button class="btn btn-secondary mx-1" name="attach" value="attach" type="submit">
+                                <button class="btn btn-secondary mx-1" name="attach" value="attach" data-toggle="modal" data-target="#exampleModalCenter">
                                     <svg font-size="x-large" width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-paperclip" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                                         <path fill-rule="evenodd" d="M4.5 3a2.5 2.5 0 0 1 5 0v9a1.5 1.5 0 0 1-3 0V5a.5.5 0 0 1 1 0v7a.5.5 0 0 0 1 0V3a1.5 1.5 0 1 0-3 0v9a2.5 2.5 0 0 0 5 0V5a.5.5 0 0 1 1 0v7a3.5 3.5 0 1 1-7 0V3z"/>
                                     </svg>
@@ -274,6 +274,27 @@
             </div>
         </form>
 
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body">
+                ...
+                </div>
+                <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+            </div>
+        </div>
+    
 
         <script type="text/javascript">
 
