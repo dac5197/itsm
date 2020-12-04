@@ -13,6 +13,8 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf import settings
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 
@@ -22,3 +24,8 @@ urlpatterns = [
     path('ticket/', include('ticket.urls')),
     path('rest-api/', include('rest_api.urls')),
 ]
+
+#If DEBUG add media dir for downloads
+#https://www.youtube.com/watch?v=Zx09vcYq1oc
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
