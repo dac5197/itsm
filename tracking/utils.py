@@ -74,14 +74,15 @@ def get_created_dict():
     return created_dict
 
 
-def create_work_note(obj, request=None, changes=None, newly_created=False):
+def create_work_note(obj, request=None, changes=None, newly_created=False, attachment=False):
 
-    if newly_created:
+    if attachment or newly_created:
         #Create work note for newly created ticket
         #Set only change as Status from Blank to Created
         work_note = WorkNote.objects.create(foreign_sysID=obj.sysID)
-        created_dict = get_created_dict()
-        for key, value in created_dict.items():
+        if newly_created:
+            changes = get_created_dict()
+        for key, value in changes.items():
                 FieldChange.objects.create(work_note_id=work_note, field=key, old_value=value['old_value'], new_value=value['new_value'])
     else:
         #Create work note for existing ticket

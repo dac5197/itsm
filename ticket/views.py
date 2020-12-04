@@ -19,6 +19,7 @@ from .models import *
 from .utils import *
 
 from access.models import *
+from base.forms import *
 from base.models import *
 from tracking.forms import *
 from tracking.models import *
@@ -72,19 +73,28 @@ def incident_detail(request, number):
 
     #Get attachments
     attachments = Attachment.objects.filter(foreign_sysID=incident.sysID).order_by('-id')
-    print(attachments)
+    attachment_form = AttachmentForm()
+
     context = {
         'incident' : incident,
         'form' : form,
-        'wn_form' : wn_form,
         'work_notes' : work_notes,
+        'wn_form' : wn_form,
         'attachments' : attachments,
+        'attachment_form' : attachment_form,
     }
 
     ### POST ###
     if request.method == 'POST':
+
         form = IncidentForm(request.POST, instance=incident)        
-        
+
+        #Add attachment to ticket
+        if 'add_attachment' in request.POST:
+
+            add_attachment(request=request, obj=incident)
+            return redirect('incident-detail', number=number)
+
         if form.is_valid():
             instance = form.save(commit=False)
             instance.ticket_type = TicketType.objects.get(id=1)

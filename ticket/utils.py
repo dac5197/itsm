@@ -5,7 +5,10 @@ from django.utils.dateformat import format
 
 from .filters import *
 from .models import *
-  
+
+from base.forms import *
+from base.models import *  
+from tracking.utils import *
 
 def increment_ticket_number(prefix, id):
     number = prefix + str(id).zfill(7)
@@ -95,3 +98,11 @@ def export_query_to_csv(queryset, qs_type='items', **override):
         for row in queryset.values(*field_names):
             writer.writerow([field_value(row, field) for field in field_names])
 
+def add_attachment(request, obj):
+    attachment_form = AttachmentForm(request.POST, request.FILES)
+
+    if attachment_form.is_valid():
+        attachment_instance = attachment_form.save(commit=False)
+        Attachment.objects.create(foreign_sysID=obj.sysID, document=attachment_instance.document)
+        attachment_wn_dict = {'Attachments': {'old_value': 'Add', 'new_value': attachment_instance}}
+        create_work_note(obj=obj, changes=attachment_wn_dict, attachment=True)
