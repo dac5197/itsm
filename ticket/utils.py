@@ -77,27 +77,6 @@ def get_status_resolved(id):
     return status
 
 
-#Export queryset to csv
-#https://stackoverflow.com/a/63228849
-def export_query_to_csv(queryset, qs_type='items', **override):
-    timestamp = format(timezone.now(), 'U')
-
-    file_name = f"{qs_type}-{timestamp}.csv"
-    field_names = [field.name for field in queryset.model._meta.fields]
-    
-    def field_value(row, field_name):
-        if field_name in override.keys():
-            return override[field_name]
-        else:
-            return row[field_name]
-
-    with open(file_name, 'w') as csvfile:
-        writer = csv.writer(csvfile, quoting=csv.QUOTE_ALL, delimiter=',')
-        writer.writerow(field_names)  # write the header
-
-        for row in queryset.values(*field_names):
-            writer.writerow([field_value(row, field) for field in field_names])
-
 def add_attachment(request, obj):
     attachment_form = AttachmentForm(request.POST, request.FILES)
 
