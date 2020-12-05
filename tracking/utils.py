@@ -80,8 +80,13 @@ def create_work_note(sysID, request=None, changes=None, newly_created=False, att
         #Create work note for newly created ticket
         #Set only change as Status from Blank to Created
         work_note = WorkNote.objects.create(foreign_sysID=sysID)
+        
         if newly_created:
             changes = get_created_dict()
+        
+        work_note.changed_data = changes
+        work_note.save()
+
         for key, value in changes.items():
                 FieldChange.objects.create(work_note_id=work_note, field=key, old_value=value['old_value'], new_value=value['new_value'])
     else:

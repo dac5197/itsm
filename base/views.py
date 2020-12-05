@@ -16,7 +16,7 @@ def create_sysid(request):
     return sys_id
 
 #Remove attachment from ticket:
-def remove_attachment(request, id, number, url):
+def remove_attachment(request, id, number, url, sysID):
     attachment = Attachment.objects.get(id=id)
     
     #Delete attachment from media/attachments
@@ -26,8 +26,9 @@ def remove_attachment(request, id, number, url):
         print("The file does not exist") 
 
     #Create work note
-    #attachment_wn_dict = {'Attachments': {'old_value': 'Remove', 'new_value': attachment.doc_name}}
-    #create_work_note(obj=obj, changes=attachment_wn_dict, attachment=True)
+    attachment_wn_dict = {'Attachments': {'old_value': 'Remove', 'new_value': attachment.doc_name}}
+    obj_sysID = SysID.objects.get(sysID=sysID)
+    create_work_note(sysID=obj_sysID, changes=attachment_wn_dict, attachment=True)
 
     #Delete attachment object
     attachment.delete()
