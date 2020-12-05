@@ -75,8 +75,6 @@ def incident_detail(request, number):
     attachments = Attachment.objects.filter(foreign_sysID=incident.sysID).order_by('-id')
     attachment_form = AttachmentForm()
 
-    print(attachments)
-
     context = {
         'incident' : incident,
         'form' : form,
