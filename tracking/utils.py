@@ -74,12 +74,12 @@ def get_created_dict():
     return created_dict
 
 
-def create_work_note(obj, request=None, changes=None, newly_created=False, attachment=False):
+def create_work_note(sysID, request=None, changes=None, newly_created=False, attachment=False):
 
     if attachment or newly_created:
         #Create work note for newly created ticket
         #Set only change as Status from Blank to Created
-        work_note = WorkNote.objects.create(foreign_sysID=obj.sysID)
+        work_note = WorkNote.objects.create(foreign_sysID=sysID)
         if newly_created:
             changes = get_created_dict()
         for key, value in changes.items():
@@ -92,7 +92,7 @@ def create_work_note(obj, request=None, changes=None, newly_created=False, attac
 
         #If data in changes, then create work note for the field changes
         if changes:
-            work_note = WorkNote.objects.create(foreign_sysID=obj.sysID, changed_data=changes)
+            work_note = WorkNote.objects.create(foreign_sysID=sysID, changed_data=changes)
         
             for change, value in changes.items():
                 FieldChange.objects.create(work_note_id=work_note, field=change, old_value=value['old_value'], new_value=value['new_value'])
@@ -103,7 +103,7 @@ def create_work_note(obj, request=None, changes=None, newly_created=False, attac
         #If text in notes, then create separate work note
         if wn_instance.notes:
             if work_note == None:
-                work_note = WorkNote.objects.create(foreign_sysID=instance.sysID) 
+                work_note = WorkNote.objects.create(foreign_sysID=sysID) 
             work_note.notes = wn_instance.notes
             work_note.customer_visible = wn_instance.customer_visible
             work_note.save()

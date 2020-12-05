@@ -49,7 +49,7 @@ def incident_create(request):
     incident.save()
     
     #Create work note
-    work_note = create_work_note(obj=incident, newly_created=True)
+    work_note = create_work_note(sysID=incident.sysID, newly_created=True)
 
     inc_detail_url = 'incident-detail/' + incident.number
     return redirect(inc_detail_url)
@@ -109,8 +109,8 @@ def incident_detail(request, number):
             if incident_status == status_resolved and instance.status != status_resolved:
                 instance.reopened += 1
 
+            #Resolve ticket if resolve submit button was clicked OR status was set to "resolved" AND text was entered in resolution textbox
             if ('resolve' in request.POST or instance.status == status_resolved) and instance.resolution:
-                #Resolve ticket if resolve submit button was clicked OR status was set to "resolved" AND text was entered in resolution textbox
                 instance.resolved = timezone.now()
                 instance.status = get_status_resolved(id=1)
                 instance.save()
@@ -118,7 +118,7 @@ def incident_detail(request, number):
                 #Create work note
                 work_note_changes = get_object_notes(instance, id=1)
                 changes = compare_field_changes(work_note_data, work_note_changes)
-                work_note = create_work_note(obj=instance, request=request, changes=changes)
+                work_note = create_work_note(obj=instance.sysID, request=request, changes=changes)
 
 
                 return redirect('incident-detail', number=number) 
@@ -132,7 +132,7 @@ def incident_detail(request, number):
             #Create work note
             work_note_changes = get_object_notes(instance, id=1)
             changes = compare_field_changes(work_note_data, work_note_changes)
-            work_note = create_work_note(obj=instance, request=request, changes=changes)
+            work_note = create_work_note(sysID=instance.sysID, request=request, changes=changes)
 
             #Redirect url based on submit button
             if 'save_stay' in request.POST:
