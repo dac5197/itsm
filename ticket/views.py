@@ -21,6 +21,7 @@ from .utils import *
 from access.models import *
 from base.forms import *
 from base.models import *
+from base.utils import *
 from tracking.forms import *
 from tracking.models import *
 from tracking.utils import *
@@ -37,7 +38,6 @@ def incident(request):
 
 def incident_create(request):
     #Create new incident
-    number = increment_inc_number()
     incident = Incident.objects.create()
 
     #Set default values not in model

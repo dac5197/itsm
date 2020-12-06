@@ -16,7 +16,7 @@ class Migration(migrations.Migration):
             name='SysID',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('SysID', models.CharField(default=base.utils.get_random_alphanumeric_string, max_length=36)),
+                ('SysID', models.CharField(default=base.models.get_random_alphanumeric_string, max_length=36)),
             ],
         ),
     ]

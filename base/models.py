@@ -1,11 +1,16 @@
 import os
+import random
+import string
+
 from django.db import models
 from django.utils import timezone
 
-from .utils import get_random_alphanumeric_string
 
-
-# Create your models here.
+#Generate random string for sysID
+def get_random_alphanumeric_string(length=32):
+    letters_and_digits = string.ascii_letters + string.digits
+    result_str = ''.join((random.choice(letters_and_digits) for i in range(length)))
+    return result_str
 
 
 class SysID(models.Model):

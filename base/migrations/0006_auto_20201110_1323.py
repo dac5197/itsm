@@ -14,6 +14,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='sysid',
             name='sysID',
-            field=models.CharField(default=base.utils.get_random_alphanumeric_string, editable=False, max_length=32, unique=True),
+            field=models.CharField(default=base.models.get_random_alphanumeric_string, editable=False, max_length=32, unique=True),
         ),
     ]

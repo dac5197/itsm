@@ -1,9 +1,14 @@
-import random
-import string
+from .forms import AttachmentForm
+from .models import Attachment
 
-def get_random_alphanumeric_string(length=32):
-    letters_and_digits = string.ascii_letters + string.digits
-    result_str = ''.join((random.choice(letters_and_digits) for i in range(length)))
-    return result_str
+from tracking.utils import create_work_note
 
+#Add attachment and create worknote
+def add_attachment(request, obj):
+    attachment_form = AttachmentForm(request.POST, request.FILES)
 
+    if attachment_form.is_valid():
+        attachment_instance = attachment_form.save(commit=False)
+        Attachment.objects.create(foreign_sysID=obj.sysID, document=attachment_instance.document)
+        attachment_wn_dict = {'Attachments': {'old_value': 'Add', 'new_value': attachment_instance}}
+        create_work_note(sysID=obj.sysID, changes=attachment_wn_dict, attachment=True)

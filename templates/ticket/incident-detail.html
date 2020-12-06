@@ -154,11 +154,11 @@
             {% include 'base/attachments.html' with attachments=attachments %}
 
             <!-- Show work notes -->
-            {% include 'base/work_notes.html' with wn_form=wn_form work_notes=work_notes %}
+            {% include 'tracking/work_notes.html' with wn_form=wn_form work_notes=work_notes %}
 
         </form>
 
-        <!-- Include Add Attachemnt and Remove Attachment modals -->
+        <!-- Include 'Add Attachment' and 'Remove Attachment' modals -->
         {% include 'base/modals.html' %}
 
         <script type="text/javascript">
