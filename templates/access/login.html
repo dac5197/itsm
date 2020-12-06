@@ -13,8 +13,6 @@
 
     <style>
 		body {
-
-
             background-image: url("{% static bg_img %}");
             background-repeat: no-repeat;
             background-attachment: fixed;
@@ -27,6 +25,11 @@
 			height: 100%;
         }
         
+        .login-card {
+            width: 350px; 
+            box-shadow:hsl(0, 0%, 80%) 0 0 16px;
+        }
+
     </style>
 
     <title>Login</title>
@@ -39,7 +42,7 @@
     
         <div class="container h-100">
             <div class="d-flex justify-content-center align-items-center h-100">
-                <div class="card d-flex flex-column position-relative justify-content-center" style="width: 350px;">
+                <div class="card d-flex flex-column position-relative justify-content-center login-card">
                     <div class="card-header d-flex justify-content-center">
                         <h3>Login</h3>
                     </div>
