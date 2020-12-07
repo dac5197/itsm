@@ -18,7 +18,7 @@ class SysID(models.Model):
     sysID = models.CharField(max_length=32, unique=True, default=get_random_alphanumeric_string, editable=False)
 
     def __str__(self):
-        return self.sysID
+        return f"{self.id} - {self.sysID}"
 
     @classmethod
     def add_new(cls):
