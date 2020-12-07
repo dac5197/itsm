@@ -7,20 +7,35 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DACME Group Tree</title>
+
+
+
 </head>
 <body>
-    <br>
+    
     {% block content %}
+        <style>
+            ul>li>ul {
+                display: none;
+            }
+        </style>
+        <br>
         <h3>Group Tree</h3>
+        <ul>
         {{group_tree|unordered_list}}
+        </ul>
 
-
-        <div class="accordion" id="accordion1">
-            {% for group in group_tree %}
-                {{group.name}}
-                {{group.children}}
-            {% endfor %}
-        </div>
+        <script type="text/javascript">
+            //Collaspible unordered list
+            //https://stackoverflow.com/a/31508501
+            $('li').click(function(e){
+                e.stopPropagation();
+                if(this.getElementsByTagName("ul")[0].style.display =="block")
+                    $(this).find("ul").slideUp();
+                else
+                    $(this).children(":first").slideDown();
+            });
+        </script>
     {% endblock %}
 </body>
 </html>
