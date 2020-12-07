@@ -1,0 +1,26 @@
+{% extends 'base\main_header.html' %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DACME Group Tree</title>
+</head>
+<body>
+    <br>
+    {% block content %}
+        <h3>Group Tree</h3>
+        {{group_tree|unordered_list}}
+
+
+        <div class="accordion" id="accordion1">
+            {% for group in group_tree %}
+                {{group.name}}
+                {{group.children}}
+            {% endfor %}
+        </div>
+    {% endblock %}
+</body>
+</html>

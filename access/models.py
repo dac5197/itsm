@@ -1,7 +1,15 @@
 from django.db import models
+from django.db.models import CharField
+from django.db.models.functions import Length
 from django.contrib.auth.base_user import AbstractBaseUser
+from django.contrib.auth.models import Group as DjangoGroup, User
+
 from base.models import SysID
 from phonenumber_field.modelfields import PhoneNumberField
+
+#Register Length transfor for Charfield to allow queryset filtering by char length
+#https://stackoverflow.com/a/45260608
+CharField.register_lookup(Length, 'length')
 
 # Create your models here.
 
@@ -65,3 +73,17 @@ class Group(models.Model):
     def __str__(self):
         return self.name
 
+class ITSMGroup(DjangoGroup):
+    sysID = models.OneToOneField(SysID, on_delete=models.CASCADE, default=SysID.add_new)
+    manager = models.ForeignKey(Customer, on_delete=models.SET_NULL, null=True, blank=True, related_name='itms_group_manager')
+    members = models.ManyToManyField(Customer, related_name='itsm_group_membership', blank=True)
+    path = models.CharField(max_length=25, unique=True, blank=False, null=False)
+    is_assignment = models.BooleanField(default=False)
+    is_approval = models.BooleanField(default=False)
+    is_heirarchal = models.BooleanField(default=False)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now_add=True)
+    active = models.BooleanField(default=True)
+    
+    def __str__(self):
+        return self.name

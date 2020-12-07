@@ -6,3 +6,4 @@ from .models import *
 admin.site.register(Location)
 admin.site.register(Customer)
 admin.site.register(Group)
+admin.site.register(ITSMGroup)
