@@ -1,7 +1,11 @@
 import json
+
+from django.contrib.auth.models import User
+
 from .forms import *
 from .models import *
 
+from access.models import *
 
 def get_object_notes(obj, id=None):
 
@@ -79,12 +83,13 @@ def create_work_note(sysID, request=None, changes=None, newly_created=False, att
     if attachment or newly_created:
         #Create work note for newly created ticket
         #Set only change as Status from Blank to Created
-        work_note = WorkNote.objects.create(foreign_sysID=sysID)
+        work_note = WorkNote.objects.create(foreign_sysID=sysID, note_taker=Customer.objects.get(user=request.user))
         
         if newly_created:
             changes = get_created_dict()
         
         work_note.changed_data = changes
+        #work_note.note_taker = Customer.objects.get(user=request.user)
         work_note.save()
 
         for key, value in changes.items():
@@ -97,7 +102,7 @@ def create_work_note(sysID, request=None, changes=None, newly_created=False, att
 
         #If data in changes, then create work note for the field changes
         if changes:
-            work_note = WorkNote.objects.create(foreign_sysID=sysID, changed_data=changes)
+            work_note = WorkNote.objects.create(foreign_sysID=sysID, changed_data=changes, note_taker=Customer.objects.get(user=request.user))
         
             for change, value in changes.items():
                 FieldChange.objects.create(work_note_id=work_note, field=change, old_value=value['old_value'], new_value=value['new_value'])
@@ -108,7 +113,7 @@ def create_work_note(sysID, request=None, changes=None, newly_created=False, att
         #If text in notes, then create separate work note
         if wn_instance.notes:
             if work_note == None:
-                work_note = WorkNote.objects.create(foreign_sysID=sysID) 
+                work_note = WorkNote.objects.create(foreign_sysID=sysID, note_taker=Customer.objects.get(user=request.user)) 
             work_note.notes = wn_instance.notes
             work_note.customer_visible = wn_instance.customer_visible
             work_note.save()

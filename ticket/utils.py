@@ -25,7 +25,7 @@ def get_priority_choices():
 
 #Return groups where assignment = True
 def get_assignment_group_choices():
-    assignment_groups = Group.objects.filter(is_assignment=True).order_by('name')
+    assignment_groups = ITSMGroup.objects.filter(is_assignment=True).order_by('name')
     choices = [(group.id, group.name) for group in  assignment_groups]
     return choices
 

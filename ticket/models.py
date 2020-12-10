@@ -3,7 +3,7 @@ from django.apps import AppConfig, apps
 from django.utils import timezone
 
 from base.models import SysID
-from access.models import Customer, Group, Location
+from access.models import *
 
 #Increment ticket numbers when object is created
 def increment_ticket_number(prefix, id):
@@ -105,7 +105,7 @@ class Ticket(models.Model):
     desc_long = models.TextField(null=True, blank=True)
     priority = models.ForeignKey(Priority, on_delete=models.SET_NULL, default= 4, null=True, blank=True)
     status = models.ForeignKey(Status, on_delete=models.SET_NULL, null=True, blank=True)
-    assignment_group = models.ForeignKey(Group, on_delete=models.SET_NULL, null=True, blank=True)
+    assignment_group = models.ForeignKey(ITSMGroup, on_delete=models.SET_NULL, null=True, blank=True)
     assignee = models.ForeignKey(Customer, on_delete=models.SET_NULL, null=True, blank=True, related_name='assignee')
     closed = models.DateTimeField(null=True, blank=True) 
     created = models.DateTimeField(default=timezone.now, null=False, blank=False)

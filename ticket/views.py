@@ -49,7 +49,7 @@ def incident_create(request):
     incident.save()
     
     #Create work note
-    work_note = create_work_note(sysID=incident.sysID, newly_created=True)
+    work_note = create_work_note(sysID=incident.sysID, newly_created=True, request=request)
 
     inc_detail_url = 'incident-detail/' + incident.number
     return redirect(inc_detail_url)

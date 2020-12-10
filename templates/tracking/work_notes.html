@@ -26,7 +26,7 @@
             <div class="box-element">
                 <div class="row">
                     <div class="col-lg-12">
-                        <!-- User that make the changes/notes -->
+                        <!-- Boolean if changes/notes are customer visible -->
                         <div class=" form-inline">
                         <label for="{{wn_form.customer_visible.id_for_label}}"><strong>{{wn_form.customer_visible.label}}:</strong></label>
                         <div class="form-field">
@@ -35,7 +35,7 @@
                         </div>
                     </div>
                     <div class="col-lg-12">
-                        <!-- Date changes/notes were made-->
+                        <!-- Notes textbox-->
                         <label for="{{wn_form.notes.id_for_label}}"><strong>{{wn_form.notes.label}}:</strong></label>
                         <div class="form-field">
                             {{wn_form.notes|add_class:'form-control'}}
@@ -53,7 +53,11 @@
                             <div class="row">
                                 <div class="col-lg-12">
                                     <div class="note-header">
-                                        <div style="flex: 2"><p>User</p></div>
+                                        {% if note.note_taker %}
+                                            <div style="flex: 2"><p>{{note.note_taker}}</p></div>
+                                        {% else %}
+                                            <div style="flex: 2"><p>User</p></div>
+                                        {% endif %}
                                         <div style="flex: 2"><p>{{note.created}}</p></div>
                                     </div>
                                     
@@ -68,11 +72,15 @@
                             <div class="row">
                                 <div class="col-lg-12">
                                     <div class="note-header">
-                                        <div style="flex: 2"><p>User</p></div>
+                                        {% if note.note_taker %}
+                                            <div style="flex: 2"><p>{{note.note_taker}}</p></div>
+                                        {% else %}
+                                            <div style="flex: 2"><p>User</p></div>
+                                        {% endif %}
                                         <div style="flex: 2"><p>{{note.created}}</p></div>
                                     </div>
                                     
-                                        <div style="flex: 2; white-space: pre-wrap; word-break: keep-all;">{{note.notes}}</div>
+                                    <div style="flex: 2; white-space: pre-wrap; word-break: keep-all;">{{note.notes}}</div>
                                 
                                 </div>
                             </div>
@@ -86,7 +94,11 @@
                         <div class="row">
                             <div class="col-lg-12">
                                 <div class="note-header">
-                                    <div style="flex: 2"><p>User</p></div>
+                                    {% if note.note_taker %}
+                                        <div style="flex: 2"><p>{{note.note_taker}}</p></div>
+                                    {% else %}
+                                        <div style="flex: 2"><p>User</p></div>
+                                    {% endif %}
                                     <div style="flex: 2"><p>{{note.created}}</p></div>
                                 </div>
                                 <table class="table table-sm table-hover w-auto table-borderless">

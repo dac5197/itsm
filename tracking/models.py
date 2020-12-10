@@ -15,6 +15,7 @@ class WorkNote(models.Model):
     customer_visible = models.BooleanField(default=False)
     created = models.DateTimeField(default=timezone.now, null=False, blank=False)
     changed_data = models.TextField(null=True, blank=True)
+    note_taker = models.ForeignKey(Customer, on_delete=models.SET_NULL, null=True, blank=True)
 
 class FieldChange(models.Model):
     work_note_id = models.ForeignKey(WorkNote, on_delete=models.CASCADE, null=True, blank=True)
