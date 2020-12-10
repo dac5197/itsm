@@ -95,7 +95,7 @@ class Status(models.Model):
         verbose_name_plural = "Statuses"
 
 class Ticket(models.Model):
-    sysID = models.ForeignKey(SysID, on_delete=models.CASCADE, default=SysID.add_new, editable=False)
+    sysID = models.OneToOneField(SysID, on_delete=models.CASCADE, default=SysID.add_new, editable=False)
     ticket_type = models.ForeignKey(TicketType, on_delete=models.SET_NULL, null=True, blank=True)
     customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, null=True, blank=True)
     phone = models.CharField(max_length=20, null=True, blank=True)
