@@ -1,13 +1,14 @@
 from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin
+
 from .models import *
 
 #Customize Admin panel view
 
-class AccountAdmin(UserAdmin):
-    list_display = ('email', 'username', 'date_joined', 'last_login', 'is_active')
-    search_fields = ('email', 'username')
-    readonly_fields = ('id', 'date_joined', 'last_login')
+class CustomerAdmin(admin.ModelAdmin):
+    list_display = ('display_name', 'email', 'user','active')
+    list_filter = ('active',)
+    search_fields = ('first_name', 'last_name', 'email',)
+    readonly_fields = ('created', 'updated')
 
     filter_horizontal = ()
     list_filter = ()
@@ -18,7 +19,7 @@ class AccountAdmin(UserAdmin):
 #admin.site.register(Account, AccountAdmin)
 
 admin.site.register(Location)
-admin.site.register(Customer)
+admin.site.register(Customer, CustomerAdmin)
 admin.site.register(Group)
 admin.site.register(ITSMGroup)
 

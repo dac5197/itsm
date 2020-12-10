@@ -1,3 +1,6 @@
+import os
+
+from django.conf import settings
 from django.db import models
 from django.db.models import CharField
 from django.db.models.functions import Length
@@ -29,11 +32,20 @@ class Location(models.Model):
     def __str__(self):
         return self.name
 
-def get_profile_image(self):
-    return f'profile_images/{self.pk}/{"profile_image.png"}'
+def get_profile_image(self, filename):
+    save_dir = f'{settings.MEDIA_ROOT}/images/profile_images/{self.pk}'
+    save_filename = f'{save_dir}/{"profile_image.png"}'
+
+    if not os.path.exists(save_dir):
+        os.mkdir(save_dir)
+
+    if os.path.exists(save_filename):
+        os.remove(save_filename)
+
+    return save_filename
 
 def get_default_profile_image():
-    return f'profile_images/default.png'
+    return f'images/profile_images/default.png'
 
 class Customer(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, blank=True, null=True)
