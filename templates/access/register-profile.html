@@ -54,15 +54,7 @@
                         <form method="POST" action="">
                             {% csrf_token %}
                             <!--Show any errors from a previous form submission-->
-                            {% if form.errors %}
-                                {% for field in form %}
-                                    {% for error in field.errors %}
-                                        <div class="alert alert-danger">
-                                            <strong>{{ field.label }} : {{ error|escape }}</strong>
-                                        </div>
-                                    {% endfor %}
-                                {% endfor %}
-                            {% endif %}
+                            {% include 'base/form-errors.html' with form=form %}
                             <!-- Display form fields -->
                             <div class="row">
                                 <div class="col-lg-6">

@@ -50,4 +50,18 @@ class IncidentForm(forms.ModelForm):
         #Remove select default (empty label) option
         self.fields['priority'].empty_label = None
 
+    def clean(self):
+        cleaned_data = super().clean()
+        status = cleaned_data.get("status")
+        resolution = cleaned_data.get("resolution")
+
+        resolved_status = get_status_resolved(id=1)
+
+        if status == resolved_status and resolution == '':
+            msg = "This field is required when resolving an incident."
+            self.add_error('resolution', msg)
+
+        return self.cleaned_data
+        #return cleaned_data            
+
 

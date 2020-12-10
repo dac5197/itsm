@@ -75,14 +75,7 @@ def incident_detail(request, number):
     attachments = Attachment.objects.filter(foreign_sysID=incident.sysID).order_by('-id')
     attachment_form = AttachmentForm()
 
-    context = {
-        'incident' : incident,
-        'form' : form,
-        'work_notes' : work_notes,
-        'wn_form' : wn_form,
-        'attachments' : attachments,
-        'attachment_form' : attachment_form,
-    }
+
 
     ### POST ###
     if request.method == 'POST':
@@ -140,9 +133,17 @@ def incident_detail(request, number):
             elif 'save_return' in request.POST:
                 return redirect('incident')
 
-        else:
-            print(form.errors)
-            return redirect('incident-detail', number=number) 
+    else:
+        form = IncidentForm(instance=incident)
+
+    context = {
+        'incident' : incident,
+        'form' : form,
+        'work_notes' : work_notes,
+        'wn_form' : wn_form,
+        'attachments' : attachments,
+        'attachment_form' : attachment_form,
+    } 
 
     return render(request, 'ticket/incident-detail.html', context)
 

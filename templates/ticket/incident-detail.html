@@ -16,6 +16,7 @@
     {% block content %}
         <form id="inc-form" method="POST">
             <div class="container bg-light mb-3 shadow">
+
             {% csrf_token %}
                 <div class="card-header">
                     <div class="row">
@@ -41,6 +42,7 @@
                 <div class="card-body">
 
                     <div class="box-element">
+                        {% include 'base/form-errors.html' with form=form %}
                         <div class="row">                    
                             <div class="col-lg-6">
                                 <label for="{{form.number.id_for_label}}"><strong>{{form.number.label}}:</strong></label>
@@ -172,43 +174,7 @@
                 document.getElementById('remove-attachment-continue').href = '/remove-attachment/'+attachmentID+'/'+number+'/'+url+'/'+sysID
             }
 
-            //Make Resolution field required when resolving ticket by either setting Status to Resolved or clicking on the Resolved button
-            var form = document.getElementById('inc-form')
-            form.addEventListener('submit', function(e) {
-                console.log('status:', form.status.value)
-                console.log('resolution:', form.resolution.value)
-                if (form.status.value == '4'  && form.resolution.value == "") {
-                    
 
-                    alert("Resolution is required for resolving ticket.")
-                    e.preventDetault()
-
-                }
-            })
-
-            //Enable expanded textarea
-            //Code copied from: https://alistapart.com/article/expanding-text-areas-made-elegant/
-            function makeExpandingArea(container) {
-                var area = container.querySelector('textarea');
-                var span = container.querySelector('span');
-                if (area.addEventListener) {
-                area.addEventListener('input', function() {
-                    span.textContent = area.value;
-                }, false);
-                span.textContent = area.value;
-                } else if (area.attachEvent) {
-                // IE8 compatibility
-                area.attachEvent('onpropertychange', function() {
-                    span.innerText = area.value;
-                });
-                span.innerText = area.value;
-                }
-            // Enable extra CSS
-            container.className += "active";
-            }var areas = document.querySelectorAll('.expandingArea');
-            var l = areas.length;while (l--) {
-                makeExpandingArea(areas[l]);
-            }
 
         </script>
     {% endblock %}
