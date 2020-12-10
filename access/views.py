@@ -1,19 +1,70 @@
-from django.shortcuts import render
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import UserCreationForm
+from django.shortcuts import render, redirect
 
+from .forms import *
 from .models import *
-from .utils import create_tree_list, get_random_bg_img
+from .utils import *
 
 # Create your views here.
 
-def login(request):
+
+
+def register_account(request):
+
+    if request.method == 'POST':
+        form = CreateUserForm(request.POST)
+
+        if form.is_valid():
+            user = form.save()
+            username = form.cleaned_data.get('username')
+
+            customer = Customer.objects.filter(user=user)
+
+            if customer:
+                return redirect('login')
+            else:
+                return redirect(f'/access/register-profile/{user.id}')
+    else:
+        form = CreateUserForm(initial={'username': create_sso()})
     
     bg_img = get_random_bg_img('backgrounds')
 
     context = {
-        'bg_img' : bg_img
+        'bg_img' : bg_img, 
+        'form' : form
     }
 
-    return render(request, 'access/login.html', context)
+    return render(request, 'access/register-account.html', context)
+
+def register_profile(request, id):
+    user = User.objects.get(id=id)
+
+    if request.method == 'POST':
+
+        request.POST._mutable = True
+        request.POST['sysID'] = SysID.objects.create()
+        request.POST['user'] = user
+        request.POST['active'] = True
+
+        form = CustomerForm(request.POST)
+    
+        if form.is_valid():
+            form.save()
+            return redirect('/access/login')
+    else:
+        form = CustomerForm(initial={'email':user.email})
+    
+    bg_img = get_random_bg_img('backgrounds')
+
+    context = {
+        'bg_img' : bg_img, 
+        'form' : form,
+    }
+
+    return render(request, 'access/register-profile.html', context)
+
 
 def group_tree(request):
     group_list = ITSMGroup.objects.all()

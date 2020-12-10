@@ -1,6 +1,8 @@
 import os
 import random
 
+from django.contrib.auth.models import User
+
 #Display random background image on page load 
 #Image must be in static\images directory or subdirectory
 def get_random_bg_img(img_dir):
@@ -37,3 +39,23 @@ def create_tree_list(qs, max_depth, depth=1, leaf=None):
             tree_list.append(create_tree_list(qs=qs, max_depth=max_depth, depth=depth, leaf=r.path))
 
     return tree_list
+
+
+def create_sso():
+    INITIAL_SSO_VALUE = 100000000
+
+    try:
+        last_user_id = User.objects.all().order_by('id').last().id
+        last_user_id += 1
+    except:
+        last_user_id = 1
+
+    sso = INITIAL_SSO_VALUE + last_user_id
+
+    existing_ssos =  User.objects.values_list('username', flat=True)
+    
+    if sso in existing_ssos:
+        sso = create_sso()
+
+    return sso
+

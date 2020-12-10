@@ -1,19 +1,18 @@
 from django.db import models
 from django.db.models import CharField
 from django.db.models.functions import Length
-from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import Group as DjangoGroup, User
 
 from base.models import SysID
 from phonenumber_field.modelfields import PhoneNumberField
 
-#Register Length transfor for Charfield to allow queryset filtering by char length
+#Register 'Length' transfer for Charfield to allow queryset filtering by char length
 #https://stackoverflow.com/a/45260608
 CharField.register_lookup(Length, 'length')
 
 # Create your models here.
 
-#class User(AbstractBaseUser):
+
 class Location(models.Model):
     sysID = models.OneToOneField(SysID, on_delete=models.CASCADE, default=SysID.add_new)
     name = models.CharField(max_length=100, unique=True, null=False, blank=False)
@@ -30,9 +29,15 @@ class Location(models.Model):
     def __str__(self):
         return self.name
 
+def get_profile_image(self):
+    return f'profile_images/{self.pk}/{"profile_image.png"}'
+
+def get_default_profile_image():
+    return f'profile_images/default.png'
+
 class Customer(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, blank=True, null=True)
     sysID = models.OneToOneField(SysID, on_delete=models.CASCADE, default=SysID.add_new)
-    username = models.CharField(max_length=10, unique=True, null=False, blank=False)
     first_name = models.CharField(max_length=100, null=False, blank=False)
     last_name = models.CharField(max_length=100, null=False, blank=False)
     email = models.EmailField(max_length=200, unique=True, null=False, blank=False)
@@ -45,7 +50,7 @@ class Customer(models.Model):
     updated = models.DateTimeField(auto_now_add=True)
     active = models.BooleanField(default=True)
     location = models.ForeignKey(Location, on_delete=models.SET_NULL, null=True, blank=True)
-    #role
+    profile_image = models.ImageField(max_length=255, upload_to=get_profile_image, null=True, blank=True, default=get_default_profile_image)
 
     def __str__(self):
         return self.display_name
@@ -56,6 +61,9 @@ class Customer(models.Model):
     @property
     def display_name(self):
         return str(self.last_name) + ", " + str(self.first_name) + " (" +  str(self.organization) + ")"
+
+    def get_profile_image_filename(self):
+        return str(self.profile_image)[str(self.profile_imag).index(f'profile_images/{self.pk}/'):]
 
 class Group(models.Model):
     sysID = models.OneToOneField(SysID, on_delete=models.CASCADE, default=SysID.add_new)
@@ -87,3 +95,14 @@ class ITSMGroup(DjangoGroup):
     
     def __str__(self):
         return self.name
+
+
+
+
+
+
+
+
+
+
+    

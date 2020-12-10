@@ -30,6 +30,10 @@
             box-shadow:hsl(0, 0%, 80%) 0 0 16px;
         }
 
+
+        .input-field {
+            margin-top: 10px;
+        }
     </style>
 
     <title>Login</title>
@@ -47,17 +51,35 @@
                         <h3>Login</h3>
                     </div>
                     <div class="card-body d-flex justify-content-center">
-                        <form id="inc-form" method="POST">
+                        <form method="POST" action="">
                             {% csrf_token %}
-                            <p>Username</p>
-                            <p>Password</p>
-                            <a href="#" class="btn btn-primary">Go somewhere</a>
-                        
+                            <input type="text" name="username" placeholder="Username..." class="form-control input-field">
+                            
+                            <input type="password" name="password" placeholder="Password..." class="form-control input-field">
+                            <div class="d-flex justify-content-center mt-3" style="padding: 0 2rem;">
+                                <input class="btn btn-primary" type="submit" value="Login" style="width: 90%;">
+                            </div>
                         </form>
                     </div>
+                    {% for message in messages %}
+					    <p id="messages">{{message}}</p>
+				    {% endfor %}	
                     <div class="card-footer text-muted d-flex justify-content-center">
-                        <p>Forgot password?</p>
-                        <p>Register.</p>
+                        <table>
+                            <tr>
+                                <td class="d-flex justify-content-center">
+                                    <a href="#">Forgot password?</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="d-flex justify-content-center">
+                                    <a href="{% url 'register-account' %}">Register</a>
+                                </td>
+                            </tr>
+                        </table>
+                        
+                        <br>
+                        
                     </div>
                 </div>
             </div>

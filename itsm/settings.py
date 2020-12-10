@@ -143,3 +143,9 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR,'media')
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+#Set login and log urls
+#https://docs.djangoproject.com/en/1.11/ref/settings/#login-redirect-url
+LOGIN_URL = 'access/login.html'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = 'access/login.html'
