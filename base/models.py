@@ -5,6 +5,7 @@ import string
 from django.db import models
 from django.utils import timezone
 
+from .validators import validate_file_size
 
 #Generate random string for sysID
 def get_random_alphanumeric_string(length=32):
@@ -30,7 +31,7 @@ class SysID(models.Model):
 
 class Attachment(models.Model):
     foreign_sysID = models.ForeignKey(SysID, on_delete=models.CASCADE, null=True, blank=True)
-    document = models.FileField(upload_to='attachments/')
+    document = models.FileField(upload_to='attachments/', validators=[validate_file_size])
     created = models.DateTimeField(default=timezone.now, null=False, blank=False)
 
     @property

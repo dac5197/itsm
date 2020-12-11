@@ -81,6 +81,29 @@ def incident_detail(request, number):
 
     ### POST ###
     if request.method == 'POST':
+        
+        #Add attachment to ticket
+        if 'add_attachment' in request.POST:
+
+            #Save attachment
+            attachment_form = add_attachment(request=request, obj=incident)
+            
+            #If any errors then display in inc form 
+            if attachment_form.errors:
+                context = {
+                    'incident' : incident,
+                    'form' : form,
+                    'work_notes' : work_notes,
+                    'wn_form' : wn_form,
+                    'attachments' : attachments,
+                    'attachment_form' : attachment_form,
+                } 
+
+                return render(request, 'ticket/incident-detail.html', context)
+            
+            #Return to INC
+            else:
+                return redirect('incident-detail', number=number)
 
         #If Resolve button was clicked, then change status to 'resolved' before checking if form is valid
         if 'resolve' in request.POST:
@@ -89,11 +112,7 @@ def incident_detail(request, number):
 
         form = IncidentForm(request.POST, instance=incident)        
 
-        #Add attachment to ticket
-        if 'add_attachment' in request.POST:
-
-            add_attachment(request=request, obj=incident)
-            return redirect('incident-detail', number=number)
+       
 
         if form.is_valid():
             instance = form.save(commit=False)

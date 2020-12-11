@@ -43,6 +43,7 @@
 
                     <div class="box-element">
                         {% include 'base/form-errors.html' with form=form %}
+                        {% include 'base/form-errors.html' with form=attachment_form %}
                         <div class="row">                    
                             <div class="col-lg-6">
                                 <label for="{{form.number.id_for_label}}"><strong>{{form.number.label}}:</strong></label>
@@ -173,8 +174,6 @@
                 document.getElementById('remove-attachment-filename').innerText = attachmentName
                 document.getElementById('remove-attachment-continue').href = '/remove-attachment/'+attachmentID+'/'+number+'/'+url+'/'+sysID
             }
-
-
 
         </script>
     {% endblock %}
