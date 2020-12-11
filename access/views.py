@@ -7,6 +7,8 @@ from .forms import *
 from .models import *
 from .utils import *
 
+from base.utils import set_sysID_relationship_fields
+
 # Create your views here.
 
 
@@ -42,27 +44,33 @@ def register_profile(request, id):
     user = User.objects.get(id=id)
 
     if request.method == 'POST':
-
-        request.POST._mutable = True
-        request.POST['sysID'] = SysID.objects.create()
+        
+        #Edit request to set the User and Active fields
+        request.POST._mutable = True        
         request.POST['user'] = user
         request.POST['active'] = True
-
+        
         form = CustomerForm(request.POST)
     
         if form.is_valid():
-            form.save()
+            instance = form.save()
+            #Create new sysID for Customer and set the relationship fields
+            instance.sysID = SysID.objects.create()
+            instance.save()
+            set_sysID_relationship_fields(instance)
+         
+            #Registration complete - redirect to login page
             return redirect('/access/login')
     else:
         form = CustomerForm(initial={'email':user.email})
-    
+
     bg_img = get_random_bg_img('backgrounds')
 
     context = {
         'bg_img' : bg_img, 
         'form' : form,
     }
-
+    
     return render(request, 'access/register-profile.html', context)
 
 

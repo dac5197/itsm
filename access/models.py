@@ -49,7 +49,7 @@ def get_default_profile_image():
 
 class Customer(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, blank=True, null=True)
-    sysID = models.OneToOneField(SysID, on_delete=models.CASCADE, default=SysID.add_new)
+    sysID = models.OneToOneField(SysID, on_delete=models.CASCADE, blank=True, null=True)
     first_name = models.CharField(max_length=100, null=False, blank=False)
     last_name = models.CharField(max_length=100, null=False, blank=False)
     email = models.EmailField(max_length=200, unique=True, null=False, blank=False)

@@ -48,6 +48,8 @@ def incident_create(request):
     #Save new incident
     incident.save()
     
+    set_sysID_relationship_fields(incident)
+
     #Create work note
     work_note = create_work_note(sysID=incident.sysID, newly_created=True, request=request)
 

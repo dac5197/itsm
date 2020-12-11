@@ -12,6 +12,7 @@ class CustomerForm(forms.ModelForm):
         model = Customer
         fields = '__all__'
 
+
 class CreateUserForm(UserCreationForm):
     class Meta:
         model = User
