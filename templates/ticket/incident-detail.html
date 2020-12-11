@@ -165,21 +165,7 @@
         </form>
 
         <!-- Include 'Add Attachment' and 'Remove Attachment' modals -->
-        {% include 'base/modals.html' %}
-
-        <script type="text/javascript">
-
-            //Get attachment id, attachment name, and ticket number, view url, and ticket sysID
-            //Set remove attachment model body to show filename
-            //Set the 'Continue' button link parameters with args
-            function removeAttachment(attachmentID, attachmentName, number, url, sysID) {
-                document.getElementById('remove-attachment-filename').innerText = attachmentName
-                document.getElementById('remove-attachment-continue').href = '/remove-attachment/'+attachmentID+'/'+number+'/'+url+'/'+sysID
-            }
-
-            
-
-        </script>
+        {% include 'base/attachment-modals.html' %}
 
     {% endblock %}
 </body>
