@@ -9,6 +9,6 @@ def add_attachment(request, obj):
 
     if attachment_form.is_valid():
         attachment_instance = attachment_form.save(commit=False)
-        Attachment.objects.create(foreign_sysID=obj.sysID, document=attachment_instance.document)
+        attachment = Attachment.objects.create(foreign_sysID=obj.sysID, document=attachment_instance.document)
         attachment_wn_dict = {'Attachments': {'old_value': 'Add', 'new_value': attachment_instance}}
-        create_work_note(sysID=obj.sysID, changes=attachment_wn_dict, attachment=True)
+        create_work_note(sysID=obj.sysID, changes=attachment_wn_dict, attachment=True, request=request)

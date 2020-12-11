@@ -29,7 +29,7 @@ def remove_attachment(request, id, number, url, sysID):
     #Create work note
     attachment_wn_dict = {'Attachments': {'old_value': 'Remove', 'new_value': attachment.doc_name}}
     obj_sysID = SysID.objects.get(sysID=sysID)
-    create_work_note(sysID=obj_sysID, changes=attachment_wn_dict, attachment=True)
+    create_work_note(sysID=obj_sysID, changes=attachment_wn_dict, attachment=True, request=request)
 
     #Delete attachment object
     attachment.delete()
