@@ -9,6 +9,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Incident</title>
+
+    
 </head>
 <body>
 
@@ -52,7 +54,7 @@
                                 </div>
                                 <label for="{{form.customer.id_for_label}}"><strong>{{form.customer.label}}:</strong></label>
                                 <div class="form-field">
-                                    {{form.customer|add_class:'form-control'}}
+                                    {{form.customer|add_class:'form-control form-control-chosen'}}
                                 </div>
                                 <label for="{{form.phone.id_for_label}}"><strong>{{form.phone.label}}:</strong></label>
                                 <div class="form-field">
@@ -60,7 +62,7 @@
                                 </div>
                                 <label for="{{form.location.id_for_label}}"><strong>{{form.location.label}}:</strong></label>
                                 <div class="form-field">
-                                    {{form.location|add_class:'form-control'}}
+                                    {{form.location|add_class:'form-control form-control-chosen'}}
                                 </div>
                                 <label for="{{form.created.id_for_label}}"><strong>{{form.created.label}}:</strong></label>
                                 <div class="form-field">
@@ -78,19 +80,19 @@
                             <div class="col-lg-6">
                                 <label for="{{form.status.id_for_label}}"><strong>{{form.status.label}}:</strong></label>
                                 <div class="form-field">
-                                    {{form.status|add_class:'form-control'}}
+                                    {{form.status|add_class:'form-control form-control-chosen'}}
                                 </div>
                                 <label for="{{form.priority.id_for_label}}"><strong>{{form.priority.label}}:</strong></label>
                                 <div class="form-field">
-                                    {{form.priority|add_class:'form-control'}}
+                                    {{form.priority|add_class:'form-control form-control-chosen'}}
                                 </div>
                                 <label for="{{form.assignment_group.id_for_label}}"><strong>{{form.assignment_group.label}}:</strong></label>
                                 <div class="form-field">
-                                    {{form.assignment_group|add_class:'form-control'}}
+                                    {{form.assignment_group|add_class:'form-control form-control-chosen'}}
                                 </div>
                                 <label for="{{form.assignee.id_for_label}}"><strong>{{form.assignee.label}}:</strong></label>
                                 <div class="form-field">
-                                    {{form.assignee|add_class:'form-control'}}
+                                    {{form.assignee|add_class:'form-control form-control-chosen'}}
                                 </div>
                                 <!-- Work in progress
                                 <label for="app-system-ci"><strong>App / System CI:</strong></label>
@@ -175,7 +177,10 @@
                 document.getElementById('remove-attachment-continue').href = '/remove-attachment/'+attachmentID+'/'+number+'/'+url+'/'+sysID
             }
 
+            
+
         </script>
+
     {% endblock %}
 </body>
 </html>

@@ -12,6 +12,16 @@
     <!-- Project CSS -->
     <link href="{% static '/css/main.css' %}" rel="stylesheet" type="text/css"> 
 
+    <!-- jquery-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+
+    <!-- Chosen JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.jquery.min.js"></script>
+    <!-- Bootstrap4C for Chosen -->
+    <link href="{% static '/css/component-chosen.min.css' %}" rel="stylesheet" type="text/css"> 
+
     <style>
 		body {
             background-image: url("{% static bg_img %}");
@@ -83,7 +93,7 @@
                                 <div class="col-lg-6">
                                     <label for="{{form.manager.id_for_label}}"><strong>{{form.manager.label}}:</strong></label>
                                     <div class="form-field">
-                                        {{form.manager|add_class:'form-control'}}
+                                        {{form.manager|add_class:'form-control form-control-chosen'}}
                                     </div>
                                     <label for="{{form.title.id_for_label}}"><strong>{{form.title.label}}:</strong></label>
                                     <div class="form-field">
@@ -115,9 +125,9 @@
                 </div>
             </div>
         </div>
-    
-    
-
+        <script type="text/javascript">
+            $('.form-control-chosen').chosen()
+        </script>
     {% endblock %}
 </body>
 </html>
