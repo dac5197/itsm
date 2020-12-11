@@ -161,13 +161,12 @@ def incident_search(request):
     #Else set queryset to blank
     if request.GET:
         incidents = inc_filter.qs
-        paginator = Paginator(incidents.order_by('id'), 10)
+        paginator = Paginator(incidents.order_by('number'), 10)
     else:
         incidents = ''
         paginator = Paginator(incidents, 10)
 
     #Setup paginator
-    
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 

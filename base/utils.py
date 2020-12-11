@@ -25,8 +25,10 @@ def set_sysID_relationship_fields(obj):
     sysID.rel_obj_name = obj.__str__()
     sysID.save()
 
+#Set the relationship fields for all models with a one-to-one relationship
 def set_all_sysIDs_relationship_fields():
 
+    #Dictionary of model : app 
     APP_MODEL_DICT = {
         'customer' : 'access',
         'itsmgroup' : 'access',
@@ -40,13 +42,16 @@ def set_all_sysIDs_relationship_fields():
         'outage' : 'ticket',
 	}
 
+    #For each model, app in dict, get the model and then get a queryset of all objects
     for m, a in APP_MODEL_DICT.items():
         print(f'app: {a} / model: {m}')
         model = apps.get_model(a, m)
         all_obj = model.objects.all()
 
+        #For each object, set the sysID relationship fields
         for obj in all_obj:
             print(f'obj: {obj.id} - {obj.__str__()}')
             set_sysID_relationship_fields(obj)
 
+    #Complete
     print('complete')
