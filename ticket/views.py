@@ -82,6 +82,11 @@ def incident_detail(request, number):
     ### POST ###
     if request.method == 'POST':
 
+        #If Resolve button was clicked, then change status to 'resolved' before checking if form is valid
+        if 'resolve' in request.POST:
+            request.POST._mutable = True        
+            request.POST['status'] = get_status_resolved(id=1)
+
         form = IncidentForm(request.POST, instance=incident)        
 
         #Add attachment to ticket
@@ -105,7 +110,7 @@ def incident_detail(request, number):
                 instance.reopened += 1
 
             #Resolve ticket if resolve submit button was clicked OR status was set to "resolved" AND text was entered in resolution textbox
-            if ('resolve' in request.POST or instance.status == status_resolved) and instance.resolution:
+            if instance.status == status_resolved and instance.resolution:
                 instance.resolved = timezone.now()
                 instance.status = get_status_resolved(id=1)
                 instance.save()
@@ -113,7 +118,7 @@ def incident_detail(request, number):
                 #Create work note
                 work_note_changes = get_object_notes(instance, id=1)
                 changes = compare_field_changes(work_note_data, work_note_changes)
-                work_note = create_work_note(obj=instance.sysID, request=request, changes=changes)
+                work_note = create_work_note(sysID=instance.sysID, request=request, changes=changes)
 
 
                 return redirect('incident-detail', number=number) 
