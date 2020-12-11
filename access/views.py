@@ -54,11 +54,16 @@ def register_profile(request, id):
     
         if form.is_valid():
             instance = form.save()
+            
+            #Set User email to match Customer email
+            user.email = instance.email
+            user.save()
+
             #Create new sysID for Customer and set the relationship fields
             instance.sysID = SysID.objects.create()
             instance.save()
             set_sysID_relationship_fields(instance)
-         
+
             #Registration complete - redirect to login page
             return redirect('/access/login')
     else:

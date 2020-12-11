@@ -1,6 +1,10 @@
+from django.apps import apps
+
 from .forms import AttachmentForm
 from .models import Attachment, SysID
 
+from access.models import *
+from ticket.models import *
 from tracking.utils import create_work_note
 
 #Add attachment and create worknote
@@ -20,3 +24,29 @@ def set_sysID_relationship_fields(obj):
     sysID.rel_obj_model = obj.__class__.__name__
     sysID.rel_obj_name = obj.__str__()
     sysID.save()
+
+def set_all_sysIDs_relationship_fields():
+
+    APP_MODEL_DICT = {
+        'customer' : 'access',
+        'itsmgroup' : 'access',
+        'location' : 'access',
+        'priority' : 'ticket',
+		'tickettype' : 'ticket',
+        'status' : 'ticket',
+        'incident' : 'ticket',
+        'passwordreset' : 'ticket',
+        'request' : 'ticket',
+        'outage' : 'ticket',
+	}
+
+    for m, a in APP_MODEL_DICT.items():
+        print(f'app: {a} / model: {m}')
+        model = apps.get_model(a, m)
+        all_obj = model.objects.all()
+
+        for obj in all_obj:
+            print(f'obj: {obj.id} - {obj.__str__()}')
+            set_sysID_relationship_fields(obj)
+
+    print('complete')

@@ -16,7 +16,7 @@ class CustomerForm(forms.ModelForm):
 class CreateUserForm(UserCreationForm):
     class Meta:
         model = User
-        fields = ['username', 'email', 'password1', 'password2']
+        fields = ['username', 'password1', 'password2']
         
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -24,5 +24,4 @@ class CreateUserForm(UserCreationForm):
         self.helper.form_method = 'POST'
 
         #Change form label names
-        self.fields['email'].label = 'Email'
         self.fields['password2'].label = 'Confirm Password'

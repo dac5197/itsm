@@ -1,0 +1,25 @@
+{% extends 'base\main_header.html' %}
+{% load static %}
+{% load tracking_tags %}
+{% load widget_tweaks %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+</head>
+<body>
+    <br>
+    {% block content %}
+
+    <h3>Admin Panel</h3>
+
+    <form action="#" method="get">
+        <input type="submit" class="btn btn-warning" value="Set SysID Relationship Fields" name="set_all_sysID_rel_fields">
+    </form>
+
+    {% endblock %}
+</body>
+</html>

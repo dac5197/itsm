@@ -3,6 +3,7 @@ import os
 from django.shortcuts import render, redirect
 
 from .models import *
+from .utils import set_all_sysIDs_relationship_fields
 
 from tracking.utils import create_work_note
 
@@ -36,4 +37,13 @@ def remove_attachment(request, id, number, url, sysID):
 
     #Then redirect back to ticket
     return redirect(url, number=number) 
+
+def admin_panel(request):
+    if request.GET.get('set_all_sysID_rel_fields'):
+        set_all_sysIDs_relationship_fields()
+        return redirect('admin-panel')
+
+    return render(request, 'base/admin-panel.html')
+
+
 
