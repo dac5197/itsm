@@ -109,3 +109,37 @@ def homepage(request):
     }
 
     return render(request, 'access/homepage.html', context)
+
+def homepage_assigned_to_me(request):
+    three_days_ago = timezone.now()-timezone.timedelta(days=3)
+    three_days_ago = three_days_ago.replace(hour=0, minute=0, second=0, microsecond=0)
+
+    new_inc = Incident.objects.filter(assignee=request.user.customer, created__gt=three_days_ago)
+    open_inc = Incident.objects.filter(assignee=request.user.customer, status__in=get_status_open(id=1))
+    resolved_inc = Incident.objects.filter(assignee=request.user.customer, status=get_status_resolved(id=1))
+
+
+    context = {
+        'new_inc' : new_inc,
+        'open_inc' : open_inc,
+        'resolved_inc' : resolved_inc,
+    }
+
+    return render(request, 'access/homepage-assignedtome.html', context)
+
+def homepage_assigned_to_my_groups(request):
+    three_days_ago = timezone.now()-timezone.timedelta(days=3)
+    three_days_ago = three_days_ago.replace(hour=0, minute=0, second=0, microsecond=0)
+
+    new_inc = Incident.objects.filter(assignee=request.user.customer, created__gt=three_days_ago)
+    open_inc = Incident.objects.filter(assignee=request.user.customer, status__in=get_status_open(id=1))
+    resolved_inc = Incident.objects.filter(assignee=request.user.customer, status=get_status_resolved(id=1))
+
+
+    context = {
+        'new_inc' : new_inc,
+        'open_inc' : open_inc,
+        'resolved_inc' : resolved_inc,
+    }
+
+    return render(request, 'access/homepage-assignedtomygroups.html', context)

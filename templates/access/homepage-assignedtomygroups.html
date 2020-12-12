@@ -17,13 +17,13 @@
             <div class="card-header">
                 <ul class="nav nav-tabs card-header-tabs">
                     <li class="nav-item">
-                      <a class="nav-link active" href="{% url 'homepage' %}"><h6>Homepage</h6></a>
+                      <a class="nav-link" href="{% url 'homepage' %}"><h6>Homepage</h6></a>
                     </li>
                     <li class="nav-item">
                       <a class="nav-link" href="{% url 'homepage-assignedtome' %}"><h6>Assigned to Me</h6></a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link" href="{% url 'homepage-assignedtomygroups' %}"><h6>Assigned to My Groups</h6></a>
+                      <a class="nav-link active" href="{% url 'homepage-assignedtomygroups' %}"><h6>Assigned to My Groups</h6></a>
                     </li>
                 </ul>
             </div>
@@ -33,7 +33,7 @@
                     <!-- New tickets (opened in last 3 days) -->
                     <div class="col-lg-4">
                         <div class="card mb-3">
-                            <div class="card-header"><h4>My New Tickets</h4></div>
+                            <div class="card-header"><h4>New Tickets</h4></div>
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-9">
@@ -65,7 +65,7 @@
                     <!-- Open tickets (in status not 'resovled' or 'closed') -->
                     <div class="col-lg-4">
                         <div class="card mb-3">
-                        <div class="card-header"><h4>My Open Tickets</h4></div>
+                        <div class="card-header"><h4>Open Tickets</h4></div>
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-9">
@@ -97,7 +97,7 @@
                     <!-- Resolved (resolved in last 3 days) -->
                     <div class="col-lg-4">
                         <div class="card mb-3">
-                        <div class="card-header"><h4>My Resolved Tickets</h4></div>
+                        <div class="card-header"><h4>Resolved Tickets</h4></div>
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-9">
@@ -127,27 +127,6 @@
                       </div>
                     </div>
                 </div>
-                <!-- My Devices -->
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div id="accordion-devices">
-                            <div class="card">
-                              <div class="card-header" id="headingDevices">
-                                <h5 class="mb-0">
-                                    <button class="btn" data-toggle="collapse" data-target="#collapseDevices" aria-expanded="true" aria-controls="collapseDevices">
-                                        <h5>My Devices</h5>
-                                    </button>
-                                </h5>
-                              </div>
-                              <div id="collapseDevices" class="collapse show" aria-labelledby="headingDevices" data-parent="#accordion-devices">
-                                <div class="card-body">
-                                    Work in Progress
-                                </div>
-                              </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 <!-- New tickets Details -->
                 <div class="row">
                     <div class="col-lg-12">
@@ -156,7 +135,7 @@
                                 <div class="card-header" id="headingNewTickets">
                                     <h5 class="mb-0">
                                         <button class="btn" data-toggle="collapse" data-target="#collapseNewTickets" aria-expanded="true" aria-controls="collapseNewTickets">
-                                            <h5>My New Tickets - Details</h5>
+                                            <h5>My Groups' New Tickets - Details</h5>
                                         </button>
                                     </h5>
                                 </div>
@@ -166,6 +145,26 @@
                                     <div id="collapseNewTickets" class="collapse" aria-labelledby="headingNewTickets" data-parent="#accordion-new-tickets">
                                 {% endif %}
                                 <div class="card-body">
+                                    <!-- Group Assignee ticket counts -->
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="card">
+                                                <div class="card-header">
+                                                    <ul class="nav nav-tabs card-header-tabs">
+                                                        <li class="nav-item">
+                                                        <a class="nav-link" href="#"><h5>New Tickets by Group > Assignee</h5></a>
+                                                        </li>
+                                                        <li class="nav-item">
+                                                        <a class="nav-link" href="#"><h5>New Tickets by Assignee > Group</h5></a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <div class="card-body">
+                                                
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <!-- New Incidents Details -->
                                     {% include 'access/homepage-collapse-ticket-table.html' with tickets=new_inc type='incident' state='new' %}
                                     <!-- New Password Resets Details -->
@@ -186,7 +185,7 @@
                                 <div class="card-header" id="headingOpenTickets">
                                 <h5 class="mb-0">
                                     <button class="btn" data-toggle="collapse" data-target="#collapseOpenTickets" aria-expanded="true" aria-controls="collapseOpenTickets">
-                                        <h5>My Open Tickets - Details</h5>
+                                        <h5>My Groups' Open Tickets - Details</h5>
                                     </button>
                                 </h5>
                                 </div>
@@ -216,7 +215,7 @@
                                 <div class="card-header" id="headingResolvedTickets">
                                 <h5 class="mb-0">
                                     <button class="btn" data-toggle="collapse" data-target="#collapseResolvedTickets" aria-expanded="false" aria-controls="collapseResolvedTickets">
-                                        <h5>My Resolved Tickets - Details</h5>
+                                        <h5>My Groups' Resolved Tickets - Details</h5>
                                     </button>
                                 </h5>
                                 </div>
