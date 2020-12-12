@@ -2,12 +2,15 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
+from django.utils import timezone
 
 from .forms import *
 from .models import *
 from .utils import *
 
 from base.utils import set_sysID_relationship_fields
+from ticket.models import Incident, PasswordReset, Request
+from ticket.utils import get_status_open, get_status_resolved
 
 # Create your views here.
 
@@ -89,3 +92,20 @@ def group_tree(request):
     }
 
     return render(request, 'access/group-tree.html', context)
+
+def homepage(request):
+    three_days_ago = timezone.now()-timezone.timedelta(days=3)
+    three_days_ago = three_days_ago.replace(hour=0, minute=0, second=0, microsecond=0)
+
+    new_inc = Incident.objects.filter(customer=request.user.customer, created__gt=three_days_ago)
+    open_inc = Incident.objects.filter(customer=request.user.customer, status__in=get_status_open(id=1))
+    resolved_inc = Incident.objects.filter(customer=request.user.customer, status=get_status_resolved(id=1))
+
+
+    context = {
+        'new_inc' : new_inc,
+        'open_inc' : open_inc,
+        'resolved_inc' : resolved_inc,
+    }
+
+    return render(request, 'access/homepage.html', context)

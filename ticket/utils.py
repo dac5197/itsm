@@ -46,6 +46,16 @@ def get_status_resolved(id):
     status = Status.objects.get(ticket_type=ticket_type, resolved_value=True)
     return status
 
+#Return the closed status for a ticket type
+def get_status_closed(id):
+    ticket_type = TicketType.objects.get(id=id)
+    status = Status.objects.get(ticket_type=ticket_type, closed_value=True)
+    return status
 
-
+#Return the open statuses for a ticket type
+#Open status is any status that is not resolved or closed
+def get_status_open(id):
+    ticket_type = TicketType.objects.get(id=id)
+    statuses = Status.objects.filter(ticket_type=ticket_type, closed_value=False, resolved_value=False)
+    return statuses
 

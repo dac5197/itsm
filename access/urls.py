@@ -7,6 +7,7 @@ from . import views, utils
 urlpatterns = [
     #path('login', views.login, name="login"),
     path('group-tree', views.group_tree, name='group-tree'),
+    path('homepage', views.homepage, name='homepage'),
     path('register-account', views.register_account, name='register-account'),
     path('register-profile/<str:id>', views.register_profile, name='register-profile'),
     path('login', LoginView.as_view(
@@ -15,5 +16,6 @@ urlpatterns = [
                 'bg_img' : utils.get_random_bg_img('backgrounds'),
             },
         )
-    )
+    ),
+
 ]
