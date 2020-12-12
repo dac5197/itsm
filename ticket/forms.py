@@ -64,4 +64,8 @@ class IncidentForm(forms.ModelForm):
         return self.cleaned_data
         #return cleaned_data            
 
+class IncidentSearchForm(IncidentForm):
+    class Meta:
+        model = Incident
+        exclude = ['sysID']
 

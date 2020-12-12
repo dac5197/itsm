@@ -176,8 +176,6 @@ def incident_detail(request, number):
 
 def incident_search(request):
 
-    form = IncidentForm()
-
     incidents = Incident.objects.all()
     inc_filter = IncidentFilter(request.GET, queryset=incidents)
 
@@ -199,7 +197,6 @@ def incident_search(request):
         return export_csv(queryset=incidents, obj_type='incident')
 
     context = {
-        'form' : form,
         'filter' : inc_filter,
         'incidents' : incidents,
         'page_obj' : page_obj,
