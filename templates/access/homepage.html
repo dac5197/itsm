@@ -14,7 +14,19 @@
     {% block content %}
     <div class="container">
         <div class="card bg-light mb-3">
-            <div class="card-header"><h5>Homepage</h5></div>
+            <div class="card-header">
+                <ul class="nav nav-tabs card-header-tabs">
+                    <li class="nav-item">
+                      <a class="nav-link active" href="#"><h6>Homepage</h6></a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="#"><h6>Assigned to Me</h6></a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="#"><h6>Assigned to My Groups</h6></a>
+                    </li>
+                </ul>
+            </div>
             <div class="card-body">
                 <!-- Ticket counts -->
                 <div class="row">
