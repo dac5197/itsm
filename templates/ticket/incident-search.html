@@ -135,34 +135,36 @@
                 <div class="box-element">
                     <div class="row">                    
                         <div class="col-lg-12">
-                            <table class="table table-sm table-hover w-auto border-bottom">
-                                <tr>
-                                    <th>Number</th>
-                                    <th>Status</th>
-                                    <th>Priority</th>
-                                    <th>Created</th>
-                                    <th>Resolved</th>
-                                    <th>Reopened</th>
-                                    <th>Customer</th>
-                                    <th>Assignment Group</th>
-                                    <th>Assignee</th>
-                                    <th>Desc Short</th>
-                                </tr>
-                                {% for inc in page_obj %}
+                            <div class="table-responsive table-sm table-hover w-auto border-bottom small">
+                                <table class="table ">
                                     <tr>
-                                        <td><a href="/ticket/incident-detail/{{inc.number}}">{{inc.number}}</a></td>
-                                        <td>{{inc.status}}</td>
-                                        <td>{{inc.priority}}</td>
-                                        <td>{{inc.created}}</td>
-                                        <td>{{inc.resolved}}</td>
-                                        <td>{{inc.reopened}}</td>
-                                        <td>{{inc.customer}}</td>
-                                        <td>{{inc.assignment_group}}</td>
-                                        <td>{{inc.assignee}}</td>
-                                        <td>{{inc.desc_short}}</td>
+                                        <th>Number</th>
+                                        <th>Status</th>
+                                        <th>Priority</th>
+                                        <th>Created</th>
+                                        <th>Resolved</th>
+                                        <th>Reopened</th>
+                                        <th>Customer</th>
+                                        <th>Assignment Group</th>
+                                        <th>Assignee</th>
+                                        <th width="20%">Desc Short</th>
                                     </tr>
-                                {% endfor %}
-                            </table>
+                                    {% for inc in page_obj %}
+                                        <tr>
+                                            <td><a href="/ticket/incident-detail/{{inc.number}}">{{inc.number}}</a></td>
+                                            <td>{{inc.status}}</td>
+                                            <td>{{inc.priority}}</td>
+                                            <td>{{inc.created}}</td>
+                                            <td>{{inc.resolved}}</td>
+                                            <td>{{inc.reopened}}</td>
+                                            <td>{{inc.customer}}</td>
+                                            <td>{{inc.assignment_group}}</td>
+                                            <td>{{inc.assignee}}</td>
+                                            <td>{{inc.desc_short}}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </table>
+                            </div>
                         </div>
                     </div>
                     <br>
