@@ -68,3 +68,11 @@ def get_new_ticket_start_date():
     new_ticket_start_date = timezone.now()-timezone.timedelta(days=DAYS)
     new_ticket_start_date = new_ticket_start_date.replace(hour=0, minute=0, second=0, microsecond=0)
     return new_ticket_start_date
+
+#Format a queryset for a GET url
+def format_queryset_to_get_url(qs):
+    url_str = ''
+    for obj in qs:
+        url_str += f'&{obj.__class__.__name__.lower()}={obj.id}'
+    
+    return url_str

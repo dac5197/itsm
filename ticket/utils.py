@@ -49,13 +49,13 @@ def get_priority_default():
 #Return the resolved status for a ticket type
 def get_status_resolved(id):
     ticket_type = TicketType.objects.get(id=id)
-    status = Status.objects.get(ticket_type=ticket_type, resolved_value=True)
+    status = Status.objects.filter(ticket_type=ticket_type, resolved_value=True)
     return status
 
 #Return the closed status for a ticket type
 def get_status_closed(id):
     ticket_type = TicketType.objects.get(id=id)
-    status = Status.objects.get(ticket_type=ticket_type, closed_value=True)
+    status = Status.objects.filter(ticket_type=ticket_type, closed_value=True)
     return status
 
 #Return the open statuses for a ticket type

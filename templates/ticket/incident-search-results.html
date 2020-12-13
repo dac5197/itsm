@@ -1,0 +1,54 @@
+<div class="card">
+    <div class="card-body">
+        <div class="row">                    
+            <div class="col-lg-12">
+                <div>
+                    <table class="table table-sm small"
+                        data-toggle="table"
+                        data-sort-class="table-active"
+                        data-sortable="true"
+                        data-pagination="true"
+                        data-pagination-h-align="left"
+                        data-pagination-detail-h-align="right"
+                    >
+                        <thead class="bg-light">
+                            <tr>
+                                <th data-field="number" data-sortable="true">Number</th>
+                                <th data-field="status" data-sortable="true">Status</th>
+                                <th data-field="priority" data-sortable="true">Priority</th>
+                                <th data-width="15" data-width-unit="%"data-field="created" data-sortable="true">Created</th>
+                                <th data-width="15" data-width-unit="%" data-field="resolved" data-sortable="true">Resolved</th>
+                                <th data-field="reopened" data-sortable="true">Reopnd</th>
+                                <th data-width="15" data-width-unit="%" data-field="customer" data-sortable="true">Customer</th>
+                                <th data-field="assignment_group" data-sortable="true">Assignment Group</th>
+                                <th data-width="15" data-width-unit="%" data-field="assignee" data-sortable="true">Assignee</th>
+                                <th data-width="20" data-width-unit="%" data-field="desc_short" data-sortable="true">Desc Short</th>
+                            </tr>
+                        </thead>
+                        {% for inc in incidents %}
+                            <tr>
+                                <td><a href="/ticket/incident-detail/{{inc.number}}">{{inc.number}}</a></td>
+                                <td>{{inc.status}}</td>
+                                <td>{{inc.priority}}</td>
+                                <td>{{inc.created}}</td>
+                                <td>{{inc.resolved}}</td>
+                                <td>{{inc.reopened}}</td>
+                                <td>{{inc.customer}}</td>
+                                <td>{{inc.assignment_group}}</td>
+                                <td>{{inc.assignee}}</td>
+                                <td>{{inc.desc_short}}</td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- Export button -->
+        <div class="row">
+            <div class="col-lg-2">                           
+                <button class="btn btn-primary btn-sm" name="export" value="export" type="submit"><strong>Export</strong></button>
+            </div>
+        </div>
+    </div>
+
+</div> 

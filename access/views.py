@@ -147,7 +147,7 @@ def homepage_assigned_to_my_groups(request):
     #Get tickets assigned to logged in user's assignment groups
     new_inc = Incident.objects.filter(assignment_group__in=user_groups, created__gt=new_start_date)
     open_inc = Incident.objects.filter(assignment_group__in=user_groups, status__in=get_status_open(id=1))
-    resolved_inc = Incident.objects.filter(assignment_group__in=user_groups, status=get_status_resolved(id=1))
+    resolved_inc = Incident.objects.filter(assignment_group__in=user_groups, status__in=get_status_resolved(id=1))
     
 
     #Create a dictionary go groups, users, , ticket types, and ticket counts
@@ -173,8 +173,11 @@ def homepage_assigned_to_my_groups(request):
                         u.full_name : {
                             t.name : {
                                 'new': (apps.get_model('ticket', t.name)).objects.annotate(n_assignee=Count('assignee')).filter(assignee=u, assignment_group=g, created__gt=new_start_date).count(),
+                                'new_url' : f'{t.name.lower()}-search/?assignee={u.id}&assignment_group={g.name}&created_range_min={new_start_date.isoformat()}',
                                 'open': (apps.get_model('ticket', t.name)).objects.annotate(n_assignee=Count('assignee')).filter(assignee=u, assignment_group=g, status__in=get_status_open(id=t.id)).count(),
-                                'resolved': (apps.get_model('ticket', t.name)).objects.annotate(n_assignee=Count('assignee')).filter(assignee=u, assignment_group=g, status=get_status_resolved(id=t.id)).count(),
+                                'open_url' : f'{t.name.lower()}-search/?assignee={u.id}&assignment_group={g.name}&{format_queryset_to_get_url(get_status_open(id=t.id))}',
+                                'resolved': (apps.get_model('ticket', t.name)).objects.annotate(n_assignee=Count('assignee')).filter(assignee=u, assignment_group=g, status__in=get_status_resolved(id=t.id)).count(),
+                                'resolved_url' : f'{t.name.lower()}-search/?assignee={u.id}&assignment_group={g.name}&{format_queryset_to_get_url(get_status_resolved(id=t.id))}',
                             } for t in ticket_types
                         } for u in Customer.objects.filter(itsm_group_membership=g)
                     } for g in user_groups
@@ -188,18 +191,27 @@ def homepage_assigned_to_my_groups(request):
                         t.name : {
                             'new': (apps.get_model('ticket', t.name)).objects.annotate(n_assignee=Count('assignee')).filter(assignee=None, assignment_group__name=k1, created__gt=new_start_date).count(),
                             'open': (apps.get_model('ticket', t.name)).objects.annotate(n_assignee=Count('assignee')).filter(assignee=None, assignment_group__name=k1, status__in=get_status_open(id=t.id)).count(),
-                            'resolved': (apps.get_model('ticket', t.name)).objects.annotate(n_assignee=Count('assignee')).filter(assignee=None, assignment_group__name=k1, status=get_status_resolved(id=t.id)).count(),
+                            'resolved': (apps.get_model('ticket', t.name)).objects.annotate(n_assignee=Count('assignee')).filter(assignee=None, assignment_group__name=k1, status__in=get_status_resolved(id=t.id)).count(),
                         } for t in ticket_types
                     }
                     
         for k2, v2 in v1.copy().items():
             ticket_sum=0
-
+            
             for k3, v3 in v2.items():
-                ticket_sum += sum(v3.values())
+                ticket_sum += sum(v4 for k4, v4 in v3.items() if isinstance(v4, int))
+            
+            if k2 =='_UNASSIGNED':
+                group_dict[k1][k2]['id'] =  ''
+            else:
+                name = k2.split(' ')
+                c_lp = Customer.objects.get(first_name=name[0], last_name=name[1])
+                group_dict[k1][k2]['id'] =  c_lp.id
+            
 
             if ticket_sum == 0:
                 group_dict[k1].pop(k2, None)
+
 
     context = {
         'new_inc' : new_inc,
@@ -207,6 +219,7 @@ def homepage_assigned_to_my_groups(request):
         'resolved_inc' : resolved_inc,
         'user_groups' : user_groups,
         'group_dict' : group_dict,
+        'new_start_date' : new_start_date,
     }
 
     return render(request, 'access/homepage-assignedtomygroups.html', context)
