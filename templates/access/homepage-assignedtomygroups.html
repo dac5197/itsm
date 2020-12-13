@@ -145,11 +145,11 @@
                                 </ul>
                             </div>
                             <div class="card-body">
-                                {% for group in user_groups %}
+                                {% for k1, v1 in group_dict.items %}
                                     <div class="col-lg-12">
                                         <div class="card">
                                             <div class="card-header">
-                                                <h6>{{group.name}}</h6>
+                                                <h6>{{k1}}</h6>
                                             </div>
                                             <div class="card-body">
                                                     <div class="table-responsive table-sm table-hover w-auto border-bottom small">
@@ -183,22 +183,23 @@
                                                             <tbody>
                                                                 
                                                                     
-                                                                    {% for user in group.members.all %}
+                                                                    {% for k2, v2 in v1.items|dictsort:"0.lower" %}
                                                                     <tr>
                                                                         
-                                                                        <td>{{user.full_name}}</td>
-                                                                        <td>{{new_inc}}</td>
-                                                                        <td>#</td>
-                                                                        <td>#</td>
-                                                                        <td>#</td>
-                                                                        <td>#</td>
-                                                                        <td>#</td>
-                                                                        <td>#</td>
-                                                                        <td>#</td>
-                                                                        <td>#</td>
-                                                                        <td>#</td>
-                                                                        <td>#</td>
-                                                                        <td>#</td>
+                                                                        <td>{{k2}}</td>
+                                                                        <td>{{v2.Incident.new}}</td>
+                                                                        <td>{{v2.Incident.open}}</td>
+                                                                        <td>{{v2.Incident.resolved}}</td>
+                                                                        <td>{{v2.PasswordReset.new}}</td>
+                                                                        <td>{{v2.PasswordReset.open}}</td>
+                                                                        <td>{{v2.PasswordReset.resolved}}</td>
+                                                                        <td>{{v2.Request.new}}</td>
+                                                                        <td>{{v2.Request.open}}</td>
+                                                                        <td>{{v2.Request.resolved}}</td>
+                                                                        <td>{{v2.Outage.new}}</td>
+                                                                        <td>{{v2.Outage.open}}</td>
+                                                                        <td>{{v2.Outage.resolved}}</td>
+                                                                        
                                                                     </tr>
                                                                     {% endfor %}
                                                                 

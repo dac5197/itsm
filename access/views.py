@@ -95,14 +95,18 @@ def group_tree(request):
 
     return render(request, 'access/group-tree.html', context)
 
+#Display homepage of logged in user's tickets
 def homepage(request):
-    three_days_ago = timezone.now()-timezone.timedelta(days=3)
-    three_days_ago = three_days_ago.replace(hour=0, minute=0, second=0, microsecond=0)
+    
+    new_start_date = get_new_ticket_start_date()
 
-    new_inc = Incident.objects.filter(customer=request.user.customer, created__gt=three_days_ago)
+    #Get tickets for the logged in user
+    #New tickets are entered after the start date (3 days ago)
+    #Open tickets are not in 'resoled' or 'closed' status
+    #Resolved tickets are in 'resolved' status
+    new_inc = Incident.objects.filter(customer=request.user.customer, created__gt=new_start_date)
     open_inc = Incident.objects.filter(customer=request.user.customer, status__in=get_status_open(id=1))
     resolved_inc = Incident.objects.filter(customer=request.user.customer, status=get_status_resolved(id=1))
-
 
     context = {
         'new_inc' : new_inc,
@@ -112,11 +116,13 @@ def homepage(request):
 
     return render(request, 'access/homepage.html', context)
 
+#Display homepage of tickets assigned to logged in user
 def homepage_assigned_to_me(request):
-    three_days_ago = timezone.now()-timezone.timedelta(days=3)
-    three_days_ago = three_days_ago.replace(hour=0, minute=0, second=0, microsecond=0)
 
-    new_inc = Incident.objects.filter(assignee=request.user.customer, created__gt=three_days_ago)
+    new_start_date = get_new_ticket_start_date()
+
+    #Get tickets assigned to the logged in user
+    new_inc = Incident.objects.filter(assignee=request.user.customer, created__gt=new_start_date)
     open_inc = Incident.objects.filter(assignee=request.user.customer, status__in=get_status_open(id=1))
     resolved_inc = Incident.objects.filter(assignee=request.user.customer, status=get_status_resolved(id=1))
 
@@ -129,73 +135,78 @@ def homepage_assigned_to_me(request):
 
     return render(request, 'access/homepage-assignedtome.html', context)
 
+#Display homepage of tickets assigned to logged in user's assignment groups
 def homepage_assigned_to_my_groups(request):
-    three_days_ago = timezone.now()-timezone.timedelta(days=3)
-    three_days_ago = three_days_ago.replace(hour=0, minute=0, second=0, microsecond=0)
+
+    new_start_date = get_new_ticket_start_date()
+
+    #Get all groups logged in user is a member of
     user_groups = ITSMGroup.objects.filter(members=request.user.customer)
-    new_inc = Incident.objects.filter(assignment_group__in=user_groups, created__gt=three_days_ago)
+    #Get all ticket types
+    ticket_types = TicketType.objects.all()
+    #Get tickets assigned to logged in user's assignment groups
+    new_inc = Incident.objects.filter(assignment_group__in=user_groups, created__gt=new_start_date)
     open_inc = Incident.objects.filter(assignment_group__in=user_groups, status__in=get_status_open(id=1))
     resolved_inc = Incident.objects.filter(assignment_group__in=user_groups, status=get_status_resolved(id=1))
-    ticket_types = TicketType.objects.all()
+    
 
-    print(ticket_types)
+    #Create a dictionary go groups, users, , ticket types, and ticket counts
+    #Dictionary format:
+    #   group_dict = {
+    #       'group' : {
+    #           'assignee' : {
+    #                'tickettype' : {
+    #                   'new' : count,
+    #                   'open' : count,
+    #                   'resolved' : count,
+    #               },
+    #           },
+    #       },
+    #   }
 
-    '''
-    group_dict = {
-        'group' : {
-            'assignee' : {
-                'tickettype' : {
-                    'new' : count,
-                    'new' : count,
-                    'old' : count,
-                },
-            },
-        },
-    }
-    '''
-
+    #Declare dictionary
     group_dict = {}
-    group_dict2 ={}
 
-    for group in user_groups:
-        users = Customer.objects.filter(itsm_group_membership=group)
-        for user in users:
-            for ticket_type  in ticket_types:
-                #print(f'group: {group.name} - user: {user.full_name} - ticket_type: {ticket_type.name}')
-                group_dict.update({
-                    group.name : {
-                        user.full_name : {
-                            ticket_type.name : {
-                                'new' : apps.get_model('ticket', ticket_type.name).objects.annotate(n_assignee=Count('assignee')).filter(assignee=user, created__gt=three_days_ago).count(),
-                            },
-                        },
-                    },
-
-                })
-
-                #group_dict2[group.name][user.full_name][ticket_type.name]['new'] = Incident.objects.annotate(n_assignee=Count('assignee')).filter(assignee=user, created__gt=three_days_ago).count(),
-
-    group_dict2 = {
+    #Populate dictionary
+    group_dict = {
                     g.name : {
                         u.full_name : {
                             t.name : {
-                                'new': (apps.get_model('ticket', t.name)).objects.annotate(n_assignee=Count('assignee')).filter(assignee=user, created__gt=three_days_ago).count(),
-                                'open': (apps.get_model('ticket', t.name)).objects.annotate(n_assignee=Count('assignee')).filter(assignee=user, status__in=get_status_open(id=t.id)).count(),
-                                'resolved': (apps.get_model('ticket', t.name)).objects.annotate(n_assignee=Count('assignee')).filter(assignee=user, status=get_status_resolved(id=t.id)).count(),
+                                'new': (apps.get_model('ticket', t.name)).objects.annotate(n_assignee=Count('assignee')).filter(assignee=u, assignment_group=g, created__gt=new_start_date).count(),
+                                'open': (apps.get_model('ticket', t.name)).objects.annotate(n_assignee=Count('assignee')).filter(assignee=u, assignment_group=g, status__in=get_status_open(id=t.id)).count(),
+                                'resolved': (apps.get_model('ticket', t.name)).objects.annotate(n_assignee=Count('assignee')).filter(assignee=u, assignment_group=g, status=get_status_resolved(id=t.id)).count(),
                             } for t in ticket_types
-                        } for u in users
+                        } for u in Customer.objects.filter(itsm_group_membership=g)
                     } for g in user_groups
                 }
 
+    #Loop through dictionary and:
+    #   Add UNASSIGNED user and counts for tickets assigned to group but with assignee = none
+    #   Remove any user where sum of ticket counts for all ticket types is 0
+    for k1, v1 in group_dict.copy().items():
+        group_dict[k1]['_UNASSIGNED'] = {
+                        t.name : {
+                            'new': (apps.get_model('ticket', t.name)).objects.annotate(n_assignee=Count('assignee')).filter(assignee=None, assignment_group__name=k1, created__gt=new_start_date).count(),
+                            'open': (apps.get_model('ticket', t.name)).objects.annotate(n_assignee=Count('assignee')).filter(assignee=None, assignment_group__name=k1, status__in=get_status_open(id=t.id)).count(),
+                            'resolved': (apps.get_model('ticket', t.name)).objects.annotate(n_assignee=Count('assignee')).filter(assignee=None, assignment_group__name=k1, status=get_status_resolved(id=t.id)).count(),
+                        } for t in ticket_types
+                    }
+                    
+        for k2, v2 in v1.copy().items():
+            ticket_sum=0
 
-    #print(group_dict)
-    print(group_dict2)
+            for k3, v3 in v2.items():
+                ticket_sum += sum(v3.values())
+
+            if ticket_sum == 0:
+                group_dict[k1].pop(k2, None)
 
     context = {
         'new_inc' : new_inc,
         'open_inc' : open_inc,
         'resolved_inc' : resolved_inc,
         'user_groups' : user_groups,
+        'group_dict' : group_dict,
     }
 
     return render(request, 'access/homepage-assignedtomygroups.html', context)

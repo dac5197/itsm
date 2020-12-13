@@ -2,6 +2,7 @@ import os
 import random
 
 from django.contrib.auth.models import User
+from django.utils import timezone
 
 #Display random background image on page load 
 #Image must be in static\images directory or subdirectory
@@ -40,7 +41,7 @@ def create_tree_list(qs, max_depth, depth=1, leaf=None):
 
     return tree_list
 
-
+#Create SSO for username
 def create_sso():
     INITIAL_SSO_VALUE = 100000000
 
@@ -59,3 +60,11 @@ def create_sso():
 
     return sso
 
+#Get the start date for "new" tickets
+#Start date is today minues DAYS then truncated to midnight for that date
+def get_new_ticket_start_date():
+    DAYS = 3
+
+    new_ticket_start_date = timezone.now()-timezone.timedelta(days=DAYS)
+    new_ticket_start_date = new_ticket_start_date.replace(hour=0, minute=0, second=0, microsecond=0)
+    return new_ticket_start_date
