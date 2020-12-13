@@ -10,8 +10,7 @@ from tracking.utils import create_work_note
 # Create your views here.
 
 def home(request):
-    print(request.user.customer.id)
-    return render(request, 'base/home.html')
+    return render(request, 'access/homepage.html')
 
 def create_sysid(request):
     sys_id = SysID.objects.create()
