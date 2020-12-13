@@ -2,7 +2,7 @@ from django.db.models import Q
 from django.forms import DateInput
 
 import django_filters
-from django_filters import DateFilter, CharFilter, MultipleChoiceFilter, DateTimeFilter, DateTimeFromToRangeFilter, RangeFilter, DateFilter, NumberFilter
+from django_filters import ChoiceFilter, DateFilter, CharFilter, MultipleChoiceFilter, DateTimeFilter, DateTimeFromToRangeFilter, RangeFilter, DateFilter, NumberFilter
 from django_filters.widgets import RangeWidget
 
 from .models import *
@@ -14,9 +14,11 @@ from access.models import *
 
 class IncidentFilter(django_filters.FilterSet):
     #Set charfilters to search multiple fields in related models (foriegn keys)
-    assignee = CharFilter(method='assignee_all_fields_filter')
+    #assignee = CharFilter(method='assignee_all_fields_filter')
+    assignee = ChoiceFilter(choices=get_all_customer_choices(), empty_label='')
     assignment_group = CharFilter(field_name='assignment_group__name', lookup_expr='icontains', label='Assignment Group')
-    customer = CharFilter(method='customer_all_fields_filter')
+    #customer = CharFilter(method='customer_all_fields_filter')
+    customer = ChoiceFilter(choices=get_all_customer_choices(), empty_label='')
     location = CharFilter(method='location_all_fields_filter')
     created = DateFilter(field_name='created', lookup_expr='icontains', label='Created', widget=DateInput(attrs={'type': 'date'}))
     created_range = DateTimeFromToRangeFilter(field_name='created', lookup_expr='icontains', label='Created Range', widget=RangeWidget(attrs={'type': 'datetime-local'}))
@@ -46,7 +48,7 @@ class IncidentFilter(django_filters.FilterSet):
 
     def customer_all_fields_filter(self, queryset, name, value):
         return Incident.objects.filter(
-            Q(customer__first_name__icontains=value) | Q(customer__last_name__icontains=value) | Q(customer__username__icontains=value) | Q(customer__email__icontains=value)
+            Q(customer__first_name__icontains=value) | Q(customer__last_name__icontains=value) | Q(customer__user__username__icontains=value) | Q(customer__email__icontains=value)
         )
         
     def location_all_fields_filter(self, queryset, name, value):

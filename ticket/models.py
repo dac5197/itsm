@@ -97,7 +97,7 @@ class Status(models.Model):
 class Ticket(models.Model):
     sysID = models.OneToOneField(SysID, on_delete=models.CASCADE, default=SysID.add_new, editable=False)
     ticket_type = models.ForeignKey(TicketType, on_delete=models.SET_NULL, null=True, blank=True)
-    customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, null=True, blank=True)
+    customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, null=True, blank=False)
     phone = models.CharField(max_length=20, null=True, blank=True)
     #delegates = 
     location = models.ForeignKey(Location, on_delete=models.SET_NULL, null=True, blank=True)
@@ -106,7 +106,7 @@ class Ticket(models.Model):
     priority = models.ForeignKey(Priority, on_delete=models.SET_NULL, default= 4, null=True, blank=True)
     status = models.ForeignKey(Status, on_delete=models.SET_NULL, null=True, blank=True)
     assignment_group = models.ForeignKey(ITSMGroup, on_delete=models.SET_NULL, null=True, blank=True)
-    assignee = models.ForeignKey(Customer, on_delete=models.SET_NULL, null=True, blank=True, related_name='assignee')
+    assignee = models.ForeignKey(Customer, on_delete=models.SET_NULL, null=True, blank=False, related_name='assignee')
     closed = models.DateTimeField(null=True, blank=True) 
     created = models.DateTimeField(default=timezone.now, null=False, blank=False)
     updated = models.DateTimeField(default=timezone.now, null=False, blank=False)

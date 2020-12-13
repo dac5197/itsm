@@ -1,8 +1,6 @@
-from django.core.paginator import Paginator
 from django.apps import apps
 from django.shortcuts import get_object_or_404, redirect, render
 from django.http import JsonResponse, HttpResponse
-
 
 import datetime
 import json
@@ -183,14 +181,9 @@ def incident_search(request):
     #Else set queryset to blank
     if request.GET:
         incidents = inc_filter.qs
-        paginator = Paginator(incidents.order_by('number'), 10)
+
     else:
         incidents = ''
-        paginator = Paginator(incidents, 10)
-
-    #Setup paginator
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
 
     #If export button -> export data to csv
     if 'export' in request.GET:
@@ -199,7 +192,6 @@ def incident_search(request):
     context = {
         'filter' : inc_filter,
         'incidents' : incidents,
-        'page_obj' : page_obj,
         }
 
     return render(request, 'ticket/incident-search.html', context)

@@ -19,8 +19,8 @@
                 <h3>Incident Search</h3>
             </div>
             <div class="card-body">
-                <div class="box-element">
-                    
+                <div class="card">
+                    <div class="card-body">
                         <div class="row">                    
                             <div class="col-lg-4">
                                 <label for="{{filter.form.number.id_for_label}}"><strong>{{filter.form.number.label}}:</strong></label>
@@ -43,13 +43,13 @@
                         </div>
                         <hr>
                         <div class="row">   
-                            <div class="col-lg-7">
+                            <div class="col-lg-6">
                                 <label for="{{filter.form.customer.id_for_label}}"><strong>{{filter.form.customer.label}}:</strong></label>
                                 <div class="form-field">
-                                    {{filter.form.customer|add_class:'form-control'}}
+                                    {{filter.form.customer|add_class:'form-control form-control-chosen'|attr:'multiple'|default_if_none:""}}
                                 </div>
                             </div>
-                            <div class="col-lg-2">
+                            <div class="col-lg-3">
                                 <label for="{{filter.form.phone.id_for_label}}"><strong>{{filter.form.phone.label}}:</strong></label>
                                 <div class="form-field">
                                     {{filter.form.phone|add_class:'form-control'}}
@@ -73,7 +73,7 @@
                             <div class="col-lg-6">
                                 <label for="{{filter.form.assignee.id_for_label}}"><strong>{{filter.form.assignee.label}}:</strong></label>
                                 <div class="form-field">
-                                    {{filter.form.assignee|add_class:'form-control'}}
+                                    {{filter.form.assignee|add_class:'form-control form-control-chosen'|attr:'multiple'}}
                                 </div>
                             </div> 
                         </div>
@@ -129,106 +129,67 @@
                                 <a class="btn btn-info" href="{% url 'incident-search' %}"><strong>Clear</strong></a>
                             </div>
                         </div>
-                    
+                    </div>
                 </div>
+                <!-- Display search results -->
                 <br>
-                <div class="box-element">
-                    <div class="row">                    
-                        <div class="col-lg-12">
-                            <div class="table-responsive table-sm table-hover w-auto border-bottom small">
-                                <table class="table ">
-                                    <tr>
-                                        <th>Number</th>
-                                        <th>Status</th>
-                                        <th>Priority</th>
-                                        <th>Created</th>
-                                        <th>Resolved</th>
-                                        <th>Reopened</th>
-                                        <th>Customer</th>
-                                        <th>Assignment Group</th>
-                                        <th>Assignee</th>
-                                        <th width="20%">Desc Short</th>
-                                    </tr>
-                                    {% for inc in page_obj %}
-                                        <tr>
-                                            <td><a href="/ticket/incident-detail/{{inc.number}}">{{inc.number}}</a></td>
-                                            <td>{{inc.status}}</td>
-                                            <td>{{inc.priority}}</td>
-                                            <td>{{inc.created}}</td>
-                                            <td>{{inc.resolved}}</td>
-                                            <td>{{inc.reopened}}</td>
-                                            <td>{{inc.customer}}</td>
-                                            <td>{{inc.assignment_group}}</td>
-                                            <td>{{inc.assignee}}</td>
-                                            <td>{{inc.desc_short}}</td>
-                                        </tr>
-                                    {% endfor %}
-                                </table>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">                    
+                            <div class="col-lg-12">
+                                <div>
+                                    <table class="table table-sm small"
+                                        data-toggle="table"
+                                        data-sort-class="table-active"
+                                        data-sortable="true"
+                                        data-pagination="true"
+                                        data-pagination-h-align="left"
+                                        data-pagination-detail-h-align="right"
+                                    >
+                                        <thead class="bg-light">
+                                            <tr>
+                                                <th data-field="number" data-sortable="true">Number</th>
+                                                <th data-field="status" data-sortable="true">Status</th>
+                                                <th data-field="priority" data-sortable="true">Priority</th>
+                                                <th data-width="15" data-width-unit="%"data-field="created" data-sortable="true">Created</th>
+                                                <th data-width="15" data-width-unit="%" data-field="resolved" data-sortable="true">Resolved</th>
+                                                <th data-field="reopened" data-sortable="true">Reopnd</th>
+                                                <th data-width="15" data-width-unit="%" data-field="customer" data-sortable="true">Customer</th>
+                                                <th data-field="assignment_group" data-sortable="true">Assignment Group</th>
+                                                <th data-width="15" data-width-unit="%" data-field="assignee" data-sortable="true">Assignee</th>
+                                                <th data-width="20" data-width-unit="%" data-field="desc_short" data-sortable="true">Desc Short</th>
+                                            </tr>
+                                        </thead>
+                                        {% for inc in incidents %}
+                                            <tr>
+                                                <td><a href="/ticket/incident-detail/{{inc.number}}">{{inc.number}}</a></td>
+                                                <td>{{inc.status}}</td>
+                                                <td>{{inc.priority}}</td>
+                                                <td>{{inc.created}}</td>
+                                                <td>{{inc.resolved}}</td>
+                                                <td>{{inc.reopened}}</td>
+                                                <td>{{inc.customer}}</td>
+                                                <td>{{inc.assignment_group}}</td>
+                                                <td>{{inc.assignee}}</td>
+                                                <td>{{inc.desc_short}}</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </table>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <br>
-                    <div class="row">                    
-                        <div class="col-lg-2">
-                            <!-- Show search count -->
-                            <p>{{page_obj.start_index}} - {{page_obj.end_index}} of {{page_obj.paginator.count}}</p>
-                        </div>
-                    </div>
-                    <div class="row"> 
-                        <div class="col-lg-10">
-                            <div class="d-flex justify-content-start">
-                                <ul class="pagination pagination-sm">
-                                    {% if page_obj.has_previous %}
-                                        <!-- Show First and Previous links if not on first page -->
-                                        <li class="page-item">
-                                            <a class="page-link" href="?page=1">&laquo; First</a>
-                                        </li>
-                                        <li class="page-item">
-                                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}">&lsaquo; Previous</a>
-                                        </li>
-                                    {% endif %}
-                                        
-
-                                    {% for i in page_obj.paginator.page_range %}
-                                        <!-- Show active page -->
-                                        {% if page_obj.number == i %}
-                                            <li class="page-item active"><a class="page-link" href="#">{{ i }}<span class="sr-only">(current)</span></a></li>
-                                        {% else %}
-                                            <li class="page-item">
-                                                <!-- Show current page and +-3 pages -->
-                                                {% if i|add:"-3" <= page_obj.number and page_obj.number <= i|add:"3" %}
-                                                <a class="page-link" href="?page={{ i }}">{{ i }}</a>
-
-                                                <!-- Shows every 10th page and the last page -->
-                                                {% elif i|divisibleby:"10" or i == page_obj.paginator.num_pages %}
-                                                    <a class="page-link" href="?page={{ i }}">{{ i }}</a>
-                                                {% endif %}
-                                            </li>
-                                        {% endif %}
-                                    {% endfor %}
-                            
-                                    {% if page_obj.has_next %}
-                                        <!-- Show Next and Last links if not on last page -->
-                                        <li class="page-item">
-                                            <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next &rsaquo;</a>
-                                        </li>
-                                        <li class="page-item">
-                                            <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last &raquo;</a>
-                                        </li>
-                                    {% endif %}
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="col-lg-2">
-                            <div class="d-flex justify-content-end">
+                        <!-- Export button -->
+                        <div class="row">
+                            <div class="col-lg-2">                           
                                 <button class="btn btn-primary btn-sm" name="export" value="export" type="submit"><strong>Export</strong></button>
                             </div>
                         </div>
-                    </div>  
-                </div>
+                    </div>
+
+                </div> 
             </div>
         </form>
-        </div>
+    </div>
     
     {% endblock %}
 </body>

@@ -6,6 +6,7 @@ from django.utils.dateformat import format
 from .filters import *
 from .models import *
 
+from access.models import *
 from base.forms import *
 from base.models import *  
 from tracking.utils import *
@@ -27,6 +28,11 @@ def get_priority_choices():
 def get_assignment_group_choices():
     assignment_groups = ITSMGroup.objects.filter(is_assignment=True).order_by('name')
     choices = [(group.id, group.name) for group in  assignment_groups]
+    return choices
+
+def get_all_customer_choices():
+    customers = Customer.objects.all()
+    choices = [(customer.id, customer.__str__()) for customer in  customers]
     return choices
 
 #Return the default status set for a ticket type
