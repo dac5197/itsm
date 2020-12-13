@@ -1,6 +1,8 @@
+from django.apps import apps
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
+from django.db.models import Count
 from django.shortcuts import render, redirect
 from django.utils import timezone
 
@@ -9,7 +11,7 @@ from .models import *
 from .utils import *
 
 from base.utils import set_sysID_relationship_fields
-from ticket.models import Incident, PasswordReset, Request
+from ticket.models import Incident, PasswordReset, Request, TicketType
 from ticket.utils import get_status_open, get_status_resolved
 
 # Create your views here.
@@ -130,16 +132,70 @@ def homepage_assigned_to_me(request):
 def homepage_assigned_to_my_groups(request):
     three_days_ago = timezone.now()-timezone.timedelta(days=3)
     three_days_ago = three_days_ago.replace(hour=0, minute=0, second=0, microsecond=0)
+    user_groups = ITSMGroup.objects.filter(members=request.user.customer)
+    new_inc = Incident.objects.filter(assignment_group__in=user_groups, created__gt=three_days_ago)
+    open_inc = Incident.objects.filter(assignment_group__in=user_groups, status__in=get_status_open(id=1))
+    resolved_inc = Incident.objects.filter(assignment_group__in=user_groups, status=get_status_resolved(id=1))
+    ticket_types = TicketType.objects.all()
 
-    new_inc = Incident.objects.filter(assignee=request.user.customer, created__gt=three_days_ago)
-    open_inc = Incident.objects.filter(assignee=request.user.customer, status__in=get_status_open(id=1))
-    resolved_inc = Incident.objects.filter(assignee=request.user.customer, status=get_status_resolved(id=1))
+    print(ticket_types)
 
+    '''
+    group_dict = {
+        'group' : {
+            'assignee' : {
+                'tickettype' : {
+                    'new' : count,
+                    'new' : count,
+                    'old' : count,
+                },
+            },
+        },
+    }
+    '''
+
+    group_dict = {}
+    group_dict2 ={}
+
+    for group in user_groups:
+        users = Customer.objects.filter(itsm_group_membership=group)
+        for user in users:
+            for ticket_type  in ticket_types:
+                #print(f'group: {group.name} - user: {user.full_name} - ticket_type: {ticket_type.name}')
+                group_dict.update({
+                    group.name : {
+                        user.full_name : {
+                            ticket_type.name : {
+                                'new' : apps.get_model('ticket', ticket_type.name).objects.annotate(n_assignee=Count('assignee')).filter(assignee=user, created__gt=three_days_ago).count(),
+                            },
+                        },
+                    },
+
+                })
+
+                #group_dict2[group.name][user.full_name][ticket_type.name]['new'] = Incident.objects.annotate(n_assignee=Count('assignee')).filter(assignee=user, created__gt=three_days_ago).count(),
+
+    group_dict2 = {
+                    g.name : {
+                        u.full_name : {
+                            t.name : {
+                                'new': (apps.get_model('ticket', t.name)).objects.annotate(n_assignee=Count('assignee')).filter(assignee=user, created__gt=three_days_ago).count(),
+                                'open': (apps.get_model('ticket', t.name)).objects.annotate(n_assignee=Count('assignee')).filter(assignee=user, status__in=get_status_open(id=t.id)).count(),
+                                'resolved': (apps.get_model('ticket', t.name)).objects.annotate(n_assignee=Count('assignee')).filter(assignee=user, status=get_status_resolved(id=t.id)).count(),
+                            } for t in ticket_types
+                        } for u in users
+                    } for g in user_groups
+                }
+
+
+    #print(group_dict)
+    print(group_dict2)
 
     context = {
         'new_inc' : new_inc,
         'open_inc' : open_inc,
         'resolved_inc' : resolved_inc,
+        'user_groups' : user_groups,
     }
 
     return render(request, 'access/homepage-assignedtomygroups.html', context)
