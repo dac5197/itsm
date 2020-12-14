@@ -190,8 +190,11 @@ def homepage_assigned_to_my_groups(request):
         group_dict[k1]['_UNASSIGNED'] = {
                         t.name : {
                             'new': (apps.get_model('ticket', t.name)).objects.annotate(n_assignee=Count('assignee')).filter(assignee=None, assignment_group__name=k1, created__gt=new_start_date).count(),
+                            'new_url' : f'{t.name.lower()}-search/?assignee__isnull=true&assignment_group={k1}&created_range_min={new_start_date.isoformat()}',
                             'open': (apps.get_model('ticket', t.name)).objects.annotate(n_assignee=Count('assignee')).filter(assignee=None, assignment_group__name=k1, status__in=get_status_open(id=t.id)).count(),
+                            'open_url' : f'{t.name.lower()}-search/?assignee__isnull=true&assignment_group={k1}&{format_queryset_to_get_url(get_status_open(id=t.id))}',
                             'resolved': (apps.get_model('ticket', t.name)).objects.annotate(n_assignee=Count('assignee')).filter(assignee=None, assignment_group__name=k1, status__in=get_status_resolved(id=t.id)).count(),
+                            'resolved_url' : f'{t.name.lower()}-search/?assignee__isnull=true&assignment_group={k1}&{format_queryset_to_get_url(get_status_resolved(id=t.id))}',
                         } for t in ticket_types
                     }
                     
