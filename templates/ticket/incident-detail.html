@@ -16,7 +16,7 @@
 
     <br>
     {% block content %}
-        <form id="inc-form" method="POST">
+        <form id="inc-form" method="POST" data-assignees-url="{% url 'load-assignees' %}">
             <div class="container bg-light mb-3 shadow">
 
             {% csrf_token %}
@@ -80,11 +80,11 @@
                             <div class="col-lg-6">
                                 <label for="{{form.status.id_for_label}}"><strong>{{form.status.label}}:</strong></label>
                                 <div class="form-field">
-                                    {{form.status|add_class:'form-control form-control-chosen'}}
+                                    {{form.status|add_class:'form-control'}}
                                 </div>
                                 <label for="{{form.priority.id_for_label}}"><strong>{{form.priority.label}}:</strong></label>
                                 <div class="form-field">
-                                    {{form.priority|add_class:'form-control form-control-chosen'}}
+                                    {{form.priority|add_class:'form-control'}}
                                 </div>
                                 <label for="{{form.assignment_group.id_for_label}}"><strong>{{form.assignment_group.label}}:</strong></label>
                                 <div class="form-field">
@@ -92,7 +92,7 @@
                                 </div>
                                 <label for="{{form.assignee.id_for_label}}"><strong>{{form.assignee.label}}:</strong></label>
                                 <div class="form-field">
-                                    {{form.assignee|add_class:'form-control form-control-chosen'}}
+                                    {{form.assignee|add_class:'form-control'}}
                                 </div>
                                 <!-- Work in progress
                                 <label for="app-system-ci"><strong>App / System CI:</strong></label>
@@ -166,6 +166,35 @@
 
         <!-- Include 'Add Attachment' and 'Remove Attachment' modals -->
         {% include 'base/attachment-modals.html' %}
+
+        <script>
+            //Set Assignee select values dependant on assignment group selection
+            //https://simpleisbetterthancomplex.com/tutorial/2018/01/29/how-to-implement-dependent-or-chained-dropdown-list-with-django.html
+            $("#id_assignment_group").change(function () {
+                // get the url of the `assignees` view
+                var url = $("#inc-form").attr("data-assignees-url");
+                // get the selected asignment group ID from the HTML input  
+                var assignmentGroupId = $(this).val();  
+
+                //Initialize an AJAX request
+                //Set the url of the request (= localhost:8000/ticket/assignee_select_list_options.html/)
+                $("#id_assignee").empty();
+                $.ajax({                       
+                    url: url,
+                    //Add the assignment group id to the GET parameters                    
+                    data: {
+                        'assignment_group': assignmentGroupId,       
+
+                    },
+                    // `Data` is the return of the `load_assignees` view function
+                    success: function (data) {   
+                        // replace the contents of the assignees input with the data that came from the server
+                        $("#id_assignee").html(data);
+                    }
+                });
+
+            })
+        </script>
 
     {% endblock %}
 </body>

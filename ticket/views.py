@@ -171,6 +171,17 @@ def incident_detail(request, number):
 
     return render(request, 'ticket/incident-detail.html', context)
 
+def load_assignees(request):
+    assignment_group_id = request.GET.get('assignment_group')
+    grp = ITSMGroup.objects.get(id=assignment_group_id)
+
+    assignees = Customer.objects.filter(itsm_group_membership=grp).order_by('last_name')
+
+    context = {
+        'assignees' : assignees,
+    }
+
+    return render(request, 'ticket/assignee_select_list_options.html', context)
 
 def incident_search(request):
 

@@ -1,0 +1,4 @@
+<option value="">---------</option>
+{% for assignee in assignees %}
+<option value="{{ assignee.id }}">{{ assignee.display_name }}</option>
+{% endfor %}
