@@ -133,7 +133,7 @@
                         <div class="card-header" id="heading{{k1|cut:' '}}">
                             <h5 class="mb-0">
                                 <button class="btn" data-toggle="collapse" data-target="#collapse{{k1|cut:' '}}" aria-expanded="true" aria-controls="collapse{{k1|cut:' '}}">
-                                    <h5>Tickets by Group</h5>
+                                    <h5>Tickets by My Groups</h5>
                                 </button>
                             </h5>
                         </div>
@@ -175,15 +175,15 @@
                                                 <td><a href="/ticket/{{v1.Incident.new_url}}">{{v1.Incident.new}}</a></td>
                                                 <td><a href="/ticket/{{v1.Incident.open_url}}">{{v1.Incident.open}}</a></td>
                                                 <td><a href="/ticket/{{v1.Incident.resolved_url}}">{{v1.Incident.resolved}}</a></td>
-                                                <td>{{v1.PasswordReset.new}}</td>
-                                                <td>{{v1.PasswordReset.open}}</td>
-                                                <td>{{v1.PasswordReset.resolved}}</td>
-                                                <td>{{v1.Request.new}}</td>
-                                                <td>{{v1.Request.open}}</td>
-                                                <td>{{v1.Request.resolved}}</td>
-                                                <td>{{v1.Outage.new}}</td>
-                                                <td>{{v1.Outage.open}}</td>
-                                                <td>{{v1.Outage.resolved}}</td>
+                                                <td><a href="#">{{v1.PasswordReset.new}}</a></td>
+                                                <td><a href="#">{{v1.PasswordReset.open}}</a></td>
+                                                <td><a href="#">{{v1.PasswordReset.resolved}}</a></td>
+                                                <td><a href="#">{{v1.Request.new}}</a></td>
+                                                <td><a href="#">{{v1.Request.open}}</a></td>
+                                                <td><a href="#">{{v1.Request.resolved}}</a></td>
+                                                <td><a href="#">{{v1.Outage.new}}</a></td>
+                                                <td><a href="#">{{v1.Outage.open}}</a></td>
+                                                <td><a href="#">{{v1.Outage.resolved}}</a></td>
                                                 
                                             </tr>
                                         {% endfor %}
@@ -242,15 +242,15 @@
                                                     <td><a href="/ticket/{{v2.Incident.new_url}}">{{v2.Incident.new}}</a></td>
                                                     <td><a href="/ticket/{{v2.Incident.open_url}}">{{v2.Incident.open}}</a></td>
                                                     <td><a href="/ticket/{{v2.Incident.resolved_url}}">{{v2.Incident.resolved}}</a></td>
-                                                    <td>{{v2.PasswordReset.new}}</td>
-                                                    <td>{{v2.PasswordReset.open}}</td>
-                                                    <td>{{v2.PasswordReset.resolved}}</td>
-                                                    <td>{{v2.Request.new}}</td>
-                                                    <td>{{v2.Request.open}}</td>
-                                                    <td>{{v2.Request.resolved}}</td>
-                                                    <td>{{v2.Outage.new}}</td>
-                                                    <td>{{v2.Outage.open}}</td>
-                                                    <td>{{v2.Outage.resolved}}</td>
+                                                    <td><a href="#">{{v2.PasswordReset.new}}</td>
+                                                    <td><a href="#">{{v2.PasswordReset.open}}</a></td>
+                                                    <td><a href="#">{{v2.PasswordReset.resolved}}</a></td>
+                                                    <td><a href="#">{{v2.Request.new}}</a></td>
+                                                    <td><a href="#">{{v2.Request.open}}</a></td>
+                                                    <td><a href="#">{{v2.Request.resolved}}</a></td>
+                                                    <td><a href="#">{{v2.Outage.new}}</a></td>
+                                                    <td><a href="#">{{v2.Outage.open}}</a></td>
+                                                    <td><a href="#">{{v2.Outage.resolved}}</a></td>
                                                     
                                                 </tr>
                                             {% endfor %}

@@ -106,7 +106,7 @@ def homepage(request):
     #Resolved tickets are in 'resolved' status
     new_inc = Incident.objects.filter(customer=request.user.customer, created__gt=new_start_date)
     open_inc = Incident.objects.filter(customer=request.user.customer, status__in=get_status_open(id=1))
-    resolved_inc = Incident.objects.filter(customer=request.user.customer, status=get_status_resolved(id=1))
+    resolved_inc = Incident.objects.filter(customer=request.user.customer, status__in=get_status_resolved(id=1))
 
     context = {
         'new_inc' : new_inc,
