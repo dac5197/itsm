@@ -176,6 +176,7 @@ def incident_search(request):
 
     incidents = Incident.objects.all()
     inc_filter = IncidentFilter(request.GET, queryset=incidents)
+    collapse_filter = False
 
     #Set search results to filter queryset if search args passed in GET
     #Else set queryset to blank
@@ -183,9 +184,13 @@ def incident_search(request):
         incidents = inc_filter.qs
 
         #If assignee__isnull is in request.GET parameters then filter qs where assignee is null
-        assignee__isnull = request.GET.get('assignee__isnull')
-        if assignee__isnull:
+        assignee_isnull = request.GET.get('assignee_isnull')
+        if assignee_isnull:
             incidents = incidents.filter(assignee__isnull=True)
+
+        #If collapse_filter, then set to GET parameter
+        #Set to True will set the Search Filters accordion to collapse on page load
+        collapse_filter = request.GET.get('collapse_filter')
 
     else:
         incidents = ''
@@ -197,6 +202,7 @@ def incident_search(request):
     context = {
         'filter' : inc_filter,
         'incidents' : incidents,
+        'collapse_filter' : collapse_filter,
         }
 
     return render(request, 'ticket/incident-search.html', context)
@@ -212,7 +218,7 @@ def export_csv(queryset, obj_type):
 		'location' : 'access',
 		'priority' : 'ticket', 
 		'status' : 'ticket',
-		'group' : 'access',		
+		'group' : 'access',
 	}
 
     #Ignore these fields in queryset
