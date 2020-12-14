@@ -124,7 +124,7 @@ def homepage_assigned_to_me(request):
     #Get tickets assigned to the logged in user
     new_inc = Incident.objects.filter(assignee=request.user.customer, created__gt=new_start_date)
     open_inc = Incident.objects.filter(assignee=request.user.customer, status__in=get_status_open(id=1))
-    resolved_inc = Incident.objects.filter(assignee=request.user.customer, status=get_status_resolved(id=1))
+    resolved_inc = Incident.objects.filter(assignee=request.user.customer, status__in=get_status_resolved(id=1))
 
 
     context = {
