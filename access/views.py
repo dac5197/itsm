@@ -164,30 +164,44 @@ def homepage_assigned_to_my_groups(request):
     #       },
     #   }
 
-    #Declare dictionary
+    #Declare dictionaries
     group_dict = {}
+    group_assignee_dict = {}
 
-    #Populate dictionary
     group_dict = {
-                    g.name : {
-                        u.full_name : {
-                            t.name : {
-                                'new': (apps.get_model('ticket', t.name)).objects.annotate(n_assignee=Count('assignee')).filter(assignee=u, assignment_group=g, created__gt=new_start_date).count(),
-                                'new_url' : f'{t.name.lower()}-search/?assignee={u.id}&assignment_group={g.name}&created_range_min={new_start_date.isoformat()}',
-                                'open': (apps.get_model('ticket', t.name)).objects.annotate(n_assignee=Count('assignee')).filter(assignee=u, assignment_group=g, status__in=get_status_open(id=t.id)).count(),
-                                'open_url' : f'{t.name.lower()}-search/?assignee={u.id}&assignment_group={g.name}&{format_queryset_to_get_url(get_status_open(id=t.id))}',
-                                'resolved': (apps.get_model('ticket', t.name)).objects.annotate(n_assignee=Count('assignee')).filter(assignee=u, assignment_group=g, status__in=get_status_resolved(id=t.id)).count(),
-                                'resolved_url' : f'{t.name.lower()}-search/?assignee={u.id}&assignment_group={g.name}&{format_queryset_to_get_url(get_status_resolved(id=t.id))}',
-                            } for t in ticket_types
-                        } for u in Customer.objects.filter(itsm_group_membership=g)
-                    } for g in user_groups
-                }
+        g.name : {
+            t.name : {
+                'new': (apps.get_model('ticket', t.name)).objects.annotate(n_assignment_group=Count('assignment_group')).filter(assignment_group=g, created__gt=new_start_date).count(),
+                'new_url' : f'{t.name.lower()}-search/?assignment_group={g.name}&created_range_min={new_start_date.isoformat()}',
+                'open': (apps.get_model('ticket', t.name)).objects.annotate(n_assignment_group=Count('assignment_group')).filter(assignment_group=g, status__in=get_status_open(id=t.id)).count(),
+                'open_url' : f'{t.name.lower()}-search/?assignment_group={g.name}&{format_queryset_to_get_url(get_status_open(id=t.id))}',
+                'resolved': (apps.get_model('ticket', t.name)).objects.annotate(n_assignment_group=Count('assignment_group')).filter(assignment_group=g, status__in=get_status_resolved(id=t.id)).count(),
+                'resolved_url' : f'{t.name.lower()}-search/?assignment_group={g.name}&{format_queryset_to_get_url(get_status_resolved(id=t.id))}',
+            } for t in ticket_types
+        } for g in user_groups
+    }
+
+    #Populate group assignee dictionary
+    group_assignee_dict = {
+        g.name : {
+            u.full_name : {
+                t.name : {
+                    'new': (apps.get_model('ticket', t.name)).objects.annotate(n_assignee=Count('assignee')).filter(assignee=u, assignment_group=g, created__gt=new_start_date).count(),
+                    'new_url' : f'{t.name.lower()}-search/?assignee={u.id}&assignment_group={g.name}&created_range_min={new_start_date.isoformat()}',
+                    'open': (apps.get_model('ticket', t.name)).objects.annotate(n_assignee=Count('assignee')).filter(assignee=u, assignment_group=g, status__in=get_status_open(id=t.id)).count(),
+                    'open_url' : f'{t.name.lower()}-search/?assignee={u.id}&assignment_group={g.name}&{format_queryset_to_get_url(get_status_open(id=t.id))}',
+                    'resolved': (apps.get_model('ticket', t.name)).objects.annotate(n_assignee=Count('assignee')).filter(assignee=u, assignment_group=g, status__in=get_status_resolved(id=t.id)).count(),
+                    'resolved_url' : f'{t.name.lower()}-search/?assignee={u.id}&assignment_group={g.name}&{format_queryset_to_get_url(get_status_resolved(id=t.id))}',
+                } for t in ticket_types
+            } for u in Customer.objects.filter(itsm_group_membership=g)
+        } for g in user_groups
+    }
 
     #Loop through dictionary and:
     #   Add UNASSIGNED user and counts for tickets assigned to group but with assignee = none
     #   Remove any user where sum of ticket counts for all ticket types is 0
-    for k1, v1 in group_dict.copy().items():
-        group_dict[k1]['_UNASSIGNED'] = {
+    for k1, v1 in group_assignee_dict.copy().items():
+        group_assignee_dict[k1]['_UNASSIGNED'] = {
                         t.name : {
                             'new': (apps.get_model('ticket', t.name)).objects.annotate(n_assignee=Count('assignee')).filter(assignee=None, assignment_group__name=k1, created__gt=new_start_date).count(),
                             'new_url' : f'{t.name.lower()}-search/?assignee__isnull=true&assignment_group={k1}&created_range_min={new_start_date.isoformat()}',
@@ -205,15 +219,15 @@ def homepage_assigned_to_my_groups(request):
                 ticket_sum += sum(v4 for k4, v4 in v3.items() if isinstance(v4, int))
             
             if k2 =='_UNASSIGNED':
-                group_dict[k1][k2]['id'] =  ''
+                group_assignee_dict[k1][k2]['id'] =  ''
             else:
                 name = k2.split(' ')
                 c_lp = Customer.objects.get(first_name=name[0], last_name=name[1])
-                group_dict[k1][k2]['id'] =  c_lp.id
+                group_assignee_dict[k1][k2]['id'] =  c_lp.id
             
 
             if ticket_sum == 0:
-                group_dict[k1].pop(k2, None)
+                group_assignee_dict[k1].pop(k2, None)
 
 
     context = {
@@ -222,6 +236,7 @@ def homepage_assigned_to_my_groups(request):
         'resolved_inc' : resolved_inc,
         'user_groups' : user_groups,
         'group_dict' : group_dict,
+        'group_assignee_dict' : group_assignee_dict,
         'new_start_date' : new_start_date,
     }
 

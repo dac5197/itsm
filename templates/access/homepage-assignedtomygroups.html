@@ -127,176 +127,144 @@
                       </div>
                     </div>
                 </div>
-                <!-- Group Assignee ticket counts -->
-
-
-                                {% for k1, v1 in group_dict.items %}
+                <!-- Group ticket counts -->
+                <div id="accordion-{{k1|cut:' '}}">
+                    <div class="card">
+                        <div class="card-header" id="heading{{k1|cut:' '}}">
+                            <h5 class="mb-0">
+                                <button class="btn" data-toggle="collapse" data-target="#collapse{{k1|cut:' '}}" aria-expanded="true" aria-controls="collapse{{k1|cut:' '}}">
+                                    <h5>Tickets by Group</h5>
+                                </button>
+                            </h5>
+                        </div>
+                        <div id="collapse{{k1|cut:' '}}" class="collapse show" aria-labelledby="heading{{k1|cut:' '}}" data-parent="#accordion-{{k1|cut:' '}}">
+                            <div class="card-body">
                                     
-                                        <div class="card">
-                                            <div class="card-header">
-                                                <h6>{{k1}}</h6>
-                                            </div>
-                                            <div class="card-body">
-                                                    <div >
-                                                        <table class="table table-sm small"
-                                                        data-toggle="table"
-                                                        data-sort-class="table-active"
-                                                        data-sortable="true"
-
-                                                        >
-                                                            <thead class="bg-light">
-                                                                <tr>
-                                                                    <th rowspan="2" data-field="assignee" data-sortable="true">Assignee</th>
-                                                                    <th colspan="3">Incidents</th>
-                                                                    <th colspan="3">PW Resets</th>
-                                                                    <th colspan="3">Requests</th>
-                                                                    <th colspan="3">Outages</th>
-                                                                </tr>
-                                                                <tr>
-                                                                    <th data-field="inc-new" data-sortable="true">New</th>
-                                                                    <th data-field="inc-open" data-sortable="true">Open</th>
-                                                                    <th data-field="inc-res" data-sortable="true">Resolved</th>
-                                                                    <th data-field="pw-new" data-sortable="true">New</th>
-                                                                    <th data-field="pw-open" data-sortable="true">Open</th>
-                                                                    <th data-field="pw-res" data-sortable="true">Resolved</th>
-                                                                    <th data-field="req-new" data-sortable="true">New</th>
-                                                                    <th data-field="req-open" data-sortable="true">Open</th>
-                                                                    <th data-field="req-res" data-sortable="true">Resolved</th>
-                                                                    <th data-field="out-new" data-sortable="true">New</th>
-                                                                    <th data-field="out-open" data-sortable="true">Open</th>
-                                                                    <th data-field="out-res" data-sortable="true">Resolved</th>
-                                                                </tr>
-                                                                
-                                                                
-                                                                
-                                                            </thead>
-                                                            <tbody>
-                                                                
-                                                                    
-                                                                    {% for k2, v2 in v1.items|dictsort:"0.lower" %}
-                                                                    <tr>
-                                                                        
-                                                                        <td>{{k2}}</td>
-                                                                        <td><a href="/ticket/{{v2.Incident.new_url}}">{{v2.Incident.new}}</a></td>
-                                                                        <td><a href="/ticket/{{v2.Incident.open_url}}">{{v2.Incident.open}}</a></td>
-                                                                        <td><a href="/ticket/{{v2.Incident.resolved_url}}">{{v2.Incident.resolved}}</a></td>
-                                                                        <td>{{v2.PasswordReset.new}}</td>
-                                                                        <td>{{v2.PasswordReset.open}}</td>
-                                                                        <td>{{v2.PasswordReset.resolved}}</td>
-                                                                        <td>{{v2.Request.new}}</td>
-                                                                        <td>{{v2.Request.open}}</td>
-                                                                        <td>{{v2.Request.resolved}}</td>
-                                                                        <td>{{v2.Outage.new}}</td>
-                                                                        <td>{{v2.Outage.open}}</td>
-                                                                        <td>{{v2.Outage.resolved}}</td>
-                                                                        
-                                                                    </tr>
-                                                                    {% endfor %}
-                                                                
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
+                                <table class="table table-sm small"
+                                data-toggle="table"
+                                data-sort-class="table-active"
+                                data-sortable="true"
+                                >
+                                    <thead class="bg-light">
+                                        <tr>
+                                            <th rowspan="2" data-field="assignee" data-sortable="true">Assignee</th>
+                                            <th colspan="3" data-halign="center">Incidents</th>
+                                            <th colspan="3" data-halign="center">PW Resets</th>
+                                            <th colspan="3" data-halign="center">Requests</th>
+                                            <th colspan="3" data-halign="center">Outages</th>
+                                        </tr>
+                                        <tr>
+                                            <th data-field="inc-new" data-sortable="true" data-halign="center" data-align="center">New</th>
+                                            <th data-field="inc-open" data-sortable="true" data-halign="center" data-align="center">Open</th>
+                                            <th data-field="inc-res" data-sortable="true" data-halign="center" data-align="center">Resolved</th>
+                                            <th data-field="pw-new" data-sortable="true" data-halign="center" data-align="center">New</th>
+                                            <th data-field="pw-open" data-sortable="true" data-halign="center" data-align="center">Open</th>
+                                            <th data-field="pw-res" data-sortable="true" data-halign="center" data-align="center">Resolved</th>
+                                            <th data-field="req-new" data-sortable="true" data-halign="center" data-align="center">New</th>
+                                            <th data-field="req-open" data-sortable="true" data-halign="center" data-align="center">Open</th>
+                                            <th data-field="req-res" data-sortable="true" data-halign="center" data-align="center">Resolved</th>
+                                            <th data-field="out-new" data-sortable="true" data-halign="center" data-align="center">New</th>
+                                            <th data-field="out-open" data-sortable="true" data-halign="center" data-align="center">Open</th>
+                                            <th data-field="out-res" data-sortable="true" data-halign="center" data-align="center">Resolved</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for k1, v1 in group_dict.items|dictsort:"0.lower" %}
+                                            <tr class="a-black">
+                                                <td>{{k1}}</td>
+                                                <td><a href="/ticket/{{v1.Incident.new_url}}">{{v1.Incident.new}}</a></td>
+                                                <td><a href="/ticket/{{v1.Incident.open_url}}">{{v1.Incident.open}}</a></td>
+                                                <td><a href="/ticket/{{v1.Incident.resolved_url}}">{{v1.Incident.resolved}}</a></td>
+                                                <td>{{v1.PasswordReset.new}}</td>
+                                                <td>{{v1.PasswordReset.open}}</td>
+                                                <td>{{v1.PasswordReset.resolved}}</td>
+                                                <td>{{v1.Request.new}}</td>
+                                                <td>{{v1.Request.open}}</td>
+                                                <td>{{v1.Request.resolved}}</td>
+                                                <td>{{v1.Outage.new}}</td>
+                                                <td>{{v1.Outage.open}}</td>
+                                                <td>{{v1.Outage.resolved}}</td>
                                                 
-                                            </div>
-                                        </div>
-                                    
-                                {% endfor %} 
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>    
+                <!-- Group Assignee ticket counts -->
+                {% for k1, v1 in group_assignee_dict.items %}
+                    <div id="accordion-{{k1|cut:' '}}">
+                        <div class="card">
+                            <div class="card-header" id="heading{{k1|cut:' '}}">
+                                <h5 class="mb-0">
+                                    <button class="btn" data-toggle="collapse" data-target="#collapse{{k1|cut:' '}}" aria-expanded="true" aria-controls="collapse{{k1|cut:' '}}">
+                                        <h5>{{k1}}</h5>
+                                    </button>
+                                </h5>
+                            </div>
+                            <div id="collapse{{k1|cut:' '}}" class="collapse show" aria-labelledby="heading{{k1|cut:' '}}" data-parent="#accordion-{{k1|cut:' '}}">
+                                <div class="card-body">
+                                        
+                                    <table class="table table-sm small"
+                                    data-toggle="table"
+                                    data-sort-class="table-active"
+                                    data-sortable="true"
+                                    >
+                                        <thead class="bg-light">
+                                            <tr>
+                                                <th rowspan="2" data-field="assignee" data-sortable="true" data-halign="center">Assignee</th>
+                                                <th colspan="3" data-halign="center">Incidents</th>
+                                                <th colspan="3" data-halign="center">PW Resets</th>
+                                                <th colspan="3" data-halign="center">Requests</th>
+                                                <th colspan="3" data-halign="center">Outages</th>
+                                            </tr>
+                                            <tr>
+                                                <th data-field="inc-new" data-sortable="true" data-halign="center" data-align="center">New</th>
+                                                <th data-field="inc-open" data-sortable="true" data-halign="center" data-align="center">Open</th>
+                                                <th data-field="inc-res" data-sortable="true" data-halign="center" data-align="center">Resolved</th>
+                                                <th data-field="pw-new" data-sortable="true" data-halign="center" data-align="center">New</th>
+                                                <th data-field="pw-open" data-sortable="true" data-halign="center" data-align="center">Open</th>
+                                                <th data-field="pw-res" data-sortable="true" data-halign="center" data-align="center">Resolved</th>
+                                                <th data-field="req-new" data-sortable="true" data-halign="center" data-align="center">New</th>
+                                                <th data-field="req-open" data-sortable="true" data-halign="center" data-align="center">Open</th>
+                                                <th data-field="req-res" data-sortable="true" data-halign="center" data-align="center">Resolved</th>
+                                                <th data-field="out-new" data-sortable="true" data-halign="center" data-align="center">New</th>
+                                                <th data-field="out-open" data-sortable="true" data-halign="center" data-align="center">Open</th>
+                                                <th data-field="out-res" data-sortable="true" data-halign="center" data-align="center">Resolved</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="a-black">
+                                            {% for k2, v2 in v1.items|dictsort:"0.lower" %}
+                                                <tr>
+                                                    <td>{{k2}}</td>
+                                                    <td><a href="/ticket/{{v2.Incident.new_url}}">{{v2.Incident.new}}</a></td>
+                                                    <td><a href="/ticket/{{v2.Incident.open_url}}">{{v2.Incident.open}}</a></td>
+                                                    <td><a href="/ticket/{{v2.Incident.resolved_url}}">{{v2.Incident.resolved}}</a></td>
+                                                    <td>{{v2.PasswordReset.new}}</td>
+                                                    <td>{{v2.PasswordReset.open}}</td>
+                                                    <td>{{v2.PasswordReset.resolved}}</td>
+                                                    <td>{{v2.Request.new}}</td>
+                                                    <td>{{v2.Request.open}}</td>
+                                                    <td>{{v2.Request.resolved}}</td>
+                                                    <td>{{v2.Outage.new}}</td>
+                                                    <td>{{v2.Outage.open}}</td>
+                                                    <td>{{v2.Outage.resolved}}</td>
+                                                    
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>    
+                {% endfor %} 
                             
-                <!-- New tickets Details -->
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div id="accordion-new-tickets">
-                            <div class="card">
-                                <div class="card-header" id="headingNewTickets">
-                                    <h5 class="mb-0">
-                                        <button class="btn" data-toggle="collapse" data-target="#collapseNewTickets" aria-expanded="true" aria-controls="collapseNewTickets">
-                                            <h5>My Groups' New Tickets - Details</h5>
-                                        </button>
-                                    </h5>
-                                </div>
-                                {% if new_inc %}
-                                    <div id="collapseNewTickets" class="collapse show" aria-labelledby="headingNewTickets" data-parent="#accordion-new-tickets">
-                                {% else %}
-                                    <div id="collapseNewTickets" class="collapse" aria-labelledby="headingNewTickets" data-parent="#accordion-new-tickets">
-                                {% endif %}
-                                <div class="card-body">
-                                    <!-- New Incidents Details -->
-                                    {% include 'access/homepage-collapse-ticket-table.html' with tickets=new_inc type='incident' state='new' %}
-                                    <!-- New Password Resets Details -->
-                                    {% include 'access/homepage-collapse-ticket-table.html' with tickets='' type='passwordreset' state='new' %}
-                                    <!-- New Requests Details -->
-                                    {% include 'access/homepage-collapse-ticket-table.html' with tickets='' type='request' state='new' %}
-                                </div>
-                              </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- Open tickets Details -->
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div id="accordion-open-tickets">
-                            <div class="card">
-                                <div class="card-header" id="headingOpenTickets">
-                                <h5 class="mb-0">
-                                    <button class="btn" data-toggle="collapse" data-target="#collapseOpenTickets" aria-expanded="true" aria-controls="collapseOpenTickets">
-                                        <h5>My Groups' Open Tickets - Details</h5>
-                                    </button>
-                                </h5>
-                                </div>
-                                {% if open_inc %}
-                                    <div id="collapseOpenTickets" class="collapse show" aria-labelledby="headingOpenTickets" data-parent="#accordion-open-tickets">
-                                {% else %}
-                                    <div id="collapseOpenTickets" class="collapse" aria-labelledby="headingOpenTickets" data-parent="#accordion-open-tickets">
-                                {% endif %}
-                                <div class="card-body">
-                                    <!-- New Incidents Details -->
-                                    {% include 'access/homepage-collapse-ticket-table.html' with tickets=open_inc type='incident' state='open' %}
-                                    <!-- New Password Resets Details -->
-                                    {% include 'access/homepage-collapse-ticket-table.html' with tickets='' type='passwordreset' state='open' %}
-                                    <!-- New Requests Details -->
-                                    {% include 'access/homepage-collapse-ticket-table.html' with tickets='' type='request' state='open' %}
-                                </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- Resolved tickets Details -->
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div id="accordion-resolved-tickets">
-                            <div class="card">
-                                <div class="card-header" id="headingResolvedTickets">
-                                <h5 class="mb-0">
-                                    <button class="btn" data-toggle="collapse" data-target="#collapseResolvedTickets" aria-expanded="false" aria-controls="collapseResolvedTickets">
-                                        <h5>My Groups' Resolved Tickets - Details</h5>
-                                    </button>
-                                </h5>
-                                </div>
-                                {% if resolved_inc %}
-                                    <div id="collapseResolvedTickets" class="collapse show" aria-labelledby="headingResolvedTickets" data-parent="#accordion-resolved-tickets">
-                                {% else %}
-                                    <div id="collapseResolvedTickets" class="collapse" aria-labelledby="headingResolvedTickets" data-parent="#accordion-resolved-tickets">
-                                {% endif %}                                
-                                <div class="card-body">
-                                    <!-- New Incidents Details -->
-                                    {% include 'access/homepage-collapse-ticket-table.html' with tickets=resolved_inc type='incident' state='resolved' %}
-                                    <!-- New Password Resets Details -->
-                                    {% include 'access/homepage-collapse-ticket-table.html' with tickets='' type='passwordreset' state='resolved' %}
-                                    <!-- New Requests Details -->
-                                    {% include 'access/homepage-collapse-ticket-table.html' with tickets='' type='request' state='resolved' %}
-                                </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-
+                
             </div>
         </div>
-    </div>
     {% endblock %}
 </body>
 </html>

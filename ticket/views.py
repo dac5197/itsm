@@ -183,7 +183,8 @@ def incident_search(request):
         incidents = inc_filter.qs
 
         #If assignee__isnull is in request.GET parameters then filter qs where assignee is null
-        if request.GET['assignee__isnull']:
+        assignee__isnull = request.GET.get('assignee__isnull')
+        if assignee__isnull:
             incidents = incidents.filter(assignee__isnull=True)
 
     else:

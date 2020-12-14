@@ -13,39 +13,39 @@
         {% else %}
             <div id="collapse{{state}}{{type}}" class="collapse" aria-labelledby="heading{{state}}{{type}}" data-parent="#accordion-{{state}}{{type}}">
         {% endif %}
-        <div class="card-body">
-                <div class="table-responsive table-sm table-hover w-auto border-bottom small">
-                    <table class="table ">
-                        <thead>
-                            <th>Number</th>
-                            <th>Status</th>
-                            <th>Priority</th>
-                            <th>Created</th>
-                            <th>Resolved</th>
-                            <th>Reopened</th>
-                            <th>Assignment Group</th>
-                            <th>Assignee</th>
-                            <th width="25%">Desc Short</th>
-                        </thead>
-                        <tbody>
-                            {% for ticket in tickets %}
-                                <tr>
-                                    <td><a href="/ticket/{{type}}-detail/{{ticket.number}}">{{ticket.number}}</a></td>
-                                    <td>{{ticket.status}}</td>
-                                    <td>{{ticket.priority}}</td>
-                                    <td>{{ticket.created}}</td>
-                                    <td>{{ticket.resolved}}</td>
-                                    <td>{{ticket.reopened}}</td>
-                                    <td>{{ticket.assignment_group}}</td>
-                                    <td>{{ticket.assignee.full_name}}</td>
-                                    <td>{{ticket.desc_short}}</td>
-                                </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
+                <div class="card-body">
+                    <div class="table-responsive table-sm table-hover w-auto border-bottom small">
+                        <table class="table ">
+                            <thead>
+                                <th>Number</th>
+                                <th>Status</th>
+                                <th>Priority</th>
+                                <th>Created</th>
+                                <th>Resolved</th>
+                                <th>Reopened</th>
+                                <th>Assignment Group</th>
+                                <th>Assignee</th>
+                                <th width="25%">Desc Short</th>
+                            </thead>
+                            <tbody>
+                                {% for ticket in tickets %}
+                                    <tr>
+                                        <td><a href="/ticket/{{type}}-detail/{{ticket.number}}">{{ticket.number}}</a></td>
+                                        <td>{{ticket.status}}</td>
+                                        <td>{{ticket.priority}}</td>
+                                        <td>{{ticket.created}}</td>
+                                        <td>{{ticket.resolved}}</td>
+                                        <td>{{ticket.reopened}}</td>
+                                        <td>{{ticket.assignment_group}}</td>
+                                        <td>{{ticket.assignee.full_name}}</td>
+                                        <td>{{ticket.desc_short}}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                
                 </div>
-            
-        </div>
-      </div>
+            </div>
     </div>
 </div>

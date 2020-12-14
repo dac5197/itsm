@@ -97,3 +97,8 @@ label {
 .card-header .card-header-tabs .nav-item .nav-link {
   color: black;
 }
+
+.a-black td a {
+  color: black !important;
+  font-size: medium;
+}
