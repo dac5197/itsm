@@ -47,8 +47,32 @@ class IncidentForm(forms.ModelForm):
         self.fields['priority'].required = True
         self.fields['assignment_group'].required = True
 
+        #Set not required fields
+        self.fields['assignee'].required = False
+
         #Remove select default (empty label) option
         self.fields['priority'].empty_label = None
+
+
+        #Clear values for the assignee select
+        self.fields['assignee'].queryset = Customer.objects.none()
+
+        #Set values for the assignee select:
+        #   If POST, get assignment group ID from request data
+        #   Else, get assignment group ID from form instance
+        #Get group membership and populated assignee select
+        #https://simpleisbetterthancomplex.com/tutorial/2018/01/29/how-to-implement-dependent-or-chained-dropdown-list-with-django.html
+        if 'assignment_group' in self.data:
+            try:
+                assignment_group_id = int(self.data.get('assignment_group'))
+                grp = ITSMGroup.objects.get(id=assignment_group_id)
+                self.fields['assignee'].queryset = Customer.objects.filter(itsm_group_membership=grp).order_by('last_name')
+            except (ValueError, TypeError):
+                pass  # invalid input from the client; ignore and fallback to empty City queryset
+        elif self.instance.pk:
+            grp = ITSMGroup.objects.get(id=self.instance.assignment_group.id)
+            self.fields['assignee'].queryset = Customer.objects.filter(itsm_group_membership=grp).order_by('last_name')
+        
 
     def clean(self):
         cleaned_data = super().clean()
