@@ -51,6 +51,8 @@
                     <div class="card-body d-flex justify-content-center">
                         <form method="POST" action="">
                             {% csrf_token %}
+                            <!--Show any errors from a previous form submission-->
+                            {% include 'base/form-errors.html' with form=form %}
                             <input type="text" name="username" placeholder="Username..." class="form-control input-field">
                             
                             <input type="password" name="password" placeholder="Password..." class="form-control input-field">
@@ -59,9 +61,6 @@
                             </div>
                         </form>
                     </div>
-                    {% for message in messages %}
-					    <p id="messages">{{message}}</p>
-				    {% endfor %}	
                     <div class="card-footer text-muted d-flex justify-content-center">
                         <table>
                             <tr>
