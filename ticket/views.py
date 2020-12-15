@@ -115,7 +115,8 @@ def incident_detail(request, number):
         if form.is_valid():
             instance = form.save(commit=False)
             instance.ticket_type = TicketType.objects.get(id=1)
-         
+            instance.created_by = request.user.customer
+
             #Set updated field to NOW            
             instance.updated = timezone.now()
 
@@ -159,7 +160,7 @@ def incident_detail(request, number):
             if 'save_stay' in request.POST:
                 return redirect('incident-detail', number=number) 
             elif 'save_return' in request.POST:
-                return redirect('incident')
+                return redirect('homepage')
 
     else:
         form = IncidentForm(instance=incident)

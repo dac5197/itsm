@@ -63,7 +63,7 @@ def create_sso():
 #Get the start date for "new" tickets
 #Start date is today minues DAYS then truncated to midnight for that date
 def get_new_ticket_start_date():
-    DAYS = 3
+    DAYS = 1
 
     new_ticket_start_date = timezone.now()-timezone.timedelta(days=DAYS)
     new_ticket_start_date = new_ticket_start_date.replace(hour=0, minute=0, second=0, microsecond=0)

@@ -112,6 +112,7 @@ class Ticket(models.Model):
     updated = models.DateTimeField(default=timezone.now, null=False, blank=False)
     active = models.BooleanField(default=True)
     reopened = models.IntegerField(default=0)
+    created_by = models.ForeignKey(Customer, on_delete=models.SET_NULL, null=True, blank=True, related_name='created_by')
 
 
 class Incident(Ticket):
