@@ -83,7 +83,7 @@ def register_profile(request, id):
     
     return render(request, 'access/register-profile.html', context)
 
-
+@login_required(login_url='/access/login')
 def group_tree(request):
     group_list = ITSMGroup.objects.all()
    

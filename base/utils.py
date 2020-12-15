@@ -37,6 +37,7 @@ def set_all_sysIDs_relationship_fields():
         'customer' : 'access',
         'itsmgroup' : 'access',
         'location' : 'access',
+        'role' : 'access',
         'priority' : 'ticket',
 		'tickettype' : 'ticket',
         'status' : 'ticket',

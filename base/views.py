@@ -7,6 +7,10 @@ from django.shortcuts import render, redirect
 from .models import *
 from .utils import set_all_sysIDs_relationship_fields
 
+from access.decorators import admin_only
+from access.forms import GroupForm
+from access.models import ITSMGroup
+from access.utils import cascade_roles
 from tracking.utils import create_work_note
 
 # Create your views here.
@@ -41,12 +45,28 @@ def remove_attachment(request, id, number, url, sysID):
     return redirect(url, number=number) 
 
 @login_required(login_url='/access/login')
+@admin_only
 def admin_panel(request):
-    if request.GET.get('set_all_sysID_rel_fields'):
-        set_all_sysIDs_relationship_fields()
-        return redirect('admin-panel')
 
-    return render(request, 'base/admin-panel.html')
+    if request.method == 'POST':
+        #Set all relationship fiels for SysID
+        if 'set_all_sysID_rel_fields' in request.POST:
+            set_all_sysIDs_relationship_fields()
+            return redirect('admin-panel')
+
+        #Cascade roles for group to all descendants
+        if request.POST.get('cascade_group_roles'):
+            grp = ITSMGroup.objects.get(id=request.POST['tsm_group'])
+            cascade_roles(grp)
+            return redirect('admin-panel')
+
+    form = GroupForm()
+
+    context = {
+        'form' : form,
+    }
+
+    return render(request, 'base/admin-panel.html', context)
 
 
 

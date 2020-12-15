@@ -4,6 +4,8 @@ import random
 from django.contrib.auth.models import User
 from django.utils import timezone
 
+from .models import *
+
 #Display random background image on page load 
 #Image must be in static\images directory or subdirectory
 def get_random_bg_img(img_dir):
@@ -40,6 +42,34 @@ def create_tree_list(qs, max_depth, depth=1, leaf=None):
             tree_list.append(create_tree_list(qs=qs, max_depth=max_depth, depth=depth, leaf=r.path))
 
     return tree_list
+
+#Get only the children of a group one level down
+def get_group_direct_descendants(grp):
+    grp_direct_descendants = ITSMGroup.objects.filter(path__startswith=grp.path, path__length=len(grp.path)+1)
+    grp_direct_descendants = grp_direct_descendants.exclude(path=grp.path)
+    return grp_direct_descendants
+
+#Get all descendants of a group
+def get_group_all_descendants(grp):
+    grp_all_descendants = ITSMGroup.objects.filter(path__startswith=grp.path)
+    grp_all_descendants = grp_all_descendants.exclude(path=grp.path)
+    return grp_all_descendants
+
+#Cascade the roles in parent group to all descandents
+def cascade_roles(grp):
+    descendants = get_group_all_descendants(grp)
+    print(grp.name)
+    roles = grp.roles.all()
+    for descendant in descendants:
+        if roles:
+            for role in roles:
+                descendant.roles.add(role.id)
+        else:
+            return False
+
+        print(descendant.name)
+    
+    return True
 
 #Create SSO for username
 def create_sso():

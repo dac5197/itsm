@@ -93,6 +93,14 @@ class Group(models.Model):
     def __str__(self):
         return self.name
 
+class Role(models.Model):
+    sysID = models.OneToOneField(SysID, on_delete=models.CASCADE, default=SysID.add_new)
+    name = models.CharField(max_length=100, unique=True, null=False, blank=False)
+    description = models.TextField(null=True, blank=True)
+
+    def __str__(self):
+        return self.name
+
 class ITSMGroup(DjangoGroup):
     sysID = models.OneToOneField(SysID, on_delete=models.CASCADE, default=SysID.add_new)
     manager = models.ForeignKey(Customer, on_delete=models.SET_NULL, null=True, blank=True, related_name='itms_group_manager')
@@ -104,6 +112,7 @@ class ITSMGroup(DjangoGroup):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now_add=True)
     active = models.BooleanField(default=True)
+    roles = models.ManyToManyField(Role, related_name='role_membership', blank=True)
     
     def __str__(self):
         return self.name

@@ -9,3 +9,4 @@ class AttachmentForm(forms.ModelForm):
     class Meta:
         model = Attachment
         fields = ['document']
+

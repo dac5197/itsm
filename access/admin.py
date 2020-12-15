@@ -22,4 +22,5 @@ admin.site.register(Location)
 admin.site.register(Customer, CustomerAdmin)
 admin.site.register(Group)
 admin.site.register(ITSMGroup)
+admin.site.register(Role)
 

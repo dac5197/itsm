@@ -12,8 +12,35 @@ Admin Panel
 
 <h3>Admin Panel</h3>
 
-<form action="#" method="get">
-    <input type="submit" class="btn btn-warning" value="Set SysID Relationship Fields" name="set_all_sysID_rel_fields">
+<form action="#" method="POST">
+    {% csrf_token %}
+    <table>
+        <thead>
+            <tr>
+                <th>Action</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <input type="submit" class="btn btn-warning" value="Set SysID Relationship Fields" name="set_all_sysID_rel_fields">
+                </td>
+                <td>
+                    <p>Set the relationship fields (rel_obj_model, rel_obj_id, rel_obj_name) for all models with a one-to-one relationship with SysID</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    {{form.tsm_group}}
+                    <input type="submit" class="btn btn-warning" value="Cascade Group Roles" name="cascade_group_roles">
+                </td>
+                <td>
+                    <p>Gets the roles for the selected group and adds those roles to all descendants in heirarchy.</p>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 </form>
 
 {% endblock %}

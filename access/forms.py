@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from django.forms import ModelForm
+from django.forms import Form, ModelForm
 
 from crispy_forms.helper import FormHelper
 
@@ -25,3 +25,6 @@ class CreateUserForm(UserCreationForm):
 
         #Change form label names
         self.fields['password2'].label = 'Confirm Password'
+
+class GroupForm(forms.Form):
+    tsm_group = forms.ChoiceField(choices=[(group.id, group.name) for group in ITSMGroup.objects.all().order_by('path')])
