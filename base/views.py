@@ -1,5 +1,6 @@
 import os
 
+from django.conf import settings
 from django.shortcuts import render, redirect
 
 from .models import *

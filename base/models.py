@@ -2,6 +2,7 @@ import os
 import random
 import string
 
+from django.conf import settings
 from django.db import models
 from django.utils import timezone
 
@@ -29,9 +30,22 @@ class SysID(models.Model):
     def add_new(cls):
         return cls.objects.create().id
 
+
+def get_attachment_file(self, filename):
+    save_dir = f'{settings.MEDIA_ROOT}/attachments/{self.foreign_sysID.rel_obj_name}'
+    save_filename = f'{save_dir}/{filename}'
+
+    if not os.path.exists(save_dir):
+        os.mkdir(save_dir)
+
+    if os.path.exists(save_filename):
+        os.remove(save_filename)
+
+    return save_filename
+
 class Attachment(models.Model):
     foreign_sysID = models.ForeignKey(SysID, on_delete=models.CASCADE, null=True, blank=True)
-    document = models.FileField(upload_to='attachments/', validators=[validate_file_size])
+    document = models.FileField(upload_to=get_attachment_file, validators=[validate_file_size])
     created = models.DateTimeField(default=timezone.now, null=False, blank=False)
 
     @property

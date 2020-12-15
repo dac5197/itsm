@@ -148,4 +148,4 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 #https://docs.djangoproject.com/en/1.11/ref/settings/#login-redirect-url
 LOGIN_URL = 'access/login.html'
 LOGIN_REDIRECT_URL = '/'
-LOGOUT_REDIRECT_URL = 'access/login.html'
+LOGOUT_REDIRECT_URL = '/access/login'
