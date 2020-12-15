@@ -13,7 +13,7 @@
 <body>
     {% block content %}
     <div class="container">
-        <div class="card bg-light mb-3">
+        <div class="card bg-light mb-3 shadow-sm">
             <div class="card-header">
                 <ul class="nav nav-tabs card-header-tabs">
                     <li class="nav-item">
@@ -32,7 +32,7 @@
                 <div class="row">
                     <!-- New tickets (opened in last 3 days) -->
                     <div class="col-lg-4">
-                        <div class="card mb-3">
+                        <div class="card mb-3 shadow-sm">
                             <div class="card-header"><h4>My New Tickets</h4></div>
                             <div class="card-body">
                                 <div class="row">
@@ -64,8 +64,10 @@
                     </div>
                     <!-- Open tickets (in status not 'resovled' or 'closed') -->
                     <div class="col-lg-4">
-                        <div class="card mb-3">
-                        <div class="card-header"><h4>My Open Tickets</h4></div>
+                        <div class="card mb-3 shadow-sm">
+                        <div class="card-header">
+                            <h4>My Open Tickets</h4>
+                        </div>
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-9">
@@ -96,8 +98,10 @@
                     </div>
                     <!-- Resolved (resolved in last 3 days) -->
                     <div class="col-lg-4">
-                        <div class="card mb-3">
-                        <div class="card-header"><h4>My Resolved Tickets</h4></div>
+                        <div class="card mb-3 shadow-sm">
+                        <div class="card-header">
+                            <h4>My Resolved Tickets</h4>
+                        </div>
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-9">
@@ -131,7 +135,7 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div id="accordion-new-tickets">
-                            <div class="card">
+                            <div class="card shadow-sm">
                                 <div class="card-header" id="headingNewTickets">
                                     <h5 class="mb-0">
                                         <button class="btn" data-toggle="collapse" data-target="#collapseNewTickets" aria-expanded="true" aria-controls="collapseNewTickets">
@@ -161,7 +165,7 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div id="accordion-open-tickets">
-                            <div class="card">
+                            <div class="card shadow-sm">
                                 <div class="card-header" id="headingOpenTickets">
                                 <h5 class="mb-0">
                                     <button class="btn" data-toggle="collapse" data-target="#collapseOpenTickets" aria-expanded="true" aria-controls="collapseOpenTickets">

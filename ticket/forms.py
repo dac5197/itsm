@@ -16,11 +16,12 @@ class IncidentForm(forms.ModelForm):
             
             #Set fields to readonly (disabled)
             'number' : forms.TextInput(attrs={'readonly':'readonly'}),
-            'created' : forms.DateTimeInput(attrs={'readonly':'readonly'}, format='%m/%d/%Y %H:%M'),
-            'updated' : forms.DateTimeInput(attrs={'readonly':'readonly'}, format='%m/%d/%Y %H:%M'),
-            'resolved' : forms.DateTimeInput(attrs={'readonly':'readonly'}, format='%m/%d/%Y %H:%M'),
-            'reopened' : forms.TextInput(attrs={'readonly':'readonly'}),
             'closed' : forms.DateTimeInput(attrs={'readonly':'readonly'}, format='%m/%d/%Y %H:%M'),
+            'created' : forms.DateTimeInput(attrs={'readonly':'readonly'}, format='%m/%d/%Y %H:%M'),
+            'created_by' : forms.TextInput(attrs={'readonly':'readonly'}),
+            'reopened' : forms.TextInput(attrs={'readonly':'readonly'}),
+            'resolved' : forms.DateTimeInput(attrs={'readonly':'readonly'}, format='%m/%d/%Y %H:%M'),
+            'updated' : forms.DateTimeInput(attrs={'readonly':'readonly'}, format='%m/%d/%Y %H:%M'),
             
             #Set 'active' boolean to a readonly textbox
             'active' : forms.TextInput(attrs={'readonly':'readonly'}),                

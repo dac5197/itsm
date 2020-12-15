@@ -12,148 +12,149 @@
 </head>
 <body>
     {% block content %}
-        <div class="container bg-light mb-3 shadow">
-        {% csrf_token %}
-        
-            <div class="card-header">
-                <h3>Incident Search</h3>
-            </div>
-            <div class="card-body">
-                <div id="accordion-search-filters">
-                    <div class="card">
-                        <div class="card-header" id="headingSearchFilters">
-                            <h5 class="mb-0">
-                                <button class="btn" data-toggle="collapse" data-target="#collapseSearchFilters" aria-expanded="true" aria-controls="collapseSearchFilters">
-                                    <h5>Search Filters</h5>
-                                </button>
-                            </h5>
-                        </div>
-                        {% if collapse_filter %}
-                            <div id="collapseSearchFilters" class="collapse" aria-labelledby="headingSearchFilters" data-parent="#accordion-search-filters">
-                        {% else %}
-                            <div id="collapseSearchFilters" class="collapse show" aria-labelledby="headingSearchFilters" data-parent="#accordion-search-filters">
-                        {% endif %}
-                                <form method="GET">
-                                    <div class="card-body">
-                                        <div class="row">                    
-                                            <div class="col-lg-4">
-                                                <label for="{{filter.form.number.id_for_label}}"><strong>{{filter.form.number.label}}:</strong></label>
-                                                <div class="form-field">
-                                                    {{filter.form.number|add_class:'form-control'}}
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-4">
-                                                <label for="{{filter.form.status.id_for_label}}"><strong>{{filter.form.status.label}}:</strong></label>
-                                                <div class="form-field">
-                                                    {{filter.form.status|add_class:'form-control'}}
-                                                </div>
-                                            </div> 
-                                            <div class="col-lg-4">
-                                                <label for="{{filter.form.priority.id_for_label}}"><strong>{{filter.form.priority.label}}:</strong></label>
-                                                <div class="form-field">
-                                                    {{filter.form.priority|add_class:'form-control'}}
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <hr>
-                                        <div class="row">   
-                                            <div class="col-lg-6">
-                                                <label for="{{filter.form.customer.id_for_label}}"><strong>{{filter.form.customer.label}}:</strong></label>
-                                                <div class="form-field">
-                                                    {{filter.form.customer|add_class:'form-control form-control-chosen'|attr:'multiple'|default_if_none:""}}
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-3">
-                                                <label for="{{filter.form.phone.id_for_label}}"><strong>{{filter.form.phone.label}}:</strong></label>
-                                                <div class="form-field">
-                                                    {{filter.form.phone|add_class:'form-control'}}
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-3">
-                                                <label for="{{filter.form.location.id_for_label}}"><strong>{{filter.form.location.label}}:</strong></label>
-                                                <div class="form-field">
-                                                    {{filter.form.location|add_class:'form-control'}}
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <hr>
-                                        <div class="row">                    
-                                            <div class="col-lg-6">
-                                                <label for="{{filter.form.assignment_group.id_for_label}}"><strong>{{filter.form.assignment_group.label}}:</strong></label>
-                                                <div class="form-field">
-                                                    {{filter.form.assignment_group|add_class:'form-control'}}
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-6">
-                                                <label for="{{filter.form.assignee.id_for_label}}"><strong>{{filter.form.assignee.label}}:</strong></label>
-                                                <div class="form-field">
-                                                    {{filter.form.assignee|add_class:'form-control form-control-chosen'|attr:'multiple'}}
-                                                </div>
-                                            </div> 
-                                        </div>
-                                        <hr>
-                                        <div class="row">                    
-                                            <div class="col-lg-3">
-                                                <label for="{{filter.form.created.id_for_label}}"><strong>{{filter.form.created.label}}:</strong></label>
-                                                <div class="form-field inline">
-                                                    {{filter.form.created|add_class:'form-control'}}
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-9">
-                                                <label for="{{filter.form.created_range.id_for_label}}"><strong>{{filter.form.created_range.label}}:</strong></label>
-                                                <div class="form-field inline">
-                                                    {{filter.form.created_range|add_class:'form-control'}}
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <hr>
-                                        <div class="row">                    
-                                            <div class="col-lg-3">
-                                                <label for="{{filter.form.resolved.id_for_label}}"><strong>{{filter.form.resolved.label}}:</strong></label>
-                                                <div class="form-field inline">
-                                                    {{filter.form.resolved|add_class:'form-control'}}
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-9">
-                                                <label for="{{filter.form.resolved_range.id_for_label}}"><strong>{{filter.form.resolved_range.label}}:</strong></label>
-                                                <div class="form-field inline">
-                                                    {{filter.form.resolved_range|add_class:'form-control'}}
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <hr>
-                                        <div class="row">                    
-                                            <div class="col-lg-3">
-                                                <label for="{{filter.form.reopened.id_for_label}}"><strong>{{filter.form.reopened.label}}:</strong></label>
-                                                <div class="form-field inline">
-                                                    {{filter.form.reopened|add_class:'form-control'}}
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-9">
-                                                <label for="{{filter.form.reopened_range.id_for_label}}"><strong>{{filter.form.reopened_range.label}}:</strong></label>
-                                                <div class="form-field inline">
-                                                    {{filter.form.reopened_range|add_class:'form-control'}}
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <hr>
-                                        <div class="row">                    
-                                            <div class="col-lg-12">
-                                                <button class="btn btn-primary" name="search" value="search" type="submit"><strong>Search</strong></button>
-                                                <a class="btn btn-info" href="{% url 'incident-search' %}"><strong>Clear</strong></a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </form>
+        <div class="container">
+            {% csrf_token %}
+            <div class="card bg-light mb-3 shadow">
+                <div class="card-header">
+                    <h3>Incident Search</h3>
+                </div>
+                <div class="card-body">
+                    <div id="accordion-search-filters">
+                        <div class="card shadow-sm">
+                            <div class="card-header" id="headingSearchFilters">
+                                <h5 class="mb-0">
+                                    <button class="btn" data-toggle="collapse" data-target="#collapseSearchFilters" aria-expanded="true" aria-controls="collapseSearchFilters">
+                                        <h5>Search Filters</h5>
+                                    </button>
+                                </h5>
                             </div>
+                            {% if collapse_filter %}
+                                <div id="collapseSearchFilters" class="collapse" aria-labelledby="headingSearchFilters" data-parent="#accordion-search-filters">
+                            {% else %}
+                                <div id="collapseSearchFilters" class="collapse show" aria-labelledby="headingSearchFilters" data-parent="#accordion-search-filters">
+                            {% endif %}
+                                    <form method="GET">
+                                        <div class="card-body">
+                                            <div class="row">                    
+                                                <div class="col-lg-4">
+                                                    <label for="{{filter.form.number.id_for_label}}"><strong>{{filter.form.number.label}}:</strong></label>
+                                                    <div class="form-field">
+                                                        {{filter.form.number|add_class:'form-control'}}
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-4">
+                                                    <label for="{{filter.form.status.id_for_label}}"><strong>{{filter.form.status.label}}:</strong></label>
+                                                    <div class="form-field">
+                                                        {{filter.form.status|add_class:'form-control'}}
+                                                    </div>
+                                                </div> 
+                                                <div class="col-lg-4">
+                                                    <label for="{{filter.form.priority.id_for_label}}"><strong>{{filter.form.priority.label}}:</strong></label>
+                                                    <div class="form-field">
+                                                        {{filter.form.priority|add_class:'form-control'}}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <hr>
+                                            <div class="row">   
+                                                <div class="col-lg-6">
+                                                    <label for="{{filter.form.customer.id_for_label}}"><strong>{{filter.form.customer.label}}:</strong></label>
+                                                    <div class="form-field">
+                                                        {{filter.form.customer|add_class:'form-control form-control-chosen'|attr:'multiple'|default_if_none:""}}
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-3">
+                                                    <label for="{{filter.form.phone.id_for_label}}"><strong>{{filter.form.phone.label}}:</strong></label>
+                                                    <div class="form-field">
+                                                        {{filter.form.phone|add_class:'form-control'}}
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-3">
+                                                    <label for="{{filter.form.location.id_for_label}}"><strong>{{filter.form.location.label}}:</strong></label>
+                                                    <div class="form-field">
+                                                        {{filter.form.location|add_class:'form-control'}}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <hr>
+                                            <div class="row">                    
+                                                <div class="col-lg-6">
+                                                    <label for="{{filter.form.assignment_group.id_for_label}}"><strong>{{filter.form.assignment_group.label}}:</strong></label>
+                                                    <div class="form-field">
+                                                        {{filter.form.assignment_group|add_class:'form-control'}}
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-6">
+                                                    <label for="{{filter.form.assignee.id_for_label}}"><strong>{{filter.form.assignee.label}}:</strong></label>
+                                                    <div class="form-field">
+                                                        {{filter.form.assignee|add_class:'form-control form-control-chosen'|attr:'multiple'}}
+                                                    </div>
+                                                </div> 
+                                            </div>
+                                            <hr>
+                                            <div class="row">                    
+                                                <div class="col-lg-3">
+                                                    <label for="{{filter.form.created.id_for_label}}"><strong>{{filter.form.created.label}}:</strong></label>
+                                                    <div class="form-field inline">
+                                                        {{filter.form.created|add_class:'form-control'}}
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-9">
+                                                    <label for="{{filter.form.created_range.id_for_label}}"><strong>{{filter.form.created_range.label}}:</strong></label>
+                                                    <div class="form-field inline">
+                                                        {{filter.form.created_range|add_class:'form-control'}}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <hr>
+                                            <div class="row">                    
+                                                <div class="col-lg-3">
+                                                    <label for="{{filter.form.resolved.id_for_label}}"><strong>{{filter.form.resolved.label}}:</strong></label>
+                                                    <div class="form-field inline">
+                                                        {{filter.form.resolved|add_class:'form-control'}}
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-9">
+                                                    <label for="{{filter.form.resolved_range.id_for_label}}"><strong>{{filter.form.resolved_range.label}}:</strong></label>
+                                                    <div class="form-field inline">
+                                                        {{filter.form.resolved_range|add_class:'form-control'}}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <hr>
+                                            <div class="row">                    
+                                                <div class="col-lg-3">
+                                                    <label for="{{filter.form.reopened.id_for_label}}"><strong>{{filter.form.reopened.label}}:</strong></label>
+                                                    <div class="form-field inline">
+                                                        {{filter.form.reopened|add_class:'form-control'}}
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-9">
+                                                    <label for="{{filter.form.reopened_range.id_for_label}}"><strong>{{filter.form.reopened_range.label}}:</strong></label>
+                                                    <div class="form-field inline">
+                                                        {{filter.form.reopened_range|add_class:'form-control'}}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <hr>
+                                            <div class="row">                    
+                                                <div class="col-lg-12">
+                                                    <button class="btn btn-primary" name="search" value="search" type="submit"><strong>Search</strong></button>
+                                                    <a class="btn btn-info" href="{% url 'incident-search' %}"><strong>Clear</strong></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                        </div>
+                    </div>
+                    <!-- Display search results -->
+                    <br>
+                    {% include 'ticket/incident-search-results.html' with incidents=incidents %}
                     </div>
                 </div>
-                <!-- Display search results -->
-                <br>
-                {% include 'ticket/incident-search-results.html' with incidents=incidents %}
             </div>
-
-    </div>
+        </div>
     
     {% endblock %}
 </body>
