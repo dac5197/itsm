@@ -99,10 +99,6 @@ def group_tree(request):
 #Display homepage of logged in user's tickets
 @login_required(login_url='/access/login')
 def homepage(request):
-    
-    user_roles = get_user_roles(request)
-    print(user_roles)
-
     new_start_date = get_new_ticket_start_date()
 
     #Get tickets for the logged in user
@@ -112,6 +108,8 @@ def homepage(request):
     new_inc = Incident.objects.filter(customer=request.user.customer, created__gt=new_start_date)
     open_inc = Incident.objects.filter(customer=request.user.customer, status__in=get_status_open(id=1))
     resolved_inc = Incident.objects.filter(customer=request.user.customer, status__in=get_status_resolved(id=1))
+
+    user_roles = get_user_roles(request)
 
     context = {
         'new_inc' : new_inc,
@@ -133,11 +131,13 @@ def homepage_assigned_to_me(request):
     open_inc = Incident.objects.filter(assignee=request.user.customer, status__in=get_status_open(id=1))
     resolved_inc = Incident.objects.filter(assignee=request.user.customer, status__in=get_status_resolved(id=1))
 
+    user_roles = get_user_roles(request)
 
     context = {
         'new_inc' : new_inc,
         'open_inc' : open_inc,
         'resolved_inc' : resolved_inc,
+        'user_roles' : user_roles,
     }
 
     return render(request, 'access/homepage-assignedtome.html', context)
@@ -259,6 +259,7 @@ def homepage_assigned_to_my_groups(request):
             if ticket_sum == 0:
                 group_assignee_dict[k1].pop(k2, None)
 
+    user_roles = get_user_roles(request)
 
     context = {
         'new_inc' : new_inc,
@@ -268,6 +269,7 @@ def homepage_assigned_to_my_groups(request):
         'group_dict' : group_dict,
         'group_assignee_dict' : group_assignee_dict,
         'new_start_date' : new_start_date,
+        'user_roles' : user_roles,
     }
 
     return render(request, 'access/homepage-assignedtomygroups.html', context)

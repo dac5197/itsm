@@ -170,6 +170,8 @@ def incident_detail(request, number):
     else:
         form = IncidentForm(instance=incident)
 
+    user_roles = get_user_roles(request)
+
     context = {
         'incident' : incident,
         'form' : form,
@@ -177,6 +179,7 @@ def incident_detail(request, number):
         'wn_form' : wn_form,
         'attachments' : attachments,
         'attachment_form' : attachment_form,
+        'user_roles' : user_roles,
     } 
 
     return render(request, 'ticket/incident-detail.html', context)
@@ -222,10 +225,13 @@ def incident_search(request):
     if 'export' in request.GET:
         return export_csv(queryset=incidents, obj_type='incident')
 
+    user_roles = get_user_roles(request)
+
     context = {
         'filter' : inc_filter,
         'incidents' : incidents,
         'collapse_filter' : collapse_filter,
+        'user_roles' : user_roles,
         }
 
     return render(request, 'ticket/incident-search.html', context)

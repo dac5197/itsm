@@ -7,7 +7,7 @@ from django.shortcuts import render, redirect
 from .models import *
 from .utils import set_all_sysIDs_relationship_fields
 
-from access.decorators import admin_only
+from access.decorators import admin_only, allowed_users
 from access.forms import GroupForm
 from access.models import ITSMGroup
 from access.utils import cascade_roles
@@ -19,12 +19,15 @@ def home(request):
     return redirect('access/homepage')
 
 #Create a new sysid object
+@login_required(login_url='/access/login')
+@allowed_users(allowed_roles=['TSM User'])
 def create_sysid(request):
     sys_id = SysID.objects.create()
     return sys_id
 
 #Remove attachment from ticket:
 @login_required(login_url='/access/login')
+@allowed_users(allowed_roles=['TSM User'])
 def remove_attachment(request, id, number, url, sysID):
     attachment = Attachment.objects.get(id=id)
     
