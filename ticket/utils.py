@@ -28,6 +28,8 @@ def get_priority_choices():
 def get_assignment_group_choices():
     assignment_groups = ITSMGroup.objects.filter(is_assignment=True).order_by('name')
     choices = [(group.id, group.name) for group in  assignment_groups]
+    #Insert null value
+    choices.insert(0,('', '---------'))
     return choices
 
 def get_all_customer_choices():

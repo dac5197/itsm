@@ -70,8 +70,13 @@ class IncidentForm(forms.ModelForm):
             except (ValueError, TypeError):
                 pass  # invalid input from the client; ignore and fallback to empty City queryset
         elif self.instance.pk:
-            grp = ITSMGroup.objects.get(id=self.instance.assignment_group.id)
-            self.fields['assignee'].queryset = Customer.objects.filter(itsm_group_membership=grp).order_by('last_name')
+            assignment_group = self.instance.assignment_group
+            if assignment_group:
+                grp = ITSMGroup.objects.get(id=assignment_group.id)
+                self.fields['assignee'].queryset = Customer.objects.filter(itsm_group_membership=grp).order_by('last_name')
+            else:
+                self.fields['assignment_group'].initial = '---------'
+            
         
 
     def clean(self):

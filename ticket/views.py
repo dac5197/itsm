@@ -144,6 +144,10 @@ def incident_detail(request, number):
                 if instance.status != get_status_resolved(id=1):
                     instance.resolved = None
             
+            #If ticket status is default (ie. Created [order_value=1]), then set the next status (order_value=2)
+            if instance.status == get_status_default(id=1):
+                instance.status = Status.objects.get(ticket_type=instance.ticket_type, order_value=2)
+
             instance.save()
 
             #Create work note
