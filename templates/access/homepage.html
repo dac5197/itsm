@@ -3,243 +3,235 @@
 {% load tracking_tags %}
 {% load widget_tweaks %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    {% block content %}
-    <div class="container">
-        <div class="card bg-light mb-3 shadow-sm">
-            <div class="card-header">
-                <ul class="nav nav-tabs card-header-tabs">
-                    <li class="nav-item">
-                      <a class="nav-link active" href="{% url 'homepage' %}"><h6>Homepage</h6></a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link" href="{% url 'homepage-assignedtome' %}"><h6>Assigned to Me</h6></a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link" href="{% url 'homepage-assignedtomygroups' %}"><h6>Assigned to My Groups</h6></a>
-                    </li>
-                </ul>
+
+{% block content %}
+<div class="container">
+    <div class="card bg-light mb-3 shadow-sm">
+        <div class="card-header">
+            <ul class="nav nav-tabs card-header-tabs">
+                <li class="nav-item">
+                    <a class="nav-link active" href="{% url 'homepage' %}"><h6>Homepage</h6></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'homepage-assignedtome' %}"><h6>Assigned to Me</h6></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'homepage-assignedtomygroups' %}"><h6>Assigned to My Groups</h6></a>
+                </li>
+            </ul>
+        </div>
+        <div class="card-body">
+            <!-- Ticket counts -->
+            <div class="row">
+                <!-- New tickets (opened in last 3 days) -->
+                <div class="col-lg-4">
+                    <div class="card mb-3 shadow-sm">
+                        <div class="card-header">
+                            <h4>My New Tickets</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-9">
+                                    <h6 class="card-title">Incidents</h6>
+                                </div>
+                                <div class="col">
+                                    <h5 class="card-title">{{new_inc.count}}</h5>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-9">
+                                    <h6 class="card-title">Password Resets</h6>
+                                </div>
+                                <div class="col">
+                                    <h5 class="card-title">#</h5>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-9">
+                                    <h6 class="card-title">Requests</h6>
+                                </div>
+                                <div class="col">
+                                    <h5 class="card-title">#</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Open tickets (in status not 'resovled' or 'closed') -->
+                <div class="col-lg-4">
+                    <div class="card mb-3 shadow-sm">
+                    <div class="card-header">
+                        <h4>My Open Tickets</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-9">
+                                <h6 class="card-title">Incidents</h6>
+                            </div>
+                            <div class="col">
+                                <h5 class="card-title">{{open_inc.count}}</h5>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-9">
+                                <h6 class="card-title">Password Resets</h6>
+                            </div>
+                            <div class="col">
+                                <h5 class="card-title">#</h5>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-9">
+                                <h6 class="card-title">Requests</h6>
+                            </div>
+                            <div class="col">
+                                <h5 class="card-title">#</h5>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                <!-- Resolved (resolved in last 3 days) -->
+                <div class="col-lg-4">
+                    <div class="card mb-3 shadow-sm">
+                    <div class="card-header">
+                        <h4>My Resolved Tickets</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-9">
+                                <h6 class="card-title">Incidents</h6>
+                            </div>
+                            <div class="col">
+                                <h5 class="card-title">{{resolved_inc.count}}</h5>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-9">
+                                <h6 class="card-title">Password Resets</h6>
+                            </div>
+                            <div class="col">
+                                <h5 class="card-title">#</h5>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-9">
+                                <h6 class="card-title">Requests</h6>
+                            </div>
+                            <div class="col">
+                                <h5 class="card-title">#</h5>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
             </div>
-            <div class="card-body">
-                <!-- Ticket counts -->
-                <div class="row">
-                    <!-- New tickets (opened in last 3 days) -->
-                    <div class="col-lg-4">
-                        <div class="card mb-3 shadow-sm">
-                            <div class="card-header">
-                                <h4>My New Tickets</h4>
+            <!-- My Devices -->
+            <div class="row">
+                <div class="col-lg-12">
+                    <div id="accordion-devices">
+                        <div class="card shadow-sm">
+                            <div class="card-header" id="headingDevices">
+                            <h5 class="mb-0">
+                                <button class="btn" data-toggle="collapse" data-target="#collapseDevices" aria-expanded="true" aria-controls="collapseDevices">
+                                    <h5>My Devices</h5>
+                                </button>
+                            </h5>
                             </div>
+                            <div id="collapseDevices" class="collapse show" aria-labelledby="headingDevices" data-parent="#accordion-devices">
                             <div class="card-body">
-                                <div class="row">
-                                    <div class="col-9">
-                                        <h6 class="card-title">Incidents</h6>
-                                    </div>
-                                    <div class="col">
-                                        <h5 class="card-title">{{new_inc.count}}</h5>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-9">
-                                        <h6 class="card-title">Password Resets</h6>
-                                    </div>
-                                    <div class="col">
-                                        <h5 class="card-title">#</h5>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-9">
-                                        <h6 class="card-title">Requests</h6>
-                                    </div>
-                                    <div class="col">
-                                        <h5 class="card-title">#</h5>
-                                    </div>
-                                </div>
+                                Work in Progress
+                            </div>
                             </div>
                         </div>
-                    </div>
-                    <!-- Open tickets (in status not 'resovled' or 'closed') -->
-                    <div class="col-lg-4">
-                        <div class="card mb-3 shadow-sm">
-                        <div class="card-header">
-                            <h4>My Open Tickets</h4>
-                        </div>
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-9">
-                                    <h6 class="card-title">Incidents</h6>
-                                </div>
-                                <div class="col">
-                                    <h5 class="card-title">{{open_inc.count}}</h5>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-9">
-                                    <h6 class="card-title">Password Resets</h6>
-                                </div>
-                                <div class="col">
-                                    <h5 class="card-title">#</h5>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-9">
-                                    <h6 class="card-title">Requests</h6>
-                                </div>
-                                <div class="col">
-                                    <h5 class="card-title">#</h5>
-                                </div>
-                            </div>
-                        </div>
-                      </div>
-                    </div>
-                    <!-- Resolved (resolved in last 3 days) -->
-                    <div class="col-lg-4">
-                        <div class="card mb-3 shadow-sm">
-                        <div class="card-header">
-                            <h4>My Resolved Tickets</h4>
-                        </div>
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-9">
-                                    <h6 class="card-title">Incidents</h6>
-                                </div>
-                                <div class="col">
-                                    <h5 class="card-title">{{resolved_inc.count}}</h5>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-9">
-                                    <h6 class="card-title">Password Resets</h6>
-                                </div>
-                                <div class="col">
-                                    <h5 class="card-title">#</h5>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-9">
-                                    <h6 class="card-title">Requests</h6>
-                                </div>
-                                <div class="col">
-                                    <h5 class="card-title">#</h5>
-                                </div>
-                            </div>
-                        </div>
-                      </div>
                     </div>
                 </div>
-                <!-- My Devices -->
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div id="accordion-devices">
-                            <div class="card shadow-sm">
-                              <div class="card-header" id="headingDevices">
+            </div>
+            <!-- New tickets Details -->
+            <div class="row">
+                <div class="col-lg-12">
+                    <div id="accordion-new-tickets">
+                        <div class="card shadow-sm">
+                            <div class="card-header" id="headingNewTickets">
                                 <h5 class="mb-0">
-                                    <button class="btn" data-toggle="collapse" data-target="#collapseDevices" aria-expanded="true" aria-controls="collapseDevices">
-                                        <h5>My Devices</h5>
+                                    <button class="btn" data-toggle="collapse" data-target="#collapseNewTickets" aria-expanded="true" aria-controls="collapseNewTickets">
+                                        <h5>My New Tickets - Details</h5>
                                     </button>
                                 </h5>
-                              </div>
-                              <div id="collapseDevices" class="collapse show" aria-labelledby="headingDevices" data-parent="#accordion-devices">
-                                <div class="card-body">
-                                    Work in Progress
-                                </div>
-                              </div>
+                            </div>
+                            {% if new_inc %}
+                                <div id="collapseNewTickets" class="collapse show" aria-labelledby="headingNewTickets" data-parent="#accordion-new-tickets">
+                            {% else %}
+                                <div id="collapseNewTickets" class="collapse" aria-labelledby="headingNewTickets" data-parent="#accordion-new-tickets">
+                            {% endif %}
+                            <div class="card-body">
+                                <!-- New Incidents Details -->
+                                {% include 'access/homepage-collapse-ticket-table.html' with tickets=new_inc type='incident' state='new' %}
+                                <!-- New Password Resets Details -->
+                                {% include 'access/homepage-collapse-ticket-table.html' with tickets='' type='passwordreset' state='new' %}
+                                <!-- New Requests Details -->
+                                {% include 'access/homepage-collapse-ticket-table.html' with tickets='' type='request' state='new' %}
+                            </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <!-- New tickets Details -->
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div id="accordion-new-tickets">
-                            <div class="card shadow-sm">
-                                <div class="card-header" id="headingNewTickets">
-                                    <h5 class="mb-0">
-                                        <button class="btn" data-toggle="collapse" data-target="#collapseNewTickets" aria-expanded="true" aria-controls="collapseNewTickets">
-                                            <h5>My New Tickets - Details</h5>
-                                        </button>
-                                    </h5>
-                                </div>
-                                {% if new_inc %}
-                                    <div id="collapseNewTickets" class="collapse show" aria-labelledby="headingNewTickets" data-parent="#accordion-new-tickets">
-                                {% else %}
-                                    <div id="collapseNewTickets" class="collapse" aria-labelledby="headingNewTickets" data-parent="#accordion-new-tickets">
-                                {% endif %}
-                                <div class="card-body">
-                                    <!-- New Incidents Details -->
-                                    {% include 'access/homepage-collapse-ticket-table.html' with tickets=new_inc type='incident' state='new' %}
-                                    <!-- New Password Resets Details -->
-                                    {% include 'access/homepage-collapse-ticket-table.html' with tickets='' type='passwordreset' state='new' %}
-                                    <!-- New Requests Details -->
-                                    {% include 'access/homepage-collapse-ticket-table.html' with tickets='' type='request' state='new' %}
-                                </div>
-                              </div>
+            </div>
+            <!-- Open tickets Details -->
+            <div class="row">
+                <div class="col-lg-12">
+                    <div id="accordion-open-tickets">
+                        <div class="card shadow-sm">
+                            <div class="card-header" id="headingOpenTickets">
+                            <h5 class="mb-0">
+                                <button class="btn" data-toggle="collapse" data-target="#collapseOpenTickets" aria-expanded="true" aria-controls="collapseOpenTickets">
+                                    <h5>My Open Tickets - Details</h5>
+                                </button>
+                            </h5>
+                            </div>
+                            {% if open_inc %}
+                                <div id="collapseOpenTickets" class="collapse show" aria-labelledby="headingOpenTickets" data-parent="#accordion-open-tickets">
+                            {% else %}
+                                <div id="collapseOpenTickets" class="collapse" aria-labelledby="headingOpenTickets" data-parent="#accordion-open-tickets">
+                            {% endif %}
+                            <div class="card-body">
+                                <!-- New Incidents Details -->
+                                {% include 'access/homepage-collapse-ticket-table.html' with tickets=open_inc type='incident' state='open' %}
+                                <!-- New Password Resets Details -->
+                                {% include 'access/homepage-collapse-ticket-table.html' with tickets='' type='passwordreset' state='open' %}
+                                <!-- New Requests Details -->
+                                {% include 'access/homepage-collapse-ticket-table.html' with tickets='' type='request' state='open' %}
+                            </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <!-- Open tickets Details -->
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div id="accordion-open-tickets">
-                            <div class="card shadow-sm">
-                                <div class="card-header" id="headingOpenTickets">
-                                <h5 class="mb-0">
-                                    <button class="btn" data-toggle="collapse" data-target="#collapseOpenTickets" aria-expanded="true" aria-controls="collapseOpenTickets">
-                                        <h5>My Open Tickets - Details</h5>
-                                    </button>
-                                </h5>
-                                </div>
-                                {% if open_inc %}
-                                    <div id="collapseOpenTickets" class="collapse show" aria-labelledby="headingOpenTickets" data-parent="#accordion-open-tickets">
-                                {% else %}
-                                    <div id="collapseOpenTickets" class="collapse" aria-labelledby="headingOpenTickets" data-parent="#accordion-open-tickets">
-                                {% endif %}
-                                <div class="card-body">
-                                    <!-- New Incidents Details -->
-                                    {% include 'access/homepage-collapse-ticket-table.html' with tickets=open_inc type='incident' state='open' %}
-                                    <!-- New Password Resets Details -->
-                                    {% include 'access/homepage-collapse-ticket-table.html' with tickets='' type='passwordreset' state='open' %}
-                                    <!-- New Requests Details -->
-                                    {% include 'access/homepage-collapse-ticket-table.html' with tickets='' type='request' state='open' %}
-                                </div>
-                                </div>
+            </div>
+            <!-- Resolved tickets Details -->
+            <div class="row">
+                <div class="col-lg-12">
+                    <div id="accordion-resolved-tickets">
+                        <div class="card shadow-sm">
+                            <div class="card-header" id="headingResolvedTickets">
+                            <h5 class="mb-0">
+                                <button class="btn" data-toggle="collapse" data-target="#collapseResolvedTickets" aria-expanded="false" aria-controls="collapseResolvedTickets">
+                                    <h5>My Resolved Tickets - Details</h5>
+                                </button>
+                            </h5>
                             </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- Resolved tickets Details -->
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div id="accordion-resolved-tickets">
-                            <div class="card shadow-sm">
-                                <div class="card-header" id="headingResolvedTickets">
-                                <h5 class="mb-0">
-                                    <button class="btn" data-toggle="collapse" data-target="#collapseResolvedTickets" aria-expanded="false" aria-controls="collapseResolvedTickets">
-                                        <h5>My Resolved Tickets - Details</h5>
-                                    </button>
-                                </h5>
-                                </div>
-                                {% if resolved_inc %}
-                                    <div id="collapseResolvedTickets" class="collapse show" aria-labelledby="headingResolvedTickets" data-parent="#accordion-resolved-tickets">
-                                {% else %}
-                                    <div id="collapseResolvedTickets" class="collapse" aria-labelledby="headingResolvedTickets" data-parent="#accordion-resolved-tickets">
-                                {% endif %}                                
-                                <div class="card-body">
-                                    <!-- New Incidents Details -->
-                                    {% include 'access/homepage-collapse-ticket-table.html' with tickets=resolved_inc type='incident' state='resolved' %}
-                                    <!-- New Password Resets Details -->
-                                    {% include 'access/homepage-collapse-ticket-table.html' with tickets='' type='passwordreset' state='resolved' %}
-                                    <!-- New Requests Details -->
-                                    {% include 'access/homepage-collapse-ticket-table.html' with tickets='' type='request' state='resolved' %}
-                                </div>
-                                </div>
+                            {% if resolved_inc %}
+                                <div id="collapseResolvedTickets" class="collapse show" aria-labelledby="headingResolvedTickets" data-parent="#accordion-resolved-tickets">
+                            {% else %}
+                                <div id="collapseResolvedTickets" class="collapse" aria-labelledby="headingResolvedTickets" data-parent="#accordion-resolved-tickets">
+                            {% endif %}                                
+                            <div class="card-body">
+                                <!-- New Incidents Details -->
+                                {% include 'access/homepage-collapse-ticket-table.html' with tickets=resolved_inc type='incident' state='resolved' %}
+                                <!-- New Password Resets Details -->
+                                {% include 'access/homepage-collapse-ticket-table.html' with tickets='' type='passwordreset' state='resolved' %}
+                                <!-- New Requests Details -->
+                                {% include 'access/homepage-collapse-ticket-table.html' with tickets='' type='request' state='resolved' %}
+                            </div>
                             </div>
                         </div>
                     </div>
@@ -247,6 +239,5 @@
             </div>
         </div>
     </div>
-    {% endblock %}
-</body>
-</html>
+</div>
+{% endblock %}

@@ -1,4 +1,5 @@
 from django.apps import apps
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 from django.http import JsonResponse, HttpResponse
 
@@ -25,7 +26,7 @@ from tracking.models import *
 from tracking.utils import *
 
 # Create your views here.
-
+@login_required(login_url='/access/login')
 def incident(request):
     form = IncidentForm()
     context = {
@@ -54,6 +55,7 @@ def incident_create(request):
     inc_detail_url = 'incident-detail/' + incident.number
     return redirect(inc_detail_url)
 
+@login_required(login_url='/access/login')
 def incident_detail(request, number):
     incident = Incident.objects.get(number=number)
     form = IncidentForm(instance=incident)
@@ -176,6 +178,7 @@ def incident_detail(request, number):
 
     return render(request, 'ticket/incident-detail.html', context)
 
+@login_required(login_url='/access/login')
 def load_assignees(request):
     assignment_group_id = request.GET.get('assignment_group')
     grp = ITSMGroup.objects.get(id=assignment_group_id)
@@ -188,6 +191,7 @@ def load_assignees(request):
 
     return render(request, 'ticket/assignee_select_list_options.html', context)
 
+@login_required(login_url='/access/login')
 def incident_search(request):
 
     incidents = Incident.objects.all()
@@ -223,7 +227,7 @@ def incident_search(request):
 
     return render(request, 'ticket/incident-search.html', context)
 
-
+@login_required(login_url='/access/login')
 def export_csv(queryset, obj_type):
 
     #Dictionary of 'model name : app name'

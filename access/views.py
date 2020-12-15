@@ -96,6 +96,7 @@ def group_tree(request):
     return render(request, 'access/group-tree.html', context)
 
 #Display homepage of logged in user's tickets
+@login_required(login_url='/access/login')
 def homepage(request):
     
     new_start_date = get_new_ticket_start_date()
@@ -117,6 +118,7 @@ def homepage(request):
     return render(request, 'access/homepage.html', context)
 
 #Display homepage of tickets assigned to logged in user
+@login_required(login_url='/access/login')
 def homepage_assigned_to_me(request):
 
     new_start_date = get_new_ticket_start_date()
@@ -136,6 +138,7 @@ def homepage_assigned_to_me(request):
     return render(request, 'access/homepage-assignedtome.html', context)
 
 #Display homepage of tickets assigned to logged in user's assignment groups
+@login_required(login_url='/access/login')
 def homepage_assigned_to_my_groups(request):
 
     new_start_date = get_new_ticket_start_date()

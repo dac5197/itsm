@@ -1,6 +1,7 @@
 import os
 
 from django.conf import settings
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 
 from .models import *
@@ -9,7 +10,7 @@ from .utils import set_all_sysIDs_relationship_fields
 from tracking.utils import create_work_note
 
 # Create your views here.
-
+@login_required(login_url='/access/login')
 def home(request):
     return render(request, 'access/homepage.html')
 
@@ -18,6 +19,7 @@ def create_sysid(request):
     return sys_id
 
 #Remove attachment from ticket:
+@login_required(login_url='/access/login')
 def remove_attachment(request, id, number, url, sysID):
     attachment = Attachment.objects.get(id=id)
     
@@ -38,6 +40,7 @@ def remove_attachment(request, id, number, url, sysID):
     #Then redirect back to ticket
     return redirect(url, number=number) 
 
+@login_required(login_url='/access/login')
 def admin_panel(request):
     if request.GET.get('set_all_sysID_rel_fields'):
         set_all_sysIDs_relationship_fields()
