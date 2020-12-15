@@ -17,138 +17,142 @@
     <br>
     {% block content %}
         <form id="inc-form" method="POST" data-assignees-url="{% url 'load-assignees' %}">
-            <div class="container bg-light mb-3 shadow">
-
+            <div class="container">
             {% csrf_token %}
-                <div class="card-header">
-                    <div class="row">
-                        <div class="col-lg-4">
-                            <div class="d-flex justify-content-start">
-                                <h3>{{incident.number}}</h3>
-                            </div>
-                        </div>
-                        <div class="col-lg-8">
-                            <div class="d-flex justify-content-end">
-                                <button class="btn btn-primary mx-1" name="save_stay" value="save_stay" type="submit"><strong>Save and Stay</strong></button>
-                                <button class="btn btn-primary mx-1" name="save_return" value="save_return" type="submit"><strong>Save and Return</strong></button>
-                                <button class="btn btn-info mx-1" name="resolve" value="resolve" type="submit"><strong>Resolve</strong></button>
-                                <button class="btn btn-secondary mx-1" name="attach" value="attach" data-toggle="modal" data-target="#AddAttachmentModalCenter" type="button">
-                                    <svg font-size="x-large" width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-paperclip" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                        <path fill-rule="evenodd" d="M4.5 3a2.5 2.5 0 0 1 5 0v9a1.5 1.5 0 0 1-3 0V5a.5.5 0 0 1 1 0v7a.5.5 0 0 0 1 0V3a1.5 1.5 0 1 0-3 0v9a2.5 2.5 0 0 0 5 0V5a.5.5 0 0 1 1 0v7a3.5 3.5 0 1 1-7 0V3z"/>
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-                    </div>  
-                </div>
-                <div class="card-body">
-
-                    <div class="box-element">
-                        {% include 'base/form-errors.html' with form=form %}
-                        {% include 'base/form-errors.html' with form=attachment_form %}
-                        <div class="row">                    
-                            <div class="col-lg-6">
-                                <label for="{{form.number.id_for_label}}"><strong>{{form.number.label}}:</strong></label>
-                                <div class="form-field">
-                                    {{form.number|add_class:'form-control'}}
-                                </div>
-                                <label for="{{form.customer.id_for_label}}"><strong>{{form.customer.label}}:</strong></label>
-                                <div class="form-field">
-                                    {{form.customer|add_class:'form-control form-control-chosen'}}
-                                </div>
-                                <label for="{{form.phone.id_for_label}}"><strong>{{form.phone.label}}:</strong></label>
-                                <div class="form-field">
-                                    {{form.phone|add_class:'form-control'}}
-                                </div>
-                                <label for="{{form.location.id_for_label}}"><strong>{{form.location.label}}:</strong></label>
-                                <div class="form-field">
-                                    {{form.location|add_class:'form-control form-control-chosen'}}
-                                </div>
-                                <label for="{{form.created.id_for_label}}"><strong>{{form.created.label}}:</strong></label>
-                                <div class="form-field">
-                                    {{form.created|add_class:'form-control'}}
-                                </div>
-                                <label for="{{form.updated.id_for_label}}"><strong>{{form.updated.label}}:</strong></label>
-                                <div class="form-field">
-                                    {{form.updated|add_class:'form-control'}}
-                                </div>
-                                <label for="{{form.active.id_for_label}}"><strong>{{form.active.label}}:</strong></label>
-                                <div class="form-field">
-                                    {{form.active|add_class:'form-control'}}
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <label for="{{form.status.id_for_label}}"><strong>{{form.status.label}}:</strong></label>
-                                <div class="form-field">
-                                    {{form.status|add_class:'form-control'}}
-                                </div>
-                                <label for="{{form.priority.id_for_label}}"><strong>{{form.priority.label}}:</strong></label>
-                                <div class="form-field">
-                                    {{form.priority|add_class:'form-control'}}
-                                </div>
-                                <label for="{{form.assignment_group.id_for_label}}"><strong>{{form.assignment_group.label}}:</strong></label>
-                                <div class="form-field">
-                                    {{form.assignment_group|add_class:'form-control form-control-chosen'}}
-                                </div>
-                                <label for="{{form.assignee.id_for_label}}"><strong>{{form.assignee.label}}:</strong></label>
-                                <div class="form-field">
-                                    {{form.assignee|add_class:'form-control'}}
-                                </div>
-                                <!-- Work in progress
-                                <label for="app-system-ci"><strong>App / System CI:</strong></label>
-                                <div class="form-field">
-                                    <input required class="form-control bg-warning " type="text" name="app-system-ci">
-                                </div>
-                                <label for="device-ci"><strong>Device CI:</strong></label>
-                                <div class="form-field">
-                                    <input required class="form-control bg-warning " type="text" name="device-ci">
-                                </div>
-                                <label for="category"><strong>Category:</strong></label>
-                                <div class="form-field">
-                                    <input required class="form-control bg-warning " type="text" name="category">
-                                </div>
-                                <label for="category-sub1"><strong>Subcategory:</strong></label>
-                                <div class="form-field">
-                                    <input required class="form-control bg-warning " type="text" name="category-sub1">
-                                </div>
-                                -->
-                            </div>
-                        </div>
-                    </div>
-                    <br>
-                    <div class="box-element">
+                <div class="card bg-light mb-3 shadow">
+                    <div class="card-header">
                         <div class="row">
-                            <div class="col-lg-12">
-                                <label for="{{form.desc_short.id_for_label}}"><strong>{{form.desc_short.label}}:</strong></label>
-                                <div class="form-field">
-                                    {{form.desc_short|add_class:'form-control'}}
+                            <div class="col-lg-4">
+                                <div class="d-flex justify-content-start">
+                                    <h3>{{incident.number}}</h3>
                                 </div>
-                                <label for="{{form.desc_long.id_for_label}}"><strong>{{form.desc_long.label}}:</strong></label>
-                                <div class="form-field">
-                                    {{form.desc_long|add_class:'form-control'}}
+                            </div>
+                            <div class="col-lg-8">
+                                <div class="d-flex justify-content-end">
+                                    <button class="btn btn-primary mx-1" name="save_stay" value="save_stay" type="submit"><strong>Save and Stay</strong></button>
+                                    <button class="btn btn-primary mx-1" name="save_return" value="save_return" type="submit"><strong>Save and Return</strong></button>
+                                    <button class="btn btn-info mx-1" name="resolve" value="resolve" type="submit"><strong>Resolve</strong></button>
+                                    <button class="btn btn-secondary mx-1" name="attach" value="attach" data-toggle="modal" data-target="#AddAttachmentModalCenter" type="button">
+                                        <svg font-size="x-large" width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-paperclip" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" d="M4.5 3a2.5 2.5 0 0 1 5 0v9a1.5 1.5 0 0 1-3 0V5a.5.5 0 0 1 1 0v7a.5.5 0 0 0 1 0V3a1.5 1.5 0 1 0-3 0v9a2.5 2.5 0 0 0 5 0V5a.5.5 0 0 1 1 0v7a3.5 3.5 0 1 1-7 0V3z"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>  
+                    </div>
+                    <div class="card-body">
+                        <div class="card mb-3 shadow-sm">
+                            <div class="card-body">
+                                {% include 'base/form-errors.html' with form=form %}
+                                {% include 'base/form-errors.html' with form=attachment_form %}
+                                <div class="row">                    
+                                    <div class="col-lg-6">
+                                        <label for="{{form.number.id_for_label}}"><strong>{{form.number.label}}:</strong></label>
+                                        <div class="form-field">
+                                            {{form.number|add_class:'form-control'}}
+                                        </div>
+                                        <label for="{{form.customer.id_for_label}}"><strong>{{form.customer.label}}:</strong></label>
+                                        <div class="form-field">
+                                            {{form.customer|add_class:'form-control form-control-chosen'}}
+                                        </div>
+                                        <label for="{{form.phone.id_for_label}}"><strong>{{form.phone.label}}:</strong></label>
+                                        <div class="form-field">
+                                            {{form.phone|add_class:'form-control'}}
+                                        </div>
+                                        <label for="{{form.location.id_for_label}}"><strong>{{form.location.label}}:</strong></label>
+                                        <div class="form-field">
+                                            {{form.location|add_class:'form-control form-control-chosen'}}
+                                        </div>
+                                        <label for="{{form.created.id_for_label}}"><strong>{{form.created.label}}:</strong></label>
+                                        <div class="form-field">
+                                            {{form.created|add_class:'form-control'}}
+                                        </div>
+                                        <label for="{{form.updated.id_for_label}}"><strong>{{form.updated.label}}:</strong></label>
+                                        <div class="form-field">
+                                            {{form.updated|add_class:'form-control'}}
+                                        </div>
+                                        <label for="{{form.active.id_for_label}}"><strong>{{form.active.label}}:</strong></label>
+                                        <div class="form-field">
+                                            {{form.active|add_class:'form-control'}}
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <label for="{{form.status.id_for_label}}"><strong>{{form.status.label}}:</strong></label>
+                                        <div class="form-field">
+                                            {{form.status|add_class:'form-control'}}
+                                        </div>
+                                        <label for="{{form.priority.id_for_label}}"><strong>{{form.priority.label}}:</strong></label>
+                                        <div class="form-field">
+                                            {{form.priority|add_class:'form-control'}}
+                                        </div>
+                                        <label for="{{form.assignment_group.id_for_label}}"><strong>{{form.assignment_group.label}}:</strong></label>
+                                        <div class="form-field">
+                                            {{form.assignment_group|add_class:'form-control form-control-chosen'}}
+                                        </div>
+                                        <label for="{{form.assignee.id_for_label}}"><strong>{{form.assignee.label}}:</strong></label>
+                                        <div class="form-field">
+                                            {{form.assignee|add_class:'form-control'}}
+                                        </div>
+                                        <!-- Work in progress
+                                        <label for="app-system-ci"><strong>App / System CI:</strong></label>
+                                        <div class="form-field">
+                                            <input required class="form-control bg-warning " type="text" name="app-system-ci">
+                                        </div>
+                                        <label for="device-ci"><strong>Device CI:</strong></label>
+                                        <div class="form-field">
+                                            <input required class="form-control bg-warning " type="text" name="device-ci">
+                                        </div>
+                                        <label for="category"><strong>Category:</strong></label>
+                                        <div class="form-field">
+                                            <input required class="form-control bg-warning " type="text" name="category">
+                                        </div>
+                                        <label for="category-sub1"><strong>Subcategory:</strong></label>
+                                        <div class="form-field">
+                                            <input required class="form-control bg-warning " type="text" name="category-sub1">
+                                        </div>
+                                        -->
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <br>
-                    <div class="box-element">
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <label for="{{form.resolved.id_for_label}}"><strong>{{form.resolved.label}}:</strong></label>
-                                <div class="form-field">
-                                    {{form.resolved|add_class:'form-control'}}
+                        <div class="card mb-3 shadow-sm">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <label for="{{form.desc_short.id_for_label}}"><strong>{{form.desc_short.label}}:</strong></label>
+                                        <div class="form-field">
+                                            {{form.desc_short|add_class:'form-control'}}
+                                        </div>
+                                        <label for="{{form.desc_long.id_for_label}}"><strong>{{form.desc_long.label}}:</strong></label>
+                                        <div class="form-field">
+                                            {{form.desc_long|add_class:'form-control'}}
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-lg-6">
-                                <label for="{{form.reopened.id_for_label}}"><strong>{{form.reopened.label}}:</strong></label>
-                                <div class="form-field">
-                                    {{form.reopened|add_class:'form-control'}}
-                                </div>
-                            </div>
-                            <div class="col-lg-12">    
-                                <label for="{{form.resolution.id_for_label}}"><strong>{{form.resolution.label}}:</strong></label>
-                                <div class="form-field">
-                                    {{form.resolution|add_class:'form-control'}}
+                        </div>
+                        <div class="card mb-3 shadow-sm">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <label for="{{form.resolved.id_for_label}}"><strong>{{form.resolved.label}}:</strong></label>
+                                        <div class="form-field">
+                                            {{form.resolved|add_class:'form-control'}}
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <label for="{{form.reopened.id_for_label}}"><strong>{{form.reopened.label}}:</strong></label>
+                                        <div class="form-field">
+                                            {{form.reopened|add_class:'form-control'}}
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12">    
+                                        <label for="{{form.resolution.id_for_label}}"><strong>{{form.resolution.label}}:</strong></label>
+                                        <div class="form-field">
+                                            {{form.resolution|add_class:'form-control'}}
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

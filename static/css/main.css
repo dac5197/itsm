@@ -51,14 +51,10 @@ label {
 }
 
 .box-customer-visible {
-	box-shadow:hsl(0, 0%, 80%) 0 0 16px;
-  background-color: #fff;
   border-style: solid;
   border-width: thin;
   border-color: steelblue;
   color: steelblue;
-	border-radius: 4px;
-	padding: 10px;
 }
 
 .container {
