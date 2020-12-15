@@ -24,7 +24,9 @@
             <li class="nav-item dropdown">
                 <a href="{% url 'incident' %}" class="nav-link dropdown-toggle" id="INCnavbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Incident</a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="{% url 'incident-create' %}">Create</a>
+                    {% if 'TSM User' in user_roles %}
+                        <a class="dropdown-item" href="{% url 'incident-create' %}">Create</a>
+                    {% endif %}
                     <a class="dropdown-item" href="{% url 'incident-search' %}">Search</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="#">My Incidents</a>

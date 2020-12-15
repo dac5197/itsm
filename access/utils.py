@@ -106,3 +106,15 @@ def format_queryset_to_get_url(qs):
         url_str += f'&{obj.__class__.__name__.lower()}={obj.id}'
     
     return url_str
+
+#Get all roles for groups user is a member of
+def get_user_roles(request):
+    user_groups = ITSMGroup.objects.filter(members=request.user.customer)
+    roles = []
+    for grp in user_groups:
+        for role in grp.roles.all():
+            if role.name not in roles:
+                roles.append(role.name)
+
+    return roles
+

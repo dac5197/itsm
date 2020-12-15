@@ -16,8 +16,9 @@ from tracking.utils import create_work_note
 # Create your views here.
 @login_required(login_url='/access/login')
 def home(request):
-    return render(request, 'access/homepage.html')
+    return redirect('access/homepage')
 
+#Create a new sysid object
 def create_sysid(request):
     sys_id = SysID.objects.create()
     return sys_id

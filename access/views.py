@@ -6,6 +6,7 @@ from django.db.models import Count
 from django.shortcuts import render, redirect
 from django.utils import timezone
 
+from .decorators import *
 from .forms import *
 from .models import *
 from .utils import *
@@ -99,6 +100,9 @@ def group_tree(request):
 @login_required(login_url='/access/login')
 def homepage(request):
     
+    user_roles = get_user_roles(request)
+    print(user_roles)
+
     new_start_date = get_new_ticket_start_date()
 
     #Get tickets for the logged in user
@@ -113,6 +117,7 @@ def homepage(request):
         'new_inc' : new_inc,
         'open_inc' : open_inc,
         'resolved_inc' : resolved_inc,
+        'user_roles' : user_roles,
     }
 
     return render(request, 'access/homepage.html', context)

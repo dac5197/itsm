@@ -17,6 +17,7 @@ from .forms import *
 from .models import *
 from .utils import *
 
+from access.decorators import allowed_users
 from access.models import *
 from base.forms import *
 from base.models import *
@@ -35,6 +36,8 @@ def incident(request):
 
     return render(request, 'ticket/incident.html', context)
 
+@login_required(login_url='/access/login')
+@allowed_users(allowed_roles=['TSM User'])
 def incident_create(request):
     #Create new incident
     incident = Incident.objects.create()
