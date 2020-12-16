@@ -10,6 +10,7 @@ urlpatterns = [
     path('homepage', views.homepage, name='homepage'),
     path('homepage-assignedtome', views.homepage_assigned_to_me, name='homepage-assignedtome'),
     path('homepage-assignedtomygroups', views.homepage_assigned_to_my_groups, name='homepage-assignedtomygroups'),
+    path('profile', views.profile, name='profile'),
     path('register-account', views.register_account, name='register-account'),
     path('register-profile/<str:id>', views.register_profile, name='register-profile'),
     path('login', LoginView.as_view(

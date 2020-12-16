@@ -78,6 +78,7 @@ class IncidentForm(forms.ModelForm):
             else:
                 self.fields['assignment_group'].initial = '---------'
 
+    #On form save, if status is resolved and resolution is empty, then throw error
     def clean(self):
         cleaned_data = super().clean()
         status = cleaned_data.get("status")

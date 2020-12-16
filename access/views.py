@@ -276,3 +276,14 @@ def homepage_assigned_to_my_groups(request):
     }
 
     return render(request, 'access/homepage-assignedtomygroups.html', context)
+
+@login_required(login_url='/access/login')
+def profile(request):
+
+    form = CustomerForm(instance=request.user.customer)
+
+    context = {
+        'form' : form
+    }
+
+    return render(request, 'access/profile.html', context)
