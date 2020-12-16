@@ -30,6 +30,6 @@ def start():
     #scheduler.add_jobstore(DjangoJobStore(), "default")
     #Set all resolved tickets to cloed with resolved date older than 3 days
     #scheduler.add_interval_job(set_resolved_tickets_closed, min=5) #days=1)
-    scheduler.add_job(set_resolved_tickets_closed, 'interval', minutes=5, name='Close Tickets')
+    scheduler.add_job(set_resolved_tickets_closed, 'interval', hours=24, name='Close Tickets')
     register_events(scheduler)
     scheduler.start()

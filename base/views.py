@@ -11,7 +11,7 @@ from access.decorators import admin_only, allowed_users
 from access.forms import GroupForm
 from access.models import ITSMGroup
 from access.utils import cascade_roles
-from ticket.updaters import start
+from ticket.utils import set_resolved_tickets_closed
 from tracking.utils import create_work_note
 
 # Create your views here.
@@ -65,8 +65,8 @@ def admin_panel(request):
             cascade_roles(grp)
             return redirect('admin-panel')
 
-        if request.POST.get('start_scheduler'):
-            start()
+        if request.POST.get('set_resolved_to_closed'):
+            set_resolved_tickets_closed()
             return redirect('admin-panel')
 
 
