@@ -11,6 +11,7 @@ from access.decorators import admin_only, allowed_users
 from access.forms import GroupForm
 from access.models import ITSMGroup
 from access.utils import cascade_roles
+from ticket.updaters import start
 from tracking.utils import create_work_note
 
 # Create your views here.
@@ -63,6 +64,11 @@ def admin_panel(request):
             grp = ITSMGroup.objects.get(id=request.POST['tsm_group'])
             cascade_roles(grp)
             return redirect('admin-panel')
+
+        if request.POST.get('start_scheduler'):
+            start()
+            return redirect('admin-panel')
+
 
     form = GroupForm()
 

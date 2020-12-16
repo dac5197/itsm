@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'crispy_forms',
+    'django_apscheduler',
     'django_filters',
     'rest_framework',
     'widget_tweaks',
@@ -49,8 +50,9 @@ INSTALLED_APPS = [
     'access.apps.AccessConfig',
     'base.apps.BaseConfig',
     'rest_api.apps.RestApiConfig',
-    'ticket.apps.TicketConfig',
     'tracking.apps.TrackingConfig',
+
+    'ticket.apps.TicketConfig',
 ]
 
 MIDDLEWARE = [
@@ -149,3 +151,14 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 LOGIN_URL = 'access/login.html'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/access/login'
+
+# - Execute jobs in threads inside the application process
+SCHEDULER_CONFIG = {
+    "apscheduler.jobstores.default": {
+        "class": "django_apscheduler.jobstores:DjangoJobStore"
+    },
+    'apscheduler.executors.processpool': {
+        "type": "threadpool"
+    },
+}
+SCHEDULER_AUTOSTART = True

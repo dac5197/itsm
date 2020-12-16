@@ -3,7 +3,7 @@ import csv
 from django.utils import timezone
 from django.utils.dateformat import format
 
-from .filters import *
+
 from .models import *
 
 from access.models import *
