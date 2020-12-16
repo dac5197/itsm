@@ -3,32 +3,8 @@
 {% load tracking_tags %}
 {% load widget_tweaks %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    {% block content %}
-    <div class="container">
-        <div class="card bg-light mb-3">
-            <div class="card-header">Homepage</div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-lg-4">
-                        <img src="{{request.user.customer.profile_image.url}}" class="img-fluid">
-                    </div>
-                    <div class="col-lg-8">
-                        <p>Customer details</p>
-                    </div>
 
-                </div>
+{% block content %}
 
-            </div>
-        </div>
-    </div>
-    {% endblock %}
-</body>
-</html>
+
+{% endblock %}

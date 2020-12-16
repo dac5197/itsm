@@ -177,8 +177,10 @@ def incident_detail(request, number):
     #Get user roles from group membership
     user_roles = get_user_roles(request)
 
-    #If ticket in closed status, then disable all fields
-    if incident.status == get_status_closed(id=1):
+    #If ticket in closed status OR 
+    #If user is NOT a member of the assignment group, does NOT have the Service Desk role, and is NOT an admin:
+    #   Then disable all fields
+    if incident.status == get_status_closed(id=1) or not (incident.assignment_group in ITSMGroup.objects.filter(members=request.user.customer) or 'Service Desk' in user_roles or request.user.is_staff):
         form = disable_form_fields(form)
 
     context = {
