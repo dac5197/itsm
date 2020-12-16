@@ -51,6 +51,7 @@ def incident_create(request):
     #Save new incident
     incident.save()
     
+    #Set the relationship fields on the matching sysID
     set_sysID_relationship_fields(incident)
 
     #Create work note
@@ -63,9 +64,6 @@ def incident_create(request):
 def incident_detail(request, number):
     incident = Incident.objects.get(number=number)
     form = IncidentForm(instance=incident)
-
-
-            
 
     #Get initial field values for work notes
     work_note_data = get_object_notes(incident)
@@ -176,6 +174,7 @@ def incident_detail(request, number):
     else:
         form = IncidentForm(instance=incident)
 
+    #Get user roles from group membership
     user_roles = get_user_roles(request)
 
     #If ticket in closed status, then disable all fields
@@ -235,6 +234,7 @@ def incident_search(request):
     if 'export' in request.GET:
         return export_csv(queryset=incidents, obj_type='incident')
 
+    #Get user roles from group membership
     user_roles = get_user_roles(request)
 
     context = {

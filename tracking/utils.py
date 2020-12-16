@@ -7,6 +7,8 @@ from .models import *
 
 from access.models import *
 
+#Create a dictionary of object fields 
+#Fields recorded are determined by the related Watcher object
 def get_object_notes(obj, id=None):
 
     #Get object ticket type
@@ -27,7 +29,7 @@ def get_object_notes(obj, id=None):
     
     return work_note_data
 
-
+#Compare two dictionaries of object fields and return a new dictionary of the changed field
 def compare_field_changes(old_dict, new_dict):
 
     #Get changes where field is in both old_dict and new_dict
@@ -72,18 +74,22 @@ def compare_field_changes(old_dict, new_dict):
                 
     return notes
 
-
+#Create dictionary for newly created items
 def get_created_dict():
     created_dict = {'status': {'old_value': '', 'new_value': 'Created'}}
     return created_dict
 
+#Create work note and related field objects
+def create_work_note(sysID, request=None, changes=None, newly_created=False, attachment=False, customer=None):
 
-def create_work_note(sysID, request=None, changes=None, newly_created=False, attachment=False):
+    #If customer is none, then set customer to request.user
+    if customer is None:
+        customer = Customer.objects.get(user=request.user)
 
     if attachment or newly_created:
         #Create work note for newly created ticket
         #Set only change as Status from Blank to Created
-        work_note = WorkNote.objects.create(foreign_sysID=sysID, note_taker=Customer.objects.get(user=request.user))
+        work_note = WorkNote.objects.create(foreign_sysID=sysID, note_taker=customer)
         
         if newly_created:
             changes = get_created_dict()
@@ -92,31 +98,36 @@ def create_work_note(sysID, request=None, changes=None, newly_created=False, att
         #work_note.note_taker = Customer.objects.get(user=request.user)
         work_note.save()
 
+        #Create field changes for each change
         for key, value in changes.items():
                 FieldChange.objects.create(work_note_id=work_note, field=key, old_value=value['old_value'], new_value=value['new_value'])
-    else:
-        #Create work note for existing ticket
-        
+    #Create work note for existing ticket
+    else:        
         #Declare work_note and set to none
         work_note = None
 
         #If data in changes, then create work note for the field changes
         if changes:
-            work_note = WorkNote.objects.create(foreign_sysID=sysID, changed_data=changes, note_taker=Customer.objects.get(user=request.user))
+            work_note = WorkNote.objects.create(foreign_sysID=sysID, changed_data=changes, note_taker=customer)
         
+            #Create field changes for each change
             for change, value in changes.items():
                 FieldChange.objects.create(work_note_id=work_note, field=change, old_value=value['old_value'], new_value=value['new_value'])
 
-        wn_form = WorkNoteForm(request.POST)
-        wn_instance = wn_form.save(commit=False)
+        #If request is passed:
+        #   Set the work note form
+        #   If anything in notes field, then create separate work note
+        if request:
+            wn_form = WorkNoteForm(request.POST)
+            wn_instance = wn_form.save(commit=False)
 
-        #If text in notes, then create separate work note
-        if wn_instance.notes:
-            if work_note == None:
-                work_note = WorkNote.objects.create(foreign_sysID=sysID, note_taker=Customer.objects.get(user=request.user)) 
-            work_note.notes = wn_instance.notes
-            work_note.customer_visible = wn_instance.customer_visible
-            work_note.save()
+            #If text in notes, then create separate work note
+            if wn_instance.notes:
+                if work_note == None:
+                    work_note = WorkNote.objects.create(foreign_sysID=sysID, note_taker=customer) 
+                work_note.notes = wn_instance.notes
+                work_note.customer_visible = wn_instance.customer_visible
+                work_note.save()
 
     return work_note
     

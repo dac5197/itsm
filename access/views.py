@@ -109,6 +109,7 @@ def homepage(request):
     open_inc = Incident.objects.filter(customer=request.user.customer, status__in=get_status_open(id=1))
     resolved_inc = Incident.objects.filter(customer=request.user.customer, status__in=get_status_resolved(id=1, return_qs=True))
 
+    #Get user roles from group membership
     user_roles = get_user_roles(request)
 
     context = {
@@ -131,6 +132,7 @@ def homepage_assigned_to_me(request):
     open_inc = Incident.objects.filter(assignee=request.user.customer, status__in=get_status_open(id=1))
     resolved_inc = Incident.objects.filter(assignee=request.user.customer, status__in=get_status_resolved(id=1, return_qs=True))
 
+    #Get user roles from group membership
     user_roles = get_user_roles(request)
 
     context = {
@@ -259,6 +261,7 @@ def homepage_assigned_to_my_groups(request):
             if ticket_sum == 0:
                 group_assignee_dict[k1].pop(k2, None)
 
+    #Get user roles from group membership
     user_roles = get_user_roles(request)
 
     context = {

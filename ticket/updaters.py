@@ -9,6 +9,6 @@ def start():
     scheduler = BackgroundScheduler()
 
     #Set all resolved tickets to cloed with resolved date older than 3 days
-    scheduler.add_interval_job(set_resolved_tickets_closed, days=1)
+    scheduler.add_interval_job(set_resolved_tickets_closed, min=5 #days=1)
 
     scheduler.start()

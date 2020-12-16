@@ -81,6 +81,24 @@ def disable_form_fields(form):
     
     return form
 
+def close_ticket(ticket, ticket_type):
+    #Create dictionary of initial field values
+    wn_initial = get_object_notes(obj=ticket, id=ticket_type.id)
+    
+    #Change ticket to closed and active to false
+    ticket.status = get_status_closed(id=ticket_type.id)
+    ticket.active = False
+    ticket.save()
+
+    #Create dictionary of changed field values
+    wn_changed = get_object_notes(obj=ticket, id=ticket_type.id)
+    #Compare dictionaries and return the changes
+    changes = compare_field_changes(wn_initial, wn_changed)
+    #Create work note of the changes as user: TSM_System
+    work_note = create_work_note(sysID=ticket.sysID, changes=changes, customer=Customer.objects.get(email='TSM_System@dacme.com'))
+
+    return ticket
+
 #Set all resolved tickets to cloed with resolved date older than 3 days
 def set_resolved_tickets_closed():
     #Get resolved status
@@ -103,20 +121,10 @@ def set_resolved_tickets_closed():
 
         for ticket in tickets:
             if ticket.__class__.__name__ == 'Request':
-
-                if ticket.fulfilled:
-
-                    if ticket.status in resolved_statuses and ticket.fulfilled < ticket_resolved_min_date:
-                        print('Ticket set to closed')
-                        ticket.status = get_status_closed(id=ticket_type.id)
-                        ticket.active = False
-                        ticket.updated = timezone.now()
-                        ticket.save()
-            else:
-                if ticket.resolved:
-                    
-                    if ticket.status in resolved_statuses and ticket.resolved < ticket_resolved_min_date:
+                if ticket.status in resolved_statuses and ticket.fulfilled < ticket_resolved_min_date:
+                        ticket = close_ticket(ticket=ticket, ticket_type=ticket_type)
                         print(f'Ticket {ticket.number} set to closed')
-                        ticket.status = get_status_closed(id=ticket_type.id)
-                        ticket.active = False
-                        ticket.save()
+            else:
+                if ticket.status in resolved_statuses and ticket.resolved < ticket_resolved_min_date:
+                    ticket = close_ticket(ticket=ticket, ticket_type=ticket_type)
+                    print(f'Ticket {ticket.number} set to closed')
