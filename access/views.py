@@ -107,7 +107,7 @@ def homepage(request):
     #Resolved tickets are in 'resolved' status
     new_inc = Incident.objects.filter(customer=request.user.customer, created__gt=new_start_date)
     open_inc = Incident.objects.filter(customer=request.user.customer, status__in=get_status_open(id=1))
-    resolved_inc = Incident.objects.filter(customer=request.user.customer, status__in=get_status_resolved(id=1))
+    resolved_inc = Incident.objects.filter(customer=request.user.customer, status__in=get_status_resolved(id=1, return_qs=True))
 
     user_roles = get_user_roles(request)
 
@@ -129,7 +129,7 @@ def homepage_assigned_to_me(request):
     #Get tickets assigned to the logged in user
     new_inc = Incident.objects.filter(assignee=request.user.customer, created__gt=new_start_date)
     open_inc = Incident.objects.filter(assignee=request.user.customer, status__in=get_status_open(id=1))
-    resolved_inc = Incident.objects.filter(assignee=request.user.customer, status__in=get_status_resolved(id=1))
+    resolved_inc = Incident.objects.filter(assignee=request.user.customer, status__in=get_status_resolved(id=1, return_qs=True))
 
     user_roles = get_user_roles(request)
 
@@ -155,7 +155,7 @@ def homepage_assigned_to_my_groups(request):
     #Get tickets assigned to logged in user's assignment groups
     new_inc = Incident.objects.filter(assignment_group__in=user_groups, created__gt=new_start_date)
     open_inc = Incident.objects.filter(assignment_group__in=user_groups, status__in=get_status_open(id=1))
-    resolved_inc = Incident.objects.filter(assignment_group__in=user_groups, status__in=get_status_resolved(id=1))
+    resolved_inc = Incident.objects.filter(assignment_group__in=user_groups, status__in=get_status_resolved(id=1, return_qs=True))
     
 
     #Create a dictionary go groups, users, , ticket types, and ticket counts
@@ -203,8 +203,8 @@ def homepage_assigned_to_my_groups(request):
                 'new_url' : f'{t.name.lower()}-search/?{collapse_filter}&assignment_group={g.name}&created_range_min={new_start_date.isoformat()}',
                 'open': (apps.get_model('ticket', t.name)).objects.annotate(n_assignment_group=Count('assignment_group')).filter(assignment_group=g, status__in=get_status_open(id=t.id)).count(),
                 'open_url' : f'{t.name.lower()}-search/?{collapse_filter}&assignment_group={g.name}&{format_queryset_to_get_url(get_status_open(id=t.id))}',
-                'resolved': (apps.get_model('ticket', t.name)).objects.annotate(n_assignment_group=Count('assignment_group')).filter(assignment_group=g, status__in=get_status_resolved(id=t.id)).count(),
-                'resolved_url' : f'{t.name.lower()}-search/?{collapse_filter}&assignment_group={g.name}&{format_queryset_to_get_url(get_status_resolved(id=t.id))}',
+                'resolved': (apps.get_model('ticket', t.name)).objects.annotate(n_assignment_group=Count('assignment_group')).filter(assignment_group=g, status__in=get_status_resolved(id=t.id, return_qs=True)).count(),
+                'resolved_url' : f'{t.name.lower()}-search/?{collapse_filter}&assignment_group={g.name}&{format_queryset_to_get_url(get_status_resolved(id=t.id, return_qs=True))}',
             } for t in ticket_types
         } for g in user_groups
     }
@@ -218,8 +218,8 @@ def homepage_assigned_to_my_groups(request):
                     'new_url' : f'{t.name.lower()}-search/?{collapse_filter}&assignee={u.id}&assignment_group={g.name}&created_range_min={new_start_date.isoformat()}',
                     'open': (apps.get_model('ticket', t.name)).objects.annotate(n_assignee=Count('assignee')).filter(assignee=u, assignment_group=g, status__in=get_status_open(id=t.id)).count(),
                     'open_url' : f'{t.name.lower()}-search/?{collapse_filter}&assignee={u.id}&assignment_group={g.name}&{format_queryset_to_get_url(get_status_open(id=t.id))}',
-                    'resolved': (apps.get_model('ticket', t.name)).objects.annotate(n_assignee=Count('assignee')).filter(assignee=u, assignment_group=g, status__in=get_status_resolved(id=t.id)).count(),
-                    'resolved_url' : f'{t.name.lower()}-search/?{collapse_filter}&assignee={u.id}&assignment_group={g.name}&{format_queryset_to_get_url(get_status_resolved(id=t.id))}',
+                    'resolved': (apps.get_model('ticket', t.name)).objects.annotate(n_assignee=Count('assignee')).filter(assignee=u, assignment_group=g, status__in=get_status_resolved(id=t.id, return_qs=True)).count(),
+                    'resolved_url' : f'{t.name.lower()}-search/?{collapse_filter}&assignee={u.id}&assignment_group={g.name}&{format_queryset_to_get_url(get_status_resolved(id=t.id, return_qs=True))}',
                 } for t in ticket_types
             } for u in Customer.objects.filter(itsm_group_membership=g)
         } for g in user_groups
@@ -237,8 +237,8 @@ def homepage_assigned_to_my_groups(request):
                             'new_url' : f'{t.name.lower()}-search/?{collapse_filter}&assignee_isnull=true&assignment_group={k1}&created_range_min={new_start_date.isoformat()}',
                             'open': (apps.get_model('ticket', t.name)).objects.annotate(n_assignee=Count('assignee')).filter(assignee=None, assignment_group__name=k1, status__in=get_status_open(id=t.id)).count(),
                             'open_url' : f'{t.name.lower()}-search/?{collapse_filter}&assignee_isnull=true&assignment_group={k1}&{format_queryset_to_get_url(get_status_open(id=t.id))}',
-                            'resolved': (apps.get_model('ticket', t.name)).objects.annotate(n_assignee=Count('assignee')).filter(assignee=None, assignment_group__name=k1, status__in=get_status_resolved(id=t.id)).count(),
-                            'resolved_url' : f'{t.name.lower()}-search/?{collapse_filter}&assignee_isnull=true&assignment_group={k1}&{format_queryset_to_get_url(get_status_resolved(id=t.id))}',
+                            'resolved': (apps.get_model('ticket', t.name)).objects.annotate(n_assignee=Count('assignee')).filter(assignee=None, assignment_group__name=k1, status__in=get_status_resolved(id=t.id, return_qs=True)).count(),
+                            'resolved_url' : f'{t.name.lower()}-search/?{collapse_filter}&assignee_isnull=true&assignment_group={k1}&{format_queryset_to_get_url(get_status_resolved(id=t.id, return_qs=True))}',
                         } for t in ticket_types
                     }
                     

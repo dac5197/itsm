@@ -35,7 +35,6 @@ class IncidentFilter(django_filters.FilterSet):
         exclude = [
             'sysID',
             'ticket_type',
-            'active',
             ]
         
     def location_all_fields_filter(self, queryset, name, value):

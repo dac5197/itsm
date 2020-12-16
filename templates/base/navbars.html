@@ -29,7 +29,7 @@
                     {% endif %}
                     <a class="dropdown-item" href="{% url 'incident-search' %}">Search</a>
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#">My Incidents</a>
+                    <a class="dropdown-item" href="/ticket/incident-search/?collapse_filter=True&customer={{request.user.customer.id}}&active=True">My Incidents</a>
                 </div>
             </li>
 

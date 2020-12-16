@@ -49,15 +49,22 @@ def get_priority_default():
     return priority
 
 #Return the resolved status for a ticket type
-def get_status_resolved(id):
+def get_status_resolved(id, return_qs=False):
     ticket_type = TicketType.objects.get(id=id)
-    status = Status.objects.filter(ticket_type=ticket_type, resolved_value=True)
+    #Return queryset if true, else return status object
+    if return_qs:
+        status = Status.objects.filter(ticket_type=ticket_type, resolved_value=True)
+    else:
+        status = Status.objects.get(ticket_type=ticket_type, resolved_value=True)
     return status
 
 #Return the closed status for a ticket type
-def get_status_closed(id):
+def get_status_closed(id, return_qs=False):
     ticket_type = TicketType.objects.get(id=id)
-    status = Status.objects.filter(ticket_type=ticket_type, closed_value=True)
+    if return_qs:
+        status = Status.objects.filter(ticket_type=ticket_type, closed_value=True)
+    else:
+        status = Status.objects.get(ticket_type=ticket_type, closed_value=True)
     return status
 
 #Return the open statuses for a ticket type
@@ -67,3 +74,49 @@ def get_status_open(id):
     statuses = Status.objects.filter(ticket_type=ticket_type, closed_value=False, resolved_value=False)
     return statuses
 
+#Set all fields in a form as disabled
+def disable_form_fields(form):
+    for field, field_type in form.fields.items():
+        form.fields[field].widget.attrs['disabled'] = True
+    
+    return form
+
+#Set all resolved tickets to cloed with resolved date older than 3 days
+def set_resolved_tickets_closed():
+    #Get resolved status
+    resolved_statuses = status = Status.objects.filter(resolved_value=True)
+    #Get all ticket types
+    ticket_types = TicketType.objects.all()
+
+    #Set the resolved min date
+    DAYS = 3
+    ticket_resolved_min_date = timezone.now()-timezone.timedelta(days=DAYS)
+    ticket_resolved_min_date = ticket_resolved_min_date.replace(hour=0, minute=0, second=0, microsecond=0)
+
+    #For each tickt type:
+    #   Get all tickets for that type
+    #   For each of those tickets:
+    #   If status is resolved and resolved date is olded than the resolved min date, then:
+    #       Set status to closed and active to false
+    for ticket_type in ticket_types:
+        tickets = (apps.get_model('ticket', ticket_type.name)).objects.all()
+
+        for ticket in tickets:
+            if ticket.__class__.__name__ == 'Request':
+
+                if ticket.fulfilled:
+
+                    if ticket.status in resolved_statuses and ticket.fulfilled < ticket_resolved_min_date:
+                        print('Ticket set to closed')
+                        ticket.status = get_status_closed(id=ticket_type.id)
+                        ticket.active = False
+                        ticket.updated = timezone.now()
+                        ticket.save()
+            else:
+                if ticket.resolved:
+                    
+                    if ticket.status in resolved_statuses and ticket.resolved < ticket_resolved_min_date:
+                        print(f'Ticket {ticket.number} set to closed')
+                        ticket.status = get_status_closed(id=ticket_type.id)
+                        ticket.active = False
+                        ticket.save()

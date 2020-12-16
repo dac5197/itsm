@@ -19,6 +19,7 @@ from .utils import *
 
 from access.decorators import allowed_users
 from access.models import *
+from access.utils import get_user_roles
 from base.forms import *
 from base.models import *
 from base.utils import *
@@ -62,6 +63,9 @@ def incident_create(request):
 def incident_detail(request, number):
     incident = Incident.objects.get(number=number)
     form = IncidentForm(instance=incident)
+
+
+            
 
     #Get initial field values for work notes
     work_note_data = get_object_notes(incident)
@@ -121,19 +125,21 @@ def incident_detail(request, number):
             instance = form.save(commit=False)
             instance.ticket_type = TicketType.objects.get(id=1)
             instance.created_by = request.user.customer
-
+            
             #Set updated field to NOW            
             instance.updated = timezone.now()
 
             #Get the resolved status for the ticket 
             status_resolved = get_status_resolved(id=1)
-
+            print(status_resolved)
             #If ticket was reopened (changed from 'Resolved' to another status), then increment reopened value by 1
             if incident_status == status_resolved and instance.status != status_resolved:
                 instance.reopened += 1
+                print('reopened')
 
             #Resolve ticket if resolve submit button was clicked OR status was set to "resolved" AND text was entered in resolution textbox
             if instance.status == status_resolved and instance.resolution:
+                print('resolved')
                 instance.resolved = timezone.now()
                 instance.status = get_status_resolved(id=1)
                 instance.save()
@@ -171,6 +177,10 @@ def incident_detail(request, number):
         form = IncidentForm(instance=incident)
 
     user_roles = get_user_roles(request)
+
+    #If ticket in closed status, then disable all fields
+    if incident.status == get_status_closed(id=1):
+        form = disable_form_fields(form)
 
     context = {
         'incident' : incident,

@@ -77,8 +77,6 @@ class IncidentForm(forms.ModelForm):
                 self.fields['assignee'].queryset = Customer.objects.filter(itsm_group_membership=grp).order_by('last_name')
             else:
                 self.fields['assignment_group'].initial = '---------'
-            
-        
 
     def clean(self):
         cleaned_data = super().clean()

@@ -153,10 +153,10 @@
         </div>
 
         <!-- Show attachments -->
-        {% include 'base/attachments.html' with attachments=attachments %}
+        {% include 'base/attachments.html' with attachments=attachments ticket=incident %}
 
         <!-- Show work notes -->
-        {% include 'tracking/work_notes.html' with wn_form=wn_form work_notes=work_notes %}
+        {% include 'tracking/work_notes.html' with wn_form=wn_form work_notes=work_notes ticket=incident %}
 
     </form>
 
