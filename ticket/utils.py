@@ -101,6 +101,7 @@ def close_ticket(ticket, ticket_type):
 
 #Set all resolved tickets to cloed with resolved date older than 3 days
 def set_resolved_tickets_closed():
+    print(timezone.now())
     #Get resolved status
     resolved_statuses = status = Status.objects.filter(resolved_value=True)
     #Get all ticket types
