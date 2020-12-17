@@ -20,12 +20,13 @@ My Profile
                 {% include 'base/form-errors.html' with form=form %}
                 <!-- Display form fields -->
                 <div class="row">
-                    <div class="col-lg-6">
+                    <div class="col-lg-4">
                         <div class="card">
                             <div class="card-header ">
                                 <div class="text-center"><h3>{{request.user.username}}</h3></div>
                             </div>
                             <div class="card-body">
+                                <!-- Profile Image -->
                                 <img class="img-fluid rounded mb-3" src="{{request.user.customer.profile_image.url}}?modified={{profile_image_modtimestamp}}">
                                 <div class="input-group mb-3">
                                     <div class="input-group-prepend">
@@ -39,12 +40,11 @@ My Profile
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-6">
-                        
-                            <div class="card">
- 
-                                <div class="card-body">
-  
+                    <div class="col-lg">
+                        <!-- Customer form fields -->
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
                                     <div class="col">
                                         <label for="{{form.first_name.id_for_label}}"><strong>{{form.first_name.label}}:</strong></label>
                                         <div class="form-field">
@@ -68,7 +68,6 @@ My Profile
                                         </div>
                                     </div>
 
-
                                     <div class="col">
                                         <label for="{{form.organization.id_for_label}}"><strong>{{form.organization.label}}:</strong></label>
                                         <div class="form-field">
@@ -86,17 +85,17 @@ My Profile
                                         <div class="form-field">
                                             {{form.manager|add_class:'form-control form-control-chosen'}}
                                         </div>
-
                                     </div>
-
                                 </div>
                             </div>
-                        
+                        </div>
                     </div>
                 </div>
+ 
                 <br>
                 <div class="row">
                     <div class="col-lg-3"></div>
+                    <!-- CustomerForm submit -->
                     <div class="col-lg-6">
                         <button class="btn btn-info btn-lg btn-block mb-3" name="update" value="update" type="submit"><strong>Update</strong></button>
                     </div>
@@ -108,7 +107,8 @@ My Profile
 </div>
 
 <script type="text/javascript">
-
+    //Show the selected filename in the boostrap input
+    //https://stackoverflow.com/a/51928387
     $('.custom-file input').change(function (e) {
         if (e.target.files.length) {
             $(this).next('.custom-file-label').html(e.target.files[0].name);

@@ -279,11 +279,15 @@ def homepage_assigned_to_my_groups(request):
 
     return render(request, 'access/homepage-assignedtomygroups.html', context)
 
+#Display customer form for logged in user to change data
 @login_required(login_url='/access/login')
 def profile(request):
 
     customer = request.user.customer
     form = CustomerForm(instance=customer)
+    
+    #Get the last modified timestamp of the profile image
+    #This is used to force the browser to refresh and not use cache when the image changes
     profile_image_modtimestamp = os.stat(customer.profile_image.path).st_mtime
     
     if request.method == 'POST':
