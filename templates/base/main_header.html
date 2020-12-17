@@ -25,14 +25,51 @@
 
     <title>{% block title %}DACME TSM{% endblock %}</title>
 
+    <style type="text/css">
+		.sidenav {
+			height:100%;
+			width:160px;
+			position: fixed;
+			z-index:1;
+			top:0;
+			left:0;
+    		overflow-x: hidden;
+			padding-top:20px;
+		}
+ 
+		.sidenav a {
+			padding:6px 8px 6px 16px;
+			text-decoration: none;
+			font-size:25px;
+
+		}
+ 
+
+ 
+		.main{
+            margin-left:160px;
+            margin-top: 15px;
+			
+		}
+ 
+	</style>
+
 </head>
 <body>
     <!-- Show navbars -->
     {% include 'base/navbars.html' %}
 
-    {% block content %}
+    <div class="sidenav bg-secondary">
+		<a href="/">Home</a>
+		<a href="/create">Create</a>
+		<a href="/2">View</a>
+	</div>
 
-    {% endblock content %}
+    <div class="main">
+        {% block content %}
+
+        {% endblock content %}
+    </div>
 
     <script type="text/javascript">
         $('.form-control-chosen').chosen()
