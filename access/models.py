@@ -40,6 +40,7 @@ def get_profile_image(self, filename):
         os.mkdir(save_dir)
 
     if os.path.exists(save_filename):
+        print('deleting old profile image')
         os.remove(save_filename)
 
     return save_filename

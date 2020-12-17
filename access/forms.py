@@ -8,9 +8,12 @@ from crispy_forms.helper import FormHelper
 from .models import *
 
 class CustomerForm(forms.ModelForm):
+    profile_image = forms.ImageField(label='Profile Image',required=False, error_messages ={'invalid': "Image files only"}, widget=forms.FileInput)
+
     class Meta:
         model = Customer
         fields = '__all__'
+        exclude = ['user']
 
 
 class CreateUserForm(UserCreationForm):

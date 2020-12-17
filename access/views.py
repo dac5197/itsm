@@ -1,3 +1,5 @@
+import os
+
 from django.apps import apps
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -280,10 +282,23 @@ def homepage_assigned_to_my_groups(request):
 @login_required(login_url='/access/login')
 def profile(request):
 
-    form = CustomerForm(instance=request.user.customer)
+    customer = request.user.customer
+    form = CustomerForm(instance=customer)
+    profile_image_modtimestamp = os.stat(customer.profile_image.path).st_mtime
+    
+    if request.method == 'POST':
+
+        form = CustomerForm(request.POST, request.FILES, instance=customer)
+
+        if form.is_valid():
+            form.save()
+
+    else:
+        form = CustomerForm(instance=customer)
 
     context = {
-        'form' : form
+        'form' : form,
+        'profile_image_modtimestamp' : profile_image_modtimestamp,
     }
 
     return render(request, 'access/profile.html', context)
