@@ -8,69 +8,101 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
     <!-- Project CSS -->
     <link href="{% static '/css/main.css' %}" rel="stylesheet" type="text/css"> 
-
+    <link href="{% static '/css/sidebar.css' %}" rel="stylesheet" type="text/css">
     <!-- jquery-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-
     <!-- Chosen JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.jquery.min.js"></script>
     <!-- Bootstrap4C for Chosen -->
     <link href="{% static '/css/component-chosen.min.css' %}" rel="stylesheet" type="text/css"> 
-
     <!-- Bootrstrap Table -->
     <link href="https://unpkg.com/bootstrap-table@1.18.1/dist/bootstrap-table.min.css" rel="stylesheet">
     
 
     <title>{% block title %}DACME TSM{% endblock %}</title>
 
-    <style type="text/css">
-		.sidenav {
-			height:100%;
-			width:160px;
-			position: fixed;
-			z-index:1;
-			top:0;
-			left:0;
-    		overflow-x: hidden;
-			padding-top:20px;
-		}
- 
-		.sidenav a {
-			padding:6px 8px 6px 16px;
-			text-decoration: none;
-			font-size:25px;
 
-		}
- 
-
- 
-		.main{
-            margin-left:160px;
-            margin-top: 15px;
-			
-		}
- 
-	</style>
 
 </head>
 <body>
+                        
     <!-- Show navbars -->
     {% include 'base/navbars.html' %}
 
-    <div class="sidenav bg-secondary">
-		<a href="/">Home</a>
-		<a href="/create">Create</a>
-		<a href="/2">View</a>
-	</div>
+    <div id="wrapper">
+        
+        <!-- Sidebar -->
+        <nav id="sidebar">
+            <div class="sidebar-header">
+                <h3>Bootstrap Sidebar</h3>
+            </div>
+    
+            <ul class="list-unstyled components">
+                
+                <li>
+                    <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Incidents</a>
+                    <ul class="collapse list-unstyled" id="homeSubmenu">
+                        <li>
+                            <a href="#">Create Incident</a>
+                        </li>
+                        <li>
+                            <a href="#">Search Incidents</a>
+                        </li>
+                        <hr>
+                        <li>
+                            <a href="#">My Incidents</a>
+                        </li>
+                        <li>
+                            <a href="#">Submitted by Me</a>
+                        </li>
+                        <li>
+                            <a href="#">Assigned to Me</a>
+                        </li>
+                        <li>
+                            <a href="#">Assigned to My Groups</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#">About</a>
+                </li>
+                <li>
+                    <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Pages</a>
+                    <ul class="collapse list-unstyled" id="pageSubmenu">
+                        <li>
+                            <a href="#">Page 1</a>
+                        </li>
+                        <li>
+                            <a href="#">Page 2</a>
+                        </li>
+                        <li>
+                            <a href="#">Page 3</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#">Portfolio</a>
+                </li>
+                <li>
+                    <a href="#">Contact</a>
+                </li>
+            </ul>
+    
+        </nav>
 
-    <div class="main">
-        {% block content %}
 
-        {% endblock content %}
+
+
+
+        <div id="content">
+
+            {% block content %}
+
+            {% endblock content %}
+        </div>
     </div>
-
     <script type="text/javascript">
         $('.form-control-chosen').chosen()
     </script>

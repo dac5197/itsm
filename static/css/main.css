@@ -1,6 +1,5 @@
 
 pre {
-
   white-space: pre-wrap;
   word-break: keep-all;
 }
@@ -65,4 +64,10 @@ label {
 .a-black td a {
   color: black !important;
   font-size: medium;
+}
+
+.top-nav {
+  z-index:1000!important; 
+  position: fixed; 
+  width: 100%;
 }
