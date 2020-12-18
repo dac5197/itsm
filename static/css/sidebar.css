@@ -3,10 +3,6 @@
     https://bootstrapious.com/p/bootstrap-sidebar
 */
 
-
-
-
-
 a,
 a:hover,
 a:focus {
@@ -45,7 +41,7 @@ a:focus {
     left: 0;
     margin-top: 50px;
     z-index: 999;
-    background: #7386D5;
+    background: steelblue;
     color: #fff;
     transition: all 0.3s;
 }
@@ -56,7 +52,7 @@ a:focus {
 
 #sidebar .sidebar-header {
     padding: 20px;
-    background: #6d7fcc;
+    background: rgba(98, 182, 250, 0.11);
 }
 
 #sidebar ul.components {
@@ -76,14 +72,14 @@ a:focus {
 }
 
 #sidebar ul li a:hover {
-    color: #7386D5;
+    color: black;
     background: #fff;
 }
 
 #sidebar ul li.active>a,
 #sidebar a[aria-expanded="true"] {
     color: #fff;
-    background: #6d7fcc;
+    background:  rgba(98, 182, 250, 0.11);
 }
 
 #sidebar a[data-toggle="collapse"] {
@@ -101,7 +97,7 @@ a:focus {
 #sidebar ul ul a {
     font-size: 0.9em !important;
     padding-left: 30px !important;
-    background: #6d7fcc;
+    background: steelblue;
 }
 
 #sidebar ul.CTAs {
@@ -165,4 +161,58 @@ a:focus {
     #sidebarCollapse span {
         display: none;
     }
+}
+
+/* ---------------------------------------------------
+    SIDEBAR SEARCH
+----------------------------------------------------- */
+
+.hide {
+    display: none;
+  }
+
+  .form-control-sidebar {
+    background-color: steelblue;
+    border-color: steelblue;
+      
+  }
+
+  .form-control-sidebar:focus {
+    background-color: steelblue;
+    color: #fff;
+    border-color: #fff;
+    box-shadow:hsl(0, 0%, 80%) 0 0 16px;
+    
+  }
+
+  .form-control-sidebar::-ms-input-placeholder {
+    color: #fff !important;
+    
+  }
+  .form-control::placeholder { 
+    color: #fff;
+    opacity: 1;
+}
+
+.sidebar-search-icon {
+    background-color: steelblue !important;
+    border-color: steelblue;
+    color: #fff;
+}
+
+
+.has-search .form-control {
+    padding-left: 2.375rem;
+}
+
+.has-search .form-control-feedback {
+    position: absolute;
+    z-index: 2;
+    display: block;
+    width: 2.375rem;
+    height: 2.375rem;
+    line-height: 2.375rem;
+    text-align: center;
+    pointer-events: none;
+    color: #fff;
 }

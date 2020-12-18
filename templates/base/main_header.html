@@ -19,7 +19,8 @@
     <link href="{% static '/css/component-chosen.min.css' %}" rel="stylesheet" type="text/css"> 
     <!-- Bootrstrap Table -->
     <link href="https://unpkg.com/bootstrap-table@1.18.1/dist/bootstrap-table.min.css" rel="stylesheet">
-    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.7/css/all.css">
 
     <title>{% block title %}DACME TSM{% endblock %}</title>
 
@@ -32,25 +33,27 @@
     {% include 'base/navbars.html' %}
 
     <div id="wrapper">
-        
+        <div class="container">
         <!-- Sidebar -->
         <nav id="sidebar">
             <div class="sidebar-header">
-                <h3>Bootstrap Sidebar</h3>
+                <!-- Search Input -->
+                <div class="form-group position-relative has-search my-1">
+                    <span class="fa fa-search form-control-feedback"></span>
+                    <input id="searchSidebarInput" type="search" class="form-control form-control-sidebar search-filter" placeholder="Search..." aria-label="Search" aria-describedby="basic-addon1">
+                </div>
             </div>
-    
-            <ul class="list-unstyled components">
-                
+            
+            <ul id="searchSidebarUL" class="list-unstyled components sidebar-nav">
                 <li>
-                    <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Incidents</a>
-                    <ul class="collapse list-unstyled" id="homeSubmenu">
+                    <a id="incDropDown" href="#incSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Incidents</a>
+                    <ul class="collapse list-unstyled sidebar-collapse" id="incSubmenu">
                         <li>
                             <a href="#">Create Incident</a>
                         </li>
                         <li>
                             <a href="#">Search Incidents</a>
                         </li>
-                        <hr>
                         <li>
                             <a href="#">My Incidents</a>
                         </li>
@@ -66,24 +69,73 @@
                     </ul>
                 </li>
                 <li>
-                    <a href="#">About</a>
-                </li>
-                <li>
-                    <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Pages</a>
-                    <ul class="collapse list-unstyled" id="pageSubmenu">
+                    <a href="#pwSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Password Resets</a>
+                    <ul class="collapse list-unstyled sidebar-collapse" id="pwSubmenu">
                         <li>
-                            <a href="#">Page 1</a>
+                            <a href="#">Create Password Reset</a>
                         </li>
                         <li>
-                            <a href="#">Page 2</a>
+                            <a href="#">Search Password Resets</a>
                         </li>
                         <li>
-                            <a href="#">Page 3</a>
+                            <a href="#">My Password Resets</a>
+                        </li>
+                        <li>
+                            <a href="#">Submitted by Me</a>
+                        </li>
+                        <li>
+                            <a href="#">Assigned to Me</a>
+                        </li>
+                        <li>
+                            <a href="#">Assigned to My Groups</a>
                         </li>
                     </ul>
                 </li>
                 <li>
-                    <a href="#">Portfolio</a>
+                    <a href="#reqSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Requests</a>
+                    <ul class="collapse list-unstyled sidebar-collapse" id="reqSubmenu">
+                        <li>
+                            <a href="#">Create Request</a>
+                        </li>
+                        <li>
+                            <a href="#">Search Requests</a>
+                        </li>
+                        <li>
+                            <a href="#">My Requests</a>
+                        </li>
+                        <li>
+                            <a href="#">Submitted by Me</a>
+                        </li>
+                        <li>
+                            <a href="#">Assigned to Me</a>
+                        </li>
+                        <li>
+                            <a href="#">Assigned to My Groups</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#outSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Outages</a>
+                    <ul class="collapse list-unstyled sidebar-collapse" id="outSubmenu">
+                        <li>
+                            <a href="#">Create Outage</a>
+                        </li>
+                        <li>
+                            <a href="#">Search Outages</a>
+                        </li>
+                        <li>
+                            <a href="#">My Outages</a>
+                        </li>
+                        <li>
+                            <a href="#">Submitted by Me</a>
+                        </li>
+                        <li>
+                            <a href="#">Assigned to Me</a>
+                        </li>
+                        <li>
+                            <a href="#">Assigned to My Groups</a>
+                        </li>
+                    </ul>
                 </li>
                 <li>
                     <a href="#">Contact</a>
@@ -91,13 +143,12 @@
             </ul>
     
         </nav>
-
+        </div>
 
 
 
 
         <div id="content">
-
             {% block content %}
 
             {% endblock content %}
@@ -105,6 +156,41 @@
     </div>
     <script type="text/javascript">
         $('.form-control-chosen').chosen()
+
+        
+        //Sidebar search
+        //https://stackoverflow.com/a/43796051
+        $('.search-filter').on('keyup', function() {
+            var matches = [];
+            var input = $.trim($('.search-filter').val());
+            var val = '^(?=.*\\b' + input.split(/\s+/).join('\\b)(?=.*\\b') + ').*$'; // using individual word matching filter from http://stackoverflow.com/a/9127872/1544886
+            var filter = RegExp(val, 'i');
+            
+            if (input.length === 0) { // show all if filter is empty
+                $('.sidebar-collapse').removeClass('show').addClass('collapsed'); // hide collapsable items fast.
+                $('.hide').removeClass('hide'); // remove any hidden elements from previous searches
+            } else {
+                $('.sidebar-collapse').addClass('show'); // show all collapsed items
+                
+                $('ul.sidebar-nav a').filter(function() { // skip home <li> so it shows permanently
+                        $this = $(this);
+                    
+                    // test for a match to search string
+                    text = $this.text().replace(/\s+/g, ' ');
+                    var isMatch = filter.test(text);
+            
+                    // store match so we can unhide parents of this item 
+                    if (isMatch) matches.push($this);
+                            
+                    return !isMatch;
+                }).parent().addClass('hide'); // this hides any <li> that doesn't match search terms. Hiding <a> results in large gaps in the output
+                    $.each(matches, function() { // unhide parents of our matches
+                        this.parentsUntil(".sidebar-nav", ".hide").removeClass('hide');
+                    });
+            }
+        });
+          
+
     </script>
     
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
