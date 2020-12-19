@@ -24,7 +24,7 @@ def create_tree_list(qs, max_depth, depth=1, leaf=None):
     
     #Filter queryset based on path level (length) and starting characters from the parent
     if leaf:
-        result = qs.filter(path__length=depth, path__startswith=leaf)
+        result = qs.filter(path__length=depth, path__startswith=leaf).distinct()
     else:
         result = qs.filter(path__length=depth)
 
@@ -35,11 +35,13 @@ def create_tree_list(qs, max_depth, depth=1, leaf=None):
     #   Add to list
     #   Recursive call this function to get children
     for r in result:
- 
         tree_list.append(r)
- 
+
         if depth <= max_depth:
-            tree_list.append(create_tree_list(qs=qs, max_depth=max_depth, depth=depth, leaf=r.path))
+            child_list = []
+            child_list = create_tree_list(qs=qs, max_depth=max_depth, depth=depth, leaf=r.path)
+            if child_list:
+                tree_list.append(child_list)
 
     return tree_list
 
@@ -108,13 +110,29 @@ def format_queryset_to_get_url(qs):
     return url_str
 
 #Get all roles for groups user is a member of
-def get_user_roles(request):
-    user_groups = ITSMGroup.objects.filter(members=request.user.customer)
+def get_user_roles(request=None, customer=None):
+    if customer:
+        user_groups = ITSMGroup.objects.filter(members=customer)
+    elif request:
+        user_groups = ITSMGroup.objects.filter(members=request.user.customer)
+    
     roles = []
     for grp in user_groups:
         for role in grp.roles.all():
             if role.name not in roles:
                 roles.append(role.name)
 
+    #Add the 'Everyone' role for base access
+    roles.append('Everyone')
+
     return roles
+
+def get_sidebar_items(customer):
+    customer_roles = get_user_roles(customer=customer)
+
+    sidebar_items = SidebarItem.objects.filter(roles__name__in=customer_roles).order_by('path')
+
+    sidebar_items_tree_list = create_tree_list(qs=sidebar_items, max_depth=2)
+    
+    return sidebar_items_tree_list
 

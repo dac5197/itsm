@@ -128,6 +128,16 @@ class SidebarItem(models.Model):
     def __str__(self):
         return self.name
 
+    @property
+    def has_children(self):
+        children = SidebarItem.objects.filter(path__startswith=self.path, path__length=len(self.path)+1)
+        children = children.exclude(path=self.path)
+
+        if children.exists():
+            return True
+        else:
+            return False
+
 
 
 

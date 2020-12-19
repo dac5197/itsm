@@ -113,12 +113,15 @@ def homepage(request):
 
     #Get user roles from group membership
     user_roles = get_user_roles(request)
+    #Get user sidebar items
+    sidebar_items = get_sidebar_items(customer=request.user.customer)
 
     context = {
         'new_inc' : new_inc,
         'open_inc' : open_inc,
         'resolved_inc' : resolved_inc,
         'user_roles' : user_roles,
+        'sidebar_items' : sidebar_items,
     }
 
     return render(request, 'access/homepage.html', context)
@@ -136,12 +139,15 @@ def homepage_assigned_to_me(request):
 
     #Get user roles from group membership
     user_roles = get_user_roles(request)
+    #Get user sidebar items
+    sidebar_items = get_sidebar_items(customer=request.user.customer)
 
     context = {
         'new_inc' : new_inc,
         'open_inc' : open_inc,
         'resolved_inc' : resolved_inc,
         'user_roles' : user_roles,
+        'sidebar_items' : sidebar_items,
     }
 
     return render(request, 'access/homepage-assignedtome.html', context)
@@ -265,6 +271,8 @@ def homepage_assigned_to_my_groups(request):
 
     #Get user roles from group membership
     user_roles = get_user_roles(request)
+    #Get user sidebar items
+    sidebar_items = get_sidebar_items(customer=request.user.customer)
 
     context = {
         'new_inc' : new_inc,
@@ -275,6 +283,7 @@ def homepage_assigned_to_my_groups(request):
         'group_assignee_dict' : group_assignee_dict,
         'new_start_date' : new_start_date,
         'user_roles' : user_roles,
+        'sidebar_items' : sidebar_items,
     }
 
     return render(request, 'access/homepage-assignedtomygroups.html', context)
@@ -300,9 +309,13 @@ def profile(request):
     else:
         form = CustomerForm(instance=customer)
 
+    #Get user sidebar items
+    sidebar_items = get_sidebar_items(customer=request.user.customer)
+
     context = {
         'form' : form,
         'profile_image_modtimestamp' : profile_image_modtimestamp,
+        'sidebar_items' : sidebar_items,
     }
 
     return render(request, 'access/profile.html', context)

@@ -1,4 +1,5 @@
 {% load static %}
+{% load access_extras %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -33,117 +34,8 @@
     {% include 'base/navbars.html' %}
 
     <div id="wrapper">
-        <div class="container">
         <!-- Sidebar -->
-        <nav id="sidebar">
-            <div class="sidebar-header">
-                <!-- Search Input -->
-                <div class="form-group position-relative has-search my-1">
-                    <span class="fa fa-search form-control-feedback"></span>
-                    <input id="searchSidebarInput" type="search" class="form-control form-control-sidebar search-filter" placeholder="Search..." aria-label="Search" aria-describedby="basic-addon1">
-                </div>
-            </div>
-            
-            <ul id="searchSidebarUL" class="list-unstyled components sidebar-nav">
-                <li>
-                    <a id="incDropDown" href="#incSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Incidents</a>
-                    <ul class="collapse list-unstyled sidebar-collapse" id="incSubmenu">
-                        <li>
-                            <a href="#">Create Incident</a>
-                        </li>
-                        <li>
-                            <a href="#">Search Incidents</a>
-                        </li>
-                        <li>
-                            <a href="#">My Incidents</a>
-                        </li>
-                        <li>
-                            <a href="#">Submitted by Me</a>
-                        </li>
-                        <li>
-                            <a href="#">Assigned to Me</a>
-                        </li>
-                        <li>
-                            <a href="#">Assigned to My Groups</a>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="#pwSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Password Resets</a>
-                    <ul class="collapse list-unstyled sidebar-collapse" id="pwSubmenu">
-                        <li>
-                            <a href="#">Create Password Reset</a>
-                        </li>
-                        <li>
-                            <a href="#">Search Password Resets</a>
-                        </li>
-                        <li>
-                            <a href="#">My Password Resets</a>
-                        </li>
-                        <li>
-                            <a href="#">Submitted by Me</a>
-                        </li>
-                        <li>
-                            <a href="#">Assigned to Me</a>
-                        </li>
-                        <li>
-                            <a href="#">Assigned to My Groups</a>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="#reqSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Requests</a>
-                    <ul class="collapse list-unstyled sidebar-collapse" id="reqSubmenu">
-                        <li>
-                            <a href="#">Create Request</a>
-                        </li>
-                        <li>
-                            <a href="#">Search Requests</a>
-                        </li>
-                        <li>
-                            <a href="#">My Requests</a>
-                        </li>
-                        <li>
-                            <a href="#">Submitted by Me</a>
-                        </li>
-                        <li>
-                            <a href="#">Assigned to Me</a>
-                        </li>
-                        <li>
-                            <a href="#">Assigned to My Groups</a>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="#outSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Outages</a>
-                    <ul class="collapse list-unstyled sidebar-collapse" id="outSubmenu">
-                        <li>
-                            <a href="#">Create Outage</a>
-                        </li>
-                        <li>
-                            <a href="#">Search Outages</a>
-                        </li>
-                        <li>
-                            <a href="#">My Outages</a>
-                        </li>
-                        <li>
-                            <a href="#">Submitted by Me</a>
-                        </li>
-                        <li>
-                            <a href="#">Assigned to Me</a>
-                        </li>
-                        <li>
-                            <a href="#">Assigned to My Groups</a>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="#">Contact</a>
-                </li>
-            </ul>
-    
-        </nav>
-        </div>
+        {% include 'base/sidebar.html' %}
 
 
 

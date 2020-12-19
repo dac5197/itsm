@@ -70,4 +70,6 @@ label {
   z-index:1000!important; 
   position: fixed; 
   width: 100%;
+  background-color: rgb(53, 98, 134) !important;
 }
+

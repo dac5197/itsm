@@ -9,9 +9,9 @@
 
 {% block content %}
     <form id="inc-form" method="POST" data-assignees-url="{% url 'load-assignees' %}">
-        <div class="container-fluid">
+        <div class="container-fluid px-0 mx-0">
         {% csrf_token %}
-            <div class="card bg-light mb-3 shadow">
+            <div class="card mb-3 border-bottom-0">
                 <div class="card-header">
                     <div class="row">
                         <div class="col-lg-4">

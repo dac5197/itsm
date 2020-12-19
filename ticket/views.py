@@ -19,7 +19,7 @@ from .utils import *
 
 from access.decorators import allowed_users
 from access.models import *
-from access.utils import get_user_roles
+from access.utils import get_user_roles, get_sidebar_items
 from base.forms import *
 from base.models import *
 from base.utils import *
@@ -176,6 +176,8 @@ def incident_detail(request, number):
 
     #Get user roles from group membership
     user_roles = get_user_roles(request)
+    #Get user sidebar items
+    sidebar_items = get_sidebar_items(customer=request.user.customer)
 
     #If ticket in closed status OR 
     #If user is NOT a member of the assignment group, does NOT have the Service Desk role, and is NOT an admin:
@@ -191,6 +193,7 @@ def incident_detail(request, number):
         'attachments' : attachments,
         'attachment_form' : attachment_form,
         'user_roles' : user_roles,
+        'sidebar_items' : sidebar_items,
     } 
 
     return render(request, 'ticket/incident-detail.html', context)
@@ -238,12 +241,15 @@ def incident_search(request):
 
     #Get user roles from group membership
     user_roles = get_user_roles(request)
+    #Get user sidebar items
+    sidebar_items = get_sidebar_items(customer=request.user.customer)
 
     context = {
         'filter' : inc_filter,
         'incidents' : incidents,
         'collapse_filter' : collapse_filter,
         'user_roles' : user_roles,
+        'sidebar_items' : sidebar_items,
         }
 
     return render(request, 'ticket/incident-search.html', context)

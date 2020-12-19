@@ -1,0 +1,31 @@
+{% for item in sidebar_items %}
+
+    {% if item|length > 0 %}
+        {% include 'base/sidebar-item.html' with sidebar_items=item %}
+            </ul>
+        </li>
+    {% else %}
+        {% if item.has_children %}
+            <li>
+                <a id="{{item.name|cut:' '}}DropDown" href="#{{item.name|cut:' '}}Submenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">{{item.name}}</a>
+                <ul class="collapse list-unstyled sidebar-collapse" id="{{item.name|cut:' '}}Submenu">
+        {% else %}
+            {% if '?' in item.url %}
+
+                {% with request.user.customer.id as customer_id %}
+                    <li>
+                        <a href="{{item.url}}{{customer_id}}">{{item.name}}</a>
+                    </li>
+                {% endwith %}
+            {% else %}
+                <li>
+                    <a href="{{item.url}}">{{item.name}}</a>
+                </li>
+            {% endif %}
+        {% endif %}   
+
+    {% endif %}
+
+{% endfor %}
+
+
