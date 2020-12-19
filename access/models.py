@@ -78,6 +78,11 @@ class Customer(models.Model):
     def get_profile_image_filename(self):
         return str(self.profile_image)[str(self.profile_imag).index(f'profile_images/{self.pk}/'):]
 
+    @property
+    def group_memberof(self):
+        groups = ITSMGroup.objects.filter(members=self)
+        return groups
+
 class Group(models.Model):
     sysID = models.OneToOneField(SysID, on_delete=models.CASCADE, default=SysID.add_new)
     name = models.CharField(max_length=100, unique=True, null=False, blank=False)

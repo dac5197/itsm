@@ -11,12 +11,15 @@
                 <ul class="collapse list-unstyled sidebar-collapse" id="{{item.name|cut:' '}}Submenu">
         {% else %}
             {% if '?' in item.url %}
-
-                {% with request.user.customer.id as customer_id %}
+                {% if 'group' in item.url %}
+                <li>
+                    <a href="{{item.url}}{% for group in request.user.customer.group_memberof %}{{group.name}}{% if not forloop.last %}&assingment_group={% endif %}{% endfor %}">{{item.name}}</a>
+                </li>          
+                {% else %}
                     <li>
-                        <a href="{{item.url}}{{customer_id}}">{{item.name}}</a>
+                        <a href="{{item.url}}{{request.user.customer.id}}">{{item.name}}</a>
                     </li>
-                {% endwith %}
+                {% endif %}
             {% else %}
                 <li>
                     <a href="{{item.url}}">{{item.name}}</a>
