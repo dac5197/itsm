@@ -127,11 +127,13 @@ def get_user_roles(request=None, customer=None):
 
     return roles
 
+#Get sidebar items (links) based of customer's roles
 def get_sidebar_items(customer):
+    #Get roles
     customer_roles = get_user_roles(customer=customer)
-
+    #Get sidebar items that match the roles
     sidebar_items = SidebarItem.objects.filter(roles__name__in=customer_roles).order_by('path')
-
+    #Create nested list of the items based on MP tree
     sidebar_items_tree_list = create_tree_list(qs=sidebar_items, max_depth=2)
     
     return sidebar_items_tree_list
