@@ -21,14 +21,17 @@
                         </div>
                         <div class="col-lg-8">
                             <div class="d-flex justify-content-end">
-                                <button class="btn btn-primary mx-1" name="save_stay" value="save_stay" type="submit"><strong>Save and Stay</strong></button>
-                                <button class="btn btn-primary mx-1" name="save_return" value="save_return" type="submit"><strong>Save and Return</strong></button>
-                                <button class="btn btn-info mx-1" name="resolve" value="resolve" type="submit"><strong>Resolve</strong></button>
-                                <button class="btn btn-secondary mx-1" name="attach" value="attach" data-toggle="modal" data-target="#AddAttachmentModalCenter" type="button">
-                                    <svg font-size="x-large" width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-paperclip" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                        <path fill-rule="evenodd" d="M4.5 3a2.5 2.5 0 0 1 5 0v9a1.5 1.5 0 0 1-3 0V5a.5.5 0 0 1 1 0v7a.5.5 0 0 0 1 0V3a1.5 1.5 0 1 0-3 0v9a2.5 2.5 0 0 0 5 0V5a.5.5 0 0 1 1 0v7a3.5 3.5 0 1 1-7 0V3z"/>
-                                    </svg>
-                                </button>
+                                {% if 'TSM User' in user_roles %}
+                                    <button class="btn btn-primary mx-1" name="save_stay" value="save_stay" type="submit"><strong>Save and Stay</strong></button>
+                                    <button class="btn btn-primary mx-1" name="save_return" value="save_return" type="submit"><strong>Save and Return</strong></button>
+                                    <button class="btn btn-success mx-1" name="resolve" value="resolve" type="submit"><strong>Resolve</strong></button>
+                                    <button class="btn btn-info mx-1" name="create_copy" value="create_copy" type="submit"><strong>Create Copy</strong></button>
+                                    <button class="btn btn-secondary mx-1" name="attach" value="attach" data-toggle="modal" data-target="#AddAttachmentModalCenter" type="button">
+                                        <svg font-size="x-large" width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-paperclip" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" d="M4.5 3a2.5 2.5 0 0 1 5 0v9a1.5 1.5 0 0 1-3 0V5a.5.5 0 0 1 1 0v7a.5.5 0 0 0 1 0V3a1.5 1.5 0 1 0-3 0v9a2.5 2.5 0 0 0 5 0V5a.5.5 0 0 1 1 0v7a3.5 3.5 0 1 1-7 0V3z"/>
+                                        </svg>
+                                    </button>
+                                {% endif %}
                             </div>
                         </div>
                     </div>  

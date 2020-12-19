@@ -9,6 +9,7 @@ from .models import *
 from access.models import *
 from base.forms import *
 from base.models import *  
+from base.utils import set_sysID_relationship_fields
 from tracking.utils import *
 
 #Return status objects for a ticket type
@@ -129,3 +130,39 @@ def set_resolved_tickets_closed():
                 if ticket.status in resolved_statuses and ticket.resolved < ticket_resolved_min_date:
                     ticket = close_ticket(ticket=ticket, ticket_type=ticket_type)
                     print(f'Ticket {ticket.number} set to closed')
+
+
+def create_incident(customer, copy_inc_id=None):
+    #Create new incident
+    incident = Incident.objects.create()
+
+    #Set default values not in model
+    incident.status = get_status_default(id=1)
+    incident.priority = get_priority_default()
+    incident.ticket_type = TicketType.objects.get(id=1)
+
+    if copy_inc_id:
+        copy_inc = Incident.objects.get(id=copy_inc_id)
+        incident.customer = copy_inc.customer
+        incident.phone = copy_inc.phone
+        incident.location = copy_inc.location
+        incident.priority = copy_inc.priority
+        incident.assignment_group = copy_inc.assignment_group
+        incident.assignee = copy_inc.assignee
+        incident.desc_short = copy_inc.desc_short
+        incident.desc_long = copy_inc.desc_long
+        incident.resolution = copy_inc.resolution
+
+    #Save new incident
+    incident.save()
+    
+    #Set the relationship fields on the matching sysID
+    set_sysID_relationship_fields(incident)
+
+    #Create work note
+    if copy_inc:
+        work_note = create_work_note(sysID=incident.sysID, newly_created=True, customer=customer, copied_ticket=copy_inc)
+    else:
+        work_note = create_work_note(sysID=incident.sysID, newly_created=True, customer=customer)
+
+    return incident

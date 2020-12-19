@@ -40,23 +40,11 @@ def incident(request):
 @login_required(login_url='/access/login')
 @allowed_users(allowed_roles=['TSM User'])
 def incident_create(request):
-    #Create new incident
-    incident = Incident.objects.create()
 
-    #Set default values not in model
-    incident.status = get_status_default(id=1)
-    incident.priority = get_priority_default()
-    incident.ticket_type = TicketType.objects.get(id=1)
-
-    #Save new incident
-    incident.save()
-    
-    #Set the relationship fields on the matching sysID
-    set_sysID_relationship_fields(incident)
-
-    #Create work note
-    work_note = create_work_note(sysID=incident.sysID, newly_created=True, request=request)
-
+    #Create incident
+    incident = create_incident(customer=request.user.customer)
+   
+    #Redirect to the incident's url
     inc_detail_url = 'incident-detail/' + incident.number
     return redirect(inc_detail_url)
 
@@ -129,15 +117,13 @@ def incident_detail(request, number):
 
             #Get the resolved status for the ticket 
             status_resolved = get_status_resolved(id=1)
-            print(status_resolved)
+
             #If ticket was reopened (changed from 'Resolved' to another status), then increment reopened value by 1
             if incident_status == status_resolved and instance.status != status_resolved:
                 instance.reopened += 1
-                print('reopened')
 
             #Resolve ticket if resolve submit button was clicked OR status was set to "resolved" AND text was entered in resolution textbox
             if instance.status == status_resolved and instance.resolution:
-                print('resolved')
                 instance.resolved = timezone.now()
                 instance.status = get_status_resolved(id=1)
                 instance.save()
@@ -166,7 +152,11 @@ def incident_detail(request, number):
             work_note = create_work_note(sysID=instance.sysID, request=request, changes=changes)
 
             #Redirect url based on submit button
-            if 'save_stay' in request.POST:
+            if 'create_copy' in request.POST:
+                new_incident = create_incident(customer=request.user.customer, copy_inc_id=instance.id)
+                new_inc_detail_url = '/ticket/incident-detail/' + new_incident.number
+                return redirect(new_inc_detail_url)
+            elif 'save_stay' in request.POST:
                 return redirect('incident-detail', number=number) 
             elif 'save_return' in request.POST:
                 return redirect('homepage')

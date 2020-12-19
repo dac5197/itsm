@@ -79,8 +79,12 @@ def get_created_dict():
     created_dict = {'status': {'old_value': '', 'new_value': 'Created'}}
     return created_dict
 
+def get_copied_dict(copied_ticket):
+    copied_dict = {'status': {'old_value': '', 'new_value': f'Copied from {copied_ticket.number}'}}
+    return copied_dict
+
 #Create work note and related field objects
-def create_work_note(sysID, request=None, changes=None, newly_created=False, attachment=False, customer=None):
+def create_work_note(sysID, request=None, changes=None, newly_created=False, attachment=False, customer=None, copied_ticket=None):
 
     #If customer is none, then set customer to request.user
     if customer is None:
@@ -91,8 +95,12 @@ def create_work_note(sysID, request=None, changes=None, newly_created=False, att
         #Set only change as Status from Blank to Created
         work_note = WorkNote.objects.create(foreign_sysID=sysID, note_taker=customer)
         
+        #Get dict of copied ticket or newly created ticket
         if newly_created:
-            changes = get_created_dict()
+            if copied_ticket:
+                changes = get_copied_dict(copied_ticket=copied_ticket)
+            else:
+                changes = get_created_dict()
         
         work_note.changed_data = changes
         #work_note.note_taker = Customer.objects.get(user=request.user)
