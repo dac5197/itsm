@@ -59,3 +59,4 @@ class Attachment(models.Model):
 
     def __str__(self):
         return self.doc_name
+

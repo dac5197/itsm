@@ -56,7 +56,15 @@ def set_all_sysIDs_relationship_fields():
         #For each object, set the sysID relationship fields
         for obj in all_obj:
             print(f'obj: {obj.id} - {obj.__str__()}')
+
+            #If object does not have a sysID, then create one
+            if not obj.sysID:
+                print('SysID not found - creating new one...')
+                obj.sysID = SysID.objects.create()
+                obj.save()
+
             set_sysID_relationship_fields(obj)
+
 
     #Complete
     print('complete')

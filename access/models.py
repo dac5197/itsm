@@ -119,7 +119,14 @@ class ITSMGroup(DjangoGroup):
         return self.name
 
 
+class SidebarItem(models.Model):
+    name = models.CharField(max_length=100, unique=True, null=False, blank=False)
+    path = models.CharField(max_length=25, unique=True, blank=False, null=False)
+    roles = models.ManyToManyField(Role, related_name='allowed_roles', blank=True)
+    url = models.CharField(max_length=200, null=True, blank=True)
 
+    def __str__(self):
+        return self.name
 
 
 

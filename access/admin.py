@@ -14,6 +14,16 @@ class CustomerAdmin(admin.ModelAdmin):
     list_filter = ()
     fieldsets = ()
 
+class SidebarItemAdmin(admin.ModelAdmin):
+    list_display = ('name', 'path','url')
+    list_filter = ('name', 'path', 'roles','url')
+    search_fields = ('name', 'path', 'roles','url')
+    readonly_fields = ()
+
+    filter_horizontal = ()
+    list_filter = ()
+    fieldsets = ()
+
 # Register your models here.
 
 #admin.site.register(Account, AccountAdmin)
@@ -23,4 +33,4 @@ admin.site.register(Customer, CustomerAdmin)
 admin.site.register(Group)
 admin.site.register(ITSMGroup)
 admin.site.register(Role)
-
+admin.site.register(SidebarItem, SidebarItemAdmin)
