@@ -13,23 +13,19 @@
 
     <style>
 		body {
-            background-image: url("{% static bg_img %}");
-            background-repeat: no-repeat;
-            background-attachment: fixed;
-            background-position: center;
+            background-color: steelblue;
+            height: 100vh;
         }
         
         html {
 			margin: 0;
-			padding: 0;
-			height: 100%;
+            padding: 0;
+            height: 100vh;
         }
         
         .login-card {
             width: 350px; 
-            box-shadow:hsl(0, 0%, 80%) 0 0 16px;
         }
-
 
         .input-field {
             margin-top: 10px;
@@ -38,15 +34,15 @@
 
     <title>Login</title>
 </head>
-<body>
+<body class="d-flex align-items-center">
     
     <br>
     {% block content %}
-        <div class="container h-100">
-            <div class="d-flex justify-content-center align-items-center h-100">
-                <div class="card d-flex flex-column position-relative justify-content-center login-card">
+        <div class="container">
+            <div class="d-flex h-100 justify-content-center align-items-center">
+                <div class="card login-card shadow-lg">
                     <div class="card-header d-flex justify-content-center">
-                        <h3>Login</h3>
+                        <h3>DACME TSM</h3>
                     </div>
                     <div class="card-body d-flex justify-content-center">
                         <form method="POST" action="">
@@ -57,7 +53,7 @@
                             
                             <input type="password" name="password" placeholder="Password..." class="form-control input-field">
                             <div class="d-flex justify-content-center mt-3" style="padding: 0 2rem;">
-                                <input class="btn btn-primary" type="submit" value="Login" style="width: 90%;">
+                                <input class="btn btn-primary" type="submit" value="Login" style="width: 90%; font-weight: bold;">
                             </div>
                         </form>
                     </div>
@@ -65,7 +61,7 @@
                         <table>
                             <tr>
                                 <td class="d-flex justify-content-center">
-                                    <a href="#">Forgot password?</a>
+                                    <a href="{% url 'reset_password' %}">Forgot password?</a>
                                 </td>
                             </tr>
                             <tr>
