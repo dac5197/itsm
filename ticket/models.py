@@ -106,7 +106,7 @@ class Ticket(models.Model):
     priority = models.ForeignKey(Priority, on_delete=models.SET_NULL, default= 4, null=True, blank=True)
     status = models.ForeignKey(Status, on_delete=models.SET_NULL, null=True, blank=True)
     assignment_group = models.ForeignKey(ITSMGroup, on_delete=models.SET_NULL, null=True, blank=True)
-    assignee = models.ForeignKey(Customer, on_delete=models.SET_NULL, null=True, blank=False, related_name='assignee')
+    assignee = models.ForeignKey(Customer, on_delete=models.SET_NULL, null=True, blank=True, related_name='assignee')
     closed = models.DateTimeField(null=True, blank=True) 
     created = models.DateTimeField(default=timezone.now, null=False, blank=False)
     updated = models.DateTimeField(default=timezone.now, null=False, blank=False)
