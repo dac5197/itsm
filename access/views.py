@@ -9,6 +9,7 @@ from django.shortcuts import render, redirect
 from django.utils import timezone
 
 from .decorators import *
+from .filters import *
 from .forms import *
 from .models import *
 from .utils import *
@@ -16,6 +17,7 @@ from .utils import *
 from base.utils import set_sysID_relationship_fields
 from ticket.models import Incident, PasswordReset, Request, TicketType
 from ticket.utils import disable_form_fields, get_status_open, get_status_resolved
+from ticket.views import export_csv
 
 # Create your views here.
 
@@ -324,3 +326,33 @@ def user_detail(request, id):
     }
 
     return render(request, 'access/user-detail.html', context)
+
+@login_required(login_url='/access/login')
+def user_search(request):
+    customers = Customer.objects.all()
+    customer_filter = CustomerFilter(request.GET, queryset=customers)
+    collapse_filter = False
+
+    #Set search results to filter queryset if search args passed in GET
+    #Else set queryset to blank
+    if request.GET:
+        customers = customer_filter.qs
+
+        #If collapse_filter, then set to GET parameter
+        #Set to True will set the Search Filters accordion to collapse on page load
+        collapse_filter = request.GET.get('collapse_filter')
+
+    else:
+        customers = ''
+
+    #If export button -> export data to csv
+    if 'export' in request.GET:
+        return export_csv(queryset=customers, obj_type='customer')
+
+    context = {
+        'filter' : customer_filter,
+        'customers' : customers,
+        'collapse_filter' : collapse_filter,
+    }
+
+    return render(request, 'access/user-search.html', context)

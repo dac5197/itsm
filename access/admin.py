@@ -5,7 +5,7 @@ from .models import *
 #Customize Admin panel view
 
 class CustomerAdmin(admin.ModelAdmin):
-    list_display = ('display_name', 'email', 'user','active')
+    list_display = ('display_name', 'email', 'user','active', 'sysID')
     list_filter = ('active',)
     search_fields = ('first_name', 'last_name', 'email',)
     readonly_fields = ('created', 'updated')

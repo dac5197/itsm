@@ -13,7 +13,7 @@ class CustomerForm(forms.ModelForm):
     class Meta:
         model = Customer
         fields = '__all__'
-        exclude = ['user']
+        exclude = ['user', 'sysID']
 
 
 class CreateUserForm(UserCreationForm):

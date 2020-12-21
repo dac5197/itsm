@@ -1,5 +1,7 @@
 import csv
 
+from django.apps import apps
+from django.http import HttpResponse
 from django.utils import timezone
 from django.utils.dateformat import format
 
@@ -31,11 +33,6 @@ def get_assignment_group_choices():
     choices = [(group.id, group.name) for group in  assignment_groups]
     #Insert null value
     choices.insert(0,('', '---------'))
-    return choices
-
-def get_all_customer_choices():
-    customers = Customer.objects.all()
-    choices = [(customer.id, customer.__str__()) for customer in  customers]
     return choices
 
 #Return the default status set for a ticket type
@@ -82,6 +79,7 @@ def disable_form_fields(form):
     
     return form
 
+#Close ticket
 def close_ticket(ticket, ticket_type):
     #Create dictionary of initial field values
     wn_initial = get_object_notes(obj=ticket, id=ticket_type.id)
@@ -131,7 +129,7 @@ def set_resolved_tickets_closed():
                     ticket = close_ticket(ticket=ticket, ticket_type=ticket_type)
                     print(f'Ticket {ticket.number} set to closed')
 
-
+#Create incident
 def create_incident(customer, copy_inc_id=None):
     #Create new incident
     incident = Incident.objects.create()
@@ -166,3 +164,89 @@ def create_incident(customer, copy_inc_id=None):
         work_note = create_work_note(sysID=incident.sysID, newly_created=True, customer=customer)
 
     return incident
+
+
+def export_csv(queryset, obj_type):
+    #Dictionary of 'model name : app name'
+    #Used for apps.get_model function
+    MODEL_APP_DICT = {
+		'tickettype' : 'ticket',
+		'customer' : 'access',
+		'location' : 'access',
+		'priority' : 'ticket', 
+		'status' : 'ticket',
+		'itsmgroup' : 'access',
+        'user' : 'auth',
+	}
+
+    #Ignore these fields in queryset
+    EXCLUDE_FIELDS = ['id','sysID','ticket_ptr', 'profile_image']
+    EXCLUDE_FIELD_NAMES = ['id','sysID_id','ticket_ptr_id', 'profile_image']
+
+    #For forieign keys and fields where the name is different than the model or field
+    FK_REPLACE_FIELD_NAMES = {
+        'assignment_group' : 'itsmgroup',
+        'assignee' : 'customer',
+        'created_by' : 'customer',
+        'manager' : 'customer',
+        'ticket_type' : 'tickettype',
+    }
+
+    #Replace any field names in the header row of the export with a different name
+    HEADER_ROW_REPLACE_FIELD_NAMES ={
+        'user' : 'username',
+    }
+
+    #Set export filename
+    timestamp = format(timezone.now(), 'U')
+    file_name = f"{obj_type}-{timestamp}.csv"
+    
+    #Get field names
+    #Ignore field names in EXCLUDE_FIELDS list
+    field_names = [field.name for field in queryset.model._meta.fields if not (field.name in EXCLUDE_FIELDS)]
+    print(field_names)
+
+    #Replace header row field names with names from dictionary HEADER_ROW_REPLACE_FIELD_NAMES
+    field_names = [field.replace(field, HEADER_ROW_REPLACE_FIELD_NAMES[field]) if field in HEADER_ROW_REPLACE_FIELD_NAMES else field for field in field_names ]
+
+    # Create the HttpResponse object with CSV header.
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = f'attachment; filename={file_name}'
+    writer = csv.writer(response)
+
+    #Write header row
+    writer.writerow(field_names)  
+
+    #Build and write rows for each instance in the queryset
+    for instance in queryset.values():
+
+        value_list = []
+        for field, value in instance.items():
+
+            #Ignore fields in the EXCLUDE_FIELD_NAMES dict
+            if not (field in EXCLUDE_FIELD_NAMES):
+
+                #If value in a foriegn key (ends with '_id')
+                if '_id' in field:
+
+                    #Remove '_id' from end of string
+                    f_name = field.replace('_id', '')
+                    
+                    #If field name is different than the model name, then replace it
+                    if f_name in FK_REPLACE_FIELD_NAMES:
+                        f_name = f_name.replace(f_name, FK_REPLACE_FIELD_NAMES[f_name])
+
+                    #Get value from model
+                    if value:
+                        #f_name = f_name.replace('_', '')
+                        model = apps.get_model(MODEL_APP_DICT[f_name], f_name)
+                        obj = model.objects.get(id=value)
+                        value = obj
+
+                #Add value to list (row)
+                value_list.append(value)
+            
+        #Write row
+        writer.writerow(value_list)
+
+    return response

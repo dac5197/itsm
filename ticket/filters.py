@@ -9,23 +9,21 @@ from .models import *
 from .utils import *
 
 from access.models import *
+from access.utils import get_all_customer_choices, get_all_location_choices
 
 class IncidentFilter(django_filters.FilterSet):
-    #Set charfilters to search multiple fields in related models (foriegn keys)
-    #assignee = CharFilter(method='assignee_all_fields_filter')
-    assignment_group = CharFilter(field_name='assignment_group__name', lookup_expr='icontains', label='Assignment Group')
-    #customer = CharFilter(method='customer_all_fields_filter')
-    location = CharFilter(method='location_all_fields_filter')
     created = DateFilter(field_name='created', lookup_expr='icontains', label='Created', widget=DateInput(attrs={'type': 'date'}))
     created_range = DateTimeFromToRangeFilter(field_name='created', lookup_expr='icontains', label='Created Range', widget=RangeWidget(attrs={'type': 'datetime-local'}))
     resolved = DateFilter(field_name='resolved', lookup_expr='icontains', label='Resolved', widget=DateInput(attrs={'type': 'date'}))
     resolved_range = DateTimeFromToRangeFilter(field_name='resolved', lookup_expr='icontains', label='Resolved Range', widget=RangeWidget(attrs={'type': 'datetime-local'}))
-    reopened = NumberFilter(field_name='reopened', lookup_expr='exact', label='Reopened')
-    reopened_range = RangeFilter(field_name='reopened', lookup_expr='icontains', label='Reopened Range')
+    reopened = NumberFilter(field_name='reopened', lookup_expr='exact', label='Reopened Count')
+    reopened_range = RangeFilter(field_name='reopened', lookup_expr='icontains', label='Reopened Count Range')
 
     #Set choices for select fields
     assignee = MultipleChoiceFilter(choices=get_all_customer_choices())
+    assignment_group = MultipleChoiceFilter(choices=get_assignment_group_choices())
     customer = MultipleChoiceFilter(choices=get_all_customer_choices())
+    location = MultipleChoiceFilter(choices=get_all_location_choices())
     priority = MultipleChoiceFilter(choices=get_priority_choices())
     status = MultipleChoiceFilter(choices=get_status_choices(id=1))
 
@@ -37,7 +35,3 @@ class IncidentFilter(django_filters.FilterSet):
             'ticket_type',
             ]
         
-    def location_all_fields_filter(self, queryset, name, value):
-        return Incident.objects.filter(
-            Q(location__name__icontains=value) | Q(location__address__icontains=value) | Q(location__city__icontains=value) | Q(location__state__icontains=value) | Q(location__zipcode__icontains=value)
-        )

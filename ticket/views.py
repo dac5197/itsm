@@ -228,77 +228,7 @@ def incident_search(request):
 
     return render(request, 'ticket/incident-search.html', context)
 
-@login_required(login_url='/access/login')
-def export_csv(queryset, obj_type):
 
-    #Dictionary of 'model name : app name'
-    #Used for apps.get_model function
-    MODEL_APP_DICT = {
-		'tickettype' : 'ticket',
-		'customer' : 'access',
-		'location' : 'access',
-		'priority' : 'ticket', 
-		'status' : 'ticket',
-		'group' : 'access',
-	}
 
-    #Ignore these fields in queryset
-    EXCLUDE_FIELDS = ['id','sysID','ticket_ptr']
-    EXCLUDE_FIELD_NAMES = ['id','sysID_id','ticket_ptr_id']
-
-    #For forieign keys where the name is different than the model
-    FK_REPLACE_FIELD_NAMES = {
-        'assignment_group' : 'group',
-        'assignee' : 'customer',
-    }
-
-    #Set export filename
-    timestamp = format(timezone.now(), 'U')
-    file_name = f"{obj_type}-{timestamp}.csv"
-
-    #Get field names
-    #Ignore field names in EXCLUDE_FIELDS list
-    field_names = [field.name for field in queryset.model._meta.fields if not (field.name in EXCLUDE_FIELDS)]
-
-    # Create the HttpResponse object with CSV header.
-    response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = f'attachment; filename={file_name}'
-    writer = csv.writer(response)
-
-    #Write header row
-    writer.writerow(field_names)  
-
-    #Build and write rows for each instance in the queryset
-    for instance in queryset.values():
-
-        value_list = []
-        for field, value in instance.items():
-
-            #Ignore fields in the EXCLUDE_FIELD_NAMES dict
-            if not (field in EXCLUDE_FIELD_NAMES):
-                #If value in a foriegn key (ends with '_id')
-                if '_id' in field:
-
-                    #Remove '_id' from end of string
-                    f_name = field.replace('_id', '')
-                    
-                    #If field name is different than the model name, then replace it
-                    if f_name in FK_REPLACE_FIELD_NAMES:
-                        f_name = f_name.replace(f_name, FK_REPLACE_FIELD_NAMES[f_name])
-
-                    #Get value from model
-                    if value:
-                        f_name = f_name.replace('_', '')
-                        model = apps.get_model(MODEL_APP_DICT[f_name], f_name)
-                        obj = model.objects.get(id=value)
-                        value = obj
-
-                #Add value to list (row)
-                value_list.append(value)
-            
-        #Write row
-        writer.writerow(value_list)
-
-    return response
     
 

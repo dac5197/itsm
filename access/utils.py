@@ -109,3 +109,15 @@ def get_sidebar_items(customer):
     
     return sidebar_items_tree_list
 
+#Return all customers in list for select dropdown menu
+def get_all_customer_choices():
+    customers = Customer.objects.all().order_by('last_name')
+    choices = [(customer.id, customer.__str__()) for customer in  customers]
+    return choices
+
+#Return all locations in list for select dropdown menu
+def get_all_location_choices():
+    locations = Location.objects.all().order_by('name')
+    choices = [(loc.id, loc.__str__()) for loc in  locations]
+    return choices
+
