@@ -13,6 +13,9 @@ def get_random_alphanumeric_string(length=32):
     print('new sysid')
     letters_and_digits = string.ascii_letters + string.digits
     result_str = ''.join((random.choice(letters_and_digits) for i in range(length)))
+    if result_str in SysID.objects.values_list('sysID', flat=True):
+        result_str = get_random_alphanumeric_string()
+
     return result_str
 
 
