@@ -55,47 +55,30 @@
                         <!-- if customer visible, change text color and border color -->
                         {% if note.customer_visible == True %}
                             <div class="card mb-3 shadow-sm box-customer-visible">
-                                <div class="card-body">
-
-                                        <div class="row">
-                                            <div class="col-lg-12">
-                                                <div class="note-header">
-                                                    {% if note.note_taker %}
-                                                        <div style="flex: 2"><p>{{note.note_taker}}</p></div>
-                                                    {% else %}
-                                                        <div style="flex: 2"><p>User</p></div>
-                                                    {% endif %}
-                                                    <div style="flex: 2"><p>{{note.created}}</p></div>
-                                                </div>
-                                                
-                                                    <div style="flex: 2; white-space: pre-wrap; word-break: keep-all;">{{note.notes}}</div>
-                                            
-                                            </div>
-                                        </div>
-                                    
-                                </div>
-                            </div>
                         {% else %}
                             <div class="card mb-3 shadow-sm">
+                        {% endif %}
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-lg-12">
                                             <div class="note-header">
                                                 {% if note.note_taker %}
-                                                    <div style="flex: 2"><p>{{note.note_taker}}</p></div>
+                                                    <div class="media" style="flex: 2">
+                                                        <img class="d-inline-block mb-2 mr-2 rounded" src="{{note.note_taker.profile_image.url}}" height="45" width="45">
+                                                        <p class="mt-2">{{note.note_taker}}</p>
+                                                    </div>
                                                 {% else %}
-                                                    <div style="flex: 2"><p>User</p></div>
+                                                    <div style="flex: 2"><p class="mt-2">User</p></div>
                                                 {% endif %}
-                                                <div style="flex: 2"><p>{{note.created}}</p></div>
+                                                <div style="flex: 2"><p class="mt-2">{{note.created}}</p></div>
                                             </div>
-                                            
-                                            <div style="flex: 2; white-space: pre-wrap; word-break: keep-all;">{{note.notes}}</div>
-                                        
+                                            <div style="flex: 2; white-space: pre-wrap; word-break: keep-all;">{{note.notes}}</div>                                        
                                         </div>
                                     </div>
+                                    
                                 </div>
-                            </div>
-                        {% endif %}
+                            </div>  
+                        
                     {% endif %}
                     <!-- If any field changes in work notes changed data, then display -->
                     {% if note.changed_data != None  %}
@@ -105,11 +88,14 @@
                                     <div class="col-lg-12">
                                         <div class="note-header">
                                             {% if note.note_taker %}
-                                                <div style="flex: 2"><p>{{note.note_taker}}</p></div>
+                                                <div class="media" style="flex: 2">
+                                                    <img class="d-inline-block mb-2 mr-2 rounded" src="{{note.note_taker.profile_image.url}}" height="45" width="45">
+                                                    <p class="mt-2">{{note.note_taker}}</p>
+                                                </div>
                                             {% else %}
-                                                <div style="flex: 2"><p>User</p></div>
+                                                <div style="flex: 2"><p class="mt-2">User</p></div>
                                             {% endif %}
-                                            <div style="flex: 2"><p>{{note.created}}</p></div>
+                                            <div style="flex: 2"><p class="mt-2">{{note.created}}</p></div>
                                         </div>
                                         <table class="table table-sm table-hover w-auto table-borderless">
                                             {% for change in note.fieldchange_set.all|dictsort:"field.lower" %}
