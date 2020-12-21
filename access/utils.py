@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 
 from .models import *
+from .mpt_utils import create_tree_list
 
 #Display random background image on page load 
 #Image must be in static\images directory or subdirectory
@@ -14,36 +15,6 @@ def get_random_bg_img(img_dir):
     static_bg_path = 'images/backgrounds/'
     bg_img = static_bg_path+random_file
     return bg_img
-
-#Generate tree list from queryset using Materialized Path Tree (MPT)
-#Object must have Path field and follow MPT structure
-#MPT: https://youtu.be/CRxjoklS8v0?t=428
-def create_tree_list(qs, max_depth, depth=1, leaf=None):
-    #Declare list
-    tree_list = []
-    
-    #Filter queryset based on path level (length) and starting characters from the parent
-    if leaf:
-        result = qs.filter(path__length=depth, path__startswith=leaf).distinct()
-    else:
-        result = qs.filter(path__length=depth)
-
-    #Increment depth 
-    depth += 1
-
-    #For each result:
-    #   Add to list
-    #   Recursive call this function to get children
-    for r in result:
-        tree_list.append(r)
-
-        if depth <= max_depth:
-            child_list = []
-            child_list = create_tree_list(qs=qs, max_depth=max_depth, depth=depth, leaf=r.path)
-            if child_list:
-                tree_list.append(child_list)
-
-    return tree_list
 
 #Get only the children of a group one level down
 def get_group_direct_descendants(grp):

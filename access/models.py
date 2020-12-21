@@ -6,8 +6,10 @@ from django.db.models import CharField
 from django.db.models.functions import Length
 from django.contrib.auth.models import Group as DjangoGroup, User
 
+from .mpt_utils import create_tree_list
+
 from base.models import SysID
-from phonenumber_field.modelfields import PhoneNumberField
+
 
 #Register 'Length' transfer for Charfield to allow queryset filtering by char length
 #https://stackoverflow.com/a/45260608
@@ -96,6 +98,15 @@ class Customer(models.Model):
         user_roles.append('Everyone')
         user_roles.sort()
         return user_roles    
+
+    @property
+    def sidebar_items(self):
+        #Get sidebar items that match the roles
+        sidebar_items = SidebarItem.objects.filter(roles__name__in=self.roles).order_by('path')
+        #Create nested list of the items based on MP tree
+        sidebar_items_tree_list = create_tree_list(qs=sidebar_items, max_depth=2)
+        
+        return sidebar_items_tree_list
 
 class Group(models.Model):
     sysID = models.OneToOneField(SysID, on_delete=models.CASCADE, default=SysID.add_new)

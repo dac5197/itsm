@@ -70,8 +70,6 @@ def incident_detail(request, number):
     attachments = Attachment.objects.filter(foreign_sysID=incident.sysID).order_by('-id')
     attachment_form = AttachmentForm()
 
-
-
     ### POST ###
     if request.method == 'POST':
         
@@ -164,15 +162,10 @@ def incident_detail(request, number):
     else:
         form = IncidentForm(instance=incident)
 
-    #Get user roles from group membership
-    user_roles = get_user_roles(request)
-    #Get user sidebar items
-    sidebar_items = get_sidebar_items(customer=request.user.customer)
-
     #If ticket in closed status OR 
     #If user is NOT a member of the assignment group, does NOT have the Service Desk role, and is NOT an admin:
     #   Then disable all fields
-    if incident.status == get_status_closed(id=1) or not (incident.assignment_group in ITSMGroup.objects.filter(members=request.user.customer) or 'Service Desk' in user_roles or request.user.is_staff):
+    if incident.status == get_status_closed(id=1) or not (incident.assignment_group in ITSMGroup.objects.filter(members=request.user.customer) or 'Service Desk' in request.user.customer.roles or request.user.is_staff):
         form = disable_form_fields(form)
 
     context = {
@@ -182,8 +175,6 @@ def incident_detail(request, number):
         'wn_form' : wn_form,
         'attachments' : attachments,
         'attachment_form' : attachment_form,
-        'user_roles' : user_roles,
-        'sidebar_items' : sidebar_items,
     } 
 
     return render(request, 'ticket/incident-detail.html', context)
@@ -229,18 +220,11 @@ def incident_search(request):
     if 'export' in request.GET:
         return export_csv(queryset=incidents, obj_type='incident')
 
-    #Get user roles from group membership
-    user_roles = get_user_roles(request)
-    #Get user sidebar items
-    sidebar_items = get_sidebar_items(customer=request.user.customer)
-
     context = {
         'filter' : inc_filter,
         'incidents' : incidents,
         'collapse_filter' : collapse_filter,
-        'user_roles' : user_roles,
-        'sidebar_items' : sidebar_items,
-        }
+    }
 
     return render(request, 'ticket/incident-search.html', context)
 

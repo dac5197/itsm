@@ -24,7 +24,7 @@
         </div>
         <div class="card-body">
             <div class="form-field">
-                {% if ticket.status.value != 'Closed' %}
+                {% if ticket.status.value != 'Closed' and 'TSM User' in request.user.customer.roles %}
                     <div class="card mb-3 shadow-sm">
                         <div class="card-body">
                             <div class="row">

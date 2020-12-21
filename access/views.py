@@ -111,23 +111,17 @@ def homepage(request):
     open_inc = Incident.objects.filter(customer=request.user.customer, status__in=get_status_open(id=1))
     resolved_inc = Incident.objects.filter(customer=request.user.customer, status__in=get_status_resolved(id=1, return_qs=True))
 
-    #Get user roles from group membership
-    user_roles = get_user_roles(request)
-    #Get user sidebar items
-    sidebar_items = get_sidebar_items(customer=request.user.customer)
-
     context = {
         'new_inc' : new_inc,
         'open_inc' : open_inc,
         'resolved_inc' : resolved_inc,
-        'user_roles' : user_roles,
-        'sidebar_items' : sidebar_items,
     }
 
     return render(request, 'access/homepage.html', context)
 
 #Display homepage of tickets assigned to logged in user
 @login_required(login_url='/access/login')
+@allowed_users(allowed_roles=['TSM User'])
 def homepage_assigned_to_me(request):
 
     new_start_date = get_new_ticket_start_date()
@@ -137,23 +131,17 @@ def homepage_assigned_to_me(request):
     open_inc = Incident.objects.filter(assignee=request.user.customer, status__in=get_status_open(id=1))
     resolved_inc = Incident.objects.filter(assignee=request.user.customer, status__in=get_status_resolved(id=1, return_qs=True))
 
-    #Get user roles from group membership
-    user_roles = get_user_roles(request)
-    #Get user sidebar items
-    sidebar_items = get_sidebar_items(customer=request.user.customer)
-
     context = {
         'new_inc' : new_inc,
         'open_inc' : open_inc,
         'resolved_inc' : resolved_inc,
-        'user_roles' : user_roles,
-        'sidebar_items' : sidebar_items,
     }
 
     return render(request, 'access/homepage-assignedtome.html', context)
 
 #Display homepage of tickets assigned to logged in user's assignment groups
 @login_required(login_url='/access/login')
+@allowed_users(allowed_roles=['TSM User'])
 def homepage_assigned_to_my_groups(request):
 
     new_start_date = get_new_ticket_start_date()
@@ -269,11 +257,6 @@ def homepage_assigned_to_my_groups(request):
             if ticket_sum == 0:
                 group_assignee_dict[k1].pop(k2, None)
 
-    #Get user roles from group membership
-    user_roles = get_user_roles(request)
-    #Get user sidebar items
-    sidebar_items = get_sidebar_items(customer=request.user.customer)
-
     context = {
         'new_inc' : new_inc,
         'open_inc' : open_inc,
@@ -282,8 +265,6 @@ def homepage_assigned_to_my_groups(request):
         'group_dict' : group_dict,
         'group_assignee_dict' : group_assignee_dict,
         'new_start_date' : new_start_date,
-        'user_roles' : user_roles,
-        'sidebar_items' : sidebar_items,
     }
 
     return render(request, 'access/homepage-assignedtomygroups.html', context)
@@ -311,13 +292,9 @@ def profile(request):
     else:
         form = CustomerForm(instance=customer)
 
-    #Get user sidebar items
-    sidebar_items = get_sidebar_items(customer=request.user.customer)
-
     context = {
         'form' : form,
         'profile_image_modtimestamp' : profile_image_modtimestamp,
-        'sidebar_items' : sidebar_items,
     }
 
     return render(request, 'access/profile.html', context)
@@ -341,13 +318,9 @@ def user_detail(request, id):
     if 'TSM Admin' not in request.user.customer.roles:
         form = disable_form_fields(form)
 
-    #Get user sidebar items
-    sidebar_items = get_sidebar_items(customer=request.user.customer)
-
     context = {
         'form' : form,
         'customer' : customer,
-        'sidebar_items' : sidebar_items,
     }
 
     return render(request, 'access/user-detail.html', context)

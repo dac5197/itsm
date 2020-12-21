@@ -9,7 +9,7 @@
     <!-- Links -->
     <ul id="searchSidebarUL" class="list-unstyled components sidebar-nav">
         
-        {% include 'base/sidebar-item.html' %}
+        {% include 'base/sidebar-item.html' with sidebar_items=request.user.customer.sidebar_items %}
         
     </ul>
 

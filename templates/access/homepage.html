@@ -12,7 +12,7 @@
                 <li class="nav-item">
                     <a class="nav-link active" href="{% url 'homepage' %}"><h6>Homepage</h6></a>
                 </li>
-                {% if 'TSM User' in user_roles %}
+                {% if 'TSM User' in request.user.customer.roles %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'homepage-assignedtome' %}"><h6>Assigned to Me</h6></a>
                     </li>
