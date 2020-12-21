@@ -67,21 +67,35 @@ class Customer(models.Model):
 
     def __str__(self):
         return self.display_name
-    @property
-    def full_name(self):
-        return str(self.first_name) + " " + str(self.last_name)
-
-    @property
-    def display_name(self):
-        return str(self.last_name) + ", " + str(self.first_name) + " (" +  str(self.organization) + ")"
 
     def get_profile_image_filename(self):
         return str(self.profile_image)[str(self.profile_imag).index(f'profile_images/{self.pk}/'):]
 
     @property
+    def display_name(self):
+        return str(self.last_name) + ", " + str(self.first_name) + " (" +  str(self.organization) + ")"
+
+    @property
+    def full_name(self):
+        return str(self.first_name) + " " + str(self.last_name)
+
+    @property
     def group_memberof(self):
-        groups = ITSMGroup.objects.filter(members=self)
+        groups = ITSMGroup.objects.filter(members=self).order_by('name')
         return groups
+
+    @property
+    def roles(self):
+        user_roles = []
+        for grp in self.group_memberof:
+            for role in grp.roles.all():
+                if role.name not in user_roles:
+                    user_roles.append(role.name)
+
+        #Add the 'Everyone' role for base access
+        user_roles.append('Everyone')
+        user_roles.sort()
+        return user_roles    
 
 class Group(models.Model):
     sysID = models.OneToOneField(SysID, on_delete=models.CASCADE, default=SysID.add_new)

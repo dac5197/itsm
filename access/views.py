@@ -15,7 +15,7 @@ from .utils import *
 
 from base.utils import set_sysID_relationship_fields
 from ticket.models import Incident, PasswordReset, Request, TicketType
-from ticket.utils import get_status_open, get_status_resolved
+from ticket.utils import disable_form_fields, get_status_open, get_status_resolved
 
 # Create your views here.
 
@@ -304,7 +304,9 @@ def profile(request):
         form = CustomerForm(request.POST, request.FILES, instance=customer)
 
         if form.is_valid():
-            form.save()
+            instance = form.save(commit=False)
+            instance.active = customer.active
+            instance.save()
 
     else:
         form = CustomerForm(instance=customer)
@@ -319,3 +321,33 @@ def profile(request):
     }
 
     return render(request, 'access/profile.html', context)
+
+@login_required(login_url='/access/login')
+def user_detail(request, id):
+
+    customer = Customer.objects.get(id=id)
+    form = CustomerForm(instance=customer)
+
+    if request.method == 'POST':
+
+        form = CustomerForm(request.POST, request.FILES, instance=customer)
+
+        if form.is_valid():
+            form.save()
+
+    else:
+        form = CustomerForm(instance=customer)
+
+    if 'TSM Admin' not in request.user.customer.roles:
+        form = disable_form_fields(form)
+
+    #Get user sidebar items
+    sidebar_items = get_sidebar_items(customer=request.user.customer)
+
+    context = {
+        'form' : form,
+        'customer' : customer,
+        'sidebar_items' : sidebar_items,
+    }
+
+    return render(request, 'access/user-detail.html', context)
