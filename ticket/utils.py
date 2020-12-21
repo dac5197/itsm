@@ -158,7 +158,7 @@ def create_incident(customer, copy_inc_id=None):
     set_sysID_relationship_fields(incident)
 
     #Create work note
-    if copy_inc:
+    if copy_inc_id:
         work_note = create_work_note(sysID=incident.sysID, newly_created=True, customer=customer, copied_ticket=copy_inc)
     else:
         work_note = create_work_note(sysID=incident.sysID, newly_created=True, customer=customer)
