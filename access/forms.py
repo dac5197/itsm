@@ -16,6 +16,12 @@ class CustomerForm(forms.ModelForm):
         fields = '__all__'
         exclude = ['user', 'sysID']
 
+        widgets = {     
+            #Set fields to readonly (disabled)
+            'created' : forms.DateTimeInput(attrs={'readonly':'readonly'}, format='%m/%d/%Y %H:%M'),
+            'updated' : forms.DateTimeInput(attrs={'readonly':'readonly'}, format='%m/%d/%Y %H:%M'),           
+        }
+
 
 class CreateUserForm(UserCreationForm):
     class Meta:

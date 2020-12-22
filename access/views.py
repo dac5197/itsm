@@ -289,7 +289,9 @@ def profile(request):
         if form.is_valid():
             instance = form.save(commit=False)
             instance.active = customer.active
+            instance.updated = timezone.now()
             instance.save()
+            return redirect('/access/profile')
 
     else:
         form = CustomerForm(instance=customer)
@@ -313,6 +315,9 @@ def user_detail(request, id):
 
         if form.is_valid():
             form.save()
+            customer.updated = timezone.now()
+            customer.save()
+            return redirect('user-detail', id=customer.id)
 
     else:
         form = CustomerForm(instance=customer)
