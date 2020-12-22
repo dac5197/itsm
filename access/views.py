@@ -93,7 +93,7 @@ def group_tree(request):
     group_list = ITSMGroup.objects.all()
    
     group_tree = create_tree_list(qs=group_list, max_depth=5)
-
+    print(group_tree)
     context = {
         'group_tree' : group_tree
     }

@@ -149,7 +149,20 @@ class ITSMGroup(DjangoGroup):
     def __str__(self):
         return self.name
 
+    @property
+    def has_children(self):
+        children = ITSMGroup.objects.filter(path__startswith=self.path, path__length=len(self.path)+1)
+        children = children.exclude(path=self.path)
 
+        if children.exists():
+            return True
+        else:
+            return False
+
+    @property
+    def parent(self):
+        parent = ITSMGroup.objects.get(path=self.path[:-1])
+        return parent
 
 
 class SidebarItem(models.Model):

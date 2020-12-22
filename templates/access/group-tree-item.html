@@ -1,0 +1,77 @@
+{% for group in group_tree %}
+
+    {% if group|length > 0 %}
+        {% include 'access/group-tree-item.html' with group_tree=group %}
+                </ul>
+            </div>
+        </li>
+    {% else %}
+        {% if group.has_children%}
+            <li>
+                <button class="btn btn-secondary my-1" type="button" data-toggle="collapse" data-target="#{{group.path}}" aria-controls="{{group.path}}" aria-expanded="false"><strong>{{group.name}}</strong></button>
+                <div class="collapse grouptree" id="{{group.path}}">
+                    <ul class="group-tree-ul-nested" >
+            
+        {% else %}
+            <li>
+                <button class="btn btn-primary my-1" type="button" data-toggle="collapse" data-target="#{{group.path}}" aria-controls="{{group.path}}" aria-expanded="false"><strong>{{group.name}}</strong></button>
+                {% if group.is_assignment or group.is_approval %}
+                    <div class="collapse show" id="{{group.path}}">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <ul class="group-tree-ul-nested" >
+                                    <li>
+                                        <table class="table table-sm"
+                                            data-toggle="table"
+                                            data-sort-class="table-active"
+                                            data-sortable="true"
+                                        >
+                                            <thead class="bg-light">
+                                                <tr>
+                                                    <th data-field="name" data-sortable="true">Roles</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for role in group.roles.all %}
+                                                    <tr>
+                                                        <td>{{role}}</td>
+                                                    </tr>
+                                        
+                                                {% endfor %}
+                        
+                                            </tbody>
+                                        </table>
+                                    </li>
+                                    <li>
+                                        <table class="table table-sm"
+                                            data-toggle="table"
+                                            data-sort-class="table-active"
+                                            data-sortable="true"
+                                        >
+                                            <thead class="bg-light">
+                                                <tr>
+                                                    <th data-field="name" data-sortable="true">Members</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for member in group.members.all %}
+                                                    <tr>
+                                                        <td>{{member}}</td>
+                                                    </tr>
+                                        
+                                                {% endfor %}
+                        
+                                            </tbody>
+                                        </table>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            </li>
+        {% endif %}   
+
+    {% endif %}
+
+{% endfor %}

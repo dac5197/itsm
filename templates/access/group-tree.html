@@ -1,41 +1,50 @@
 {% extends 'base\main_header.html' %}
 {% load static %}
+{% load tracking_tags %}
+{% load widget_tweaks %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DACME Group Tree</title>
+{% block title %}
+Group Tree
+{% endblock %}
 
+{% block content %}
 
-
-</head>
-<body>
+<style>
+    .group-tree-ul {
+        list-style-type: none;
+        
+      }
     
-    {% block content %}
-        <style>
-            ul>li>ul {
-                display: none;
-            }
-        </style>
-        <br>
-        <h3>Group Tree</h3>
-        <ul>
-        {{group_tree|unordered_list}}
-        </ul>
+    .group-tree-ul-nested {
+        list-style-type: none;
+        margin-left: 5rem;
+    }
 
-        <script type="text/javascript">
-            //Collaspible unordered list
-            //https://stackoverflow.com/a/31508501
-            $('li').click(function(e){
-                e.stopPropagation();
-                if(this.getElementsByTagName("ul")[0].style.display =="block")
-                    $(this).find("ul").slideUp();
-                else
-                    $(this).children(":first").slideDown();
-            });
-        </script>
-    {% endblock %}
-</body>
-</html>
+    button {
+        width: 15rem;
+    }
+
+</style>
+
+<div class="container-fluid px-0 mx-0">
+    <div class="card mb-3 border-0">
+        <div class="card-header">
+            <h4>Group Tree</h4>
+        </div>
+        <div class="card-body">
+            <button class="btn btn-info mt-1 mb-5" type="button" data-toggle="collapse" data-target=".grouptree"><strong>Toggle All</strong></button>
+            
+            <ul class="group-tree-ul">
+
+                {% include 'access/group-tree-item.html' with group_tree=group_tree %}
+
+            </ul>
+
+
+        
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
