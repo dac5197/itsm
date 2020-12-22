@@ -356,3 +356,115 @@ def user_search(request):
     }
 
     return render(request, 'access/user-search.html', context)
+
+#Display itsmgroup details
+@login_required(login_url='/access/login')
+def group_detail(request, id):
+    group = ITSMGroup.objects.get(id=id)
+    form = GroupForm(instance=group)
+
+    #Show the update membership button if user is group manager or TSM Admin
+    #Else hide the button
+    if 'TSM Admin' in request.user.customer.roles or request.user.customer == group.manager:
+        can_edit_members = True
+    else:
+        can_edit_members = False
+    
+    context = {
+        'form' : form,
+        'group' : group,
+        'can_edit_members' : can_edit_members,
+    }
+
+    return render(request, 'access/group-detail.html', context)
+
+#Updated itsmgroup membership
+#Accessible for the group's manager and TSM Admins
+@login_required(login_url='/access/login')
+def group_members_update(request, id):
+    group = ITSMGroup.objects.get(id=id)
+    form = GroupForm(instance=group)
+
+    if request.method == 'POST':
+        form = GroupForm(request.POST, instance=group)
+
+        if form.is_valid():
+            form.save()
+            group.updated = timezone.now()
+            group.save()
+            return redirect('group-detail', id=group.id)
+
+    else:
+        form = GroupForm(instance=group)
+
+    #Disable all form fields if user is not group manager or TSM Admin
+    if not ('TSM Admin' in request.user.customer.roles or request.user.customer == group.manager):
+        form = disable_form_fields(form)
+
+    context = {
+        'form' : form,
+        'group' : group,
+    }
+
+    return render(request, 'access/group-members-update.html', context)
+
+#Update itsm group fields
+#Accessible for TSM Admins
+@login_required(login_url='/access/login')
+@allowed_users(allowed_roles=['TSM Admin'])
+def group_admin_update(request, id):
+    group = ITSMGroup.objects.get(id=id)
+    form = GroupAdminForm(instance=group)
+
+    if request.method == 'POST':
+        form = GroupAdminForm(request.POST, instance=group)
+
+        if form.is_valid():
+            form.save()
+            group.updated = timezone.now()
+            group.save()
+            return redirect('group-detail', id=group.id)
+
+    else:
+        form = GroupAdminForm(instance=group)
+
+    #Disable all form fields if user is not TSM Admin
+    if not ('TSM Admin' in request.user.customer.roles):
+        form = disable_form_fields(form)
+
+    context = {
+        'form' : form,
+        'group' : group,
+    }
+
+    return render(request, 'access/group-admin-update.html', context)
+
+@login_required(login_url='/access/login')
+def group_search(request):
+    groups = ITSMGroup.objects.all()
+    group_filter = GroupFilter(request.GET, queryset=groups)
+    collapse_filter = False
+
+    #Set search results to filter queryset if search args passed in GET
+    #Else set queryset to blank
+    if request.GET:
+        groups = group_filter.qs
+
+        #If collapse_filter, then set to GET parameter
+        #Set to True will set the Search Filters accordion to collapse on page load
+        collapse_filter = request.GET.get('collapse_filter')
+
+    else:
+        groups = ''
+
+    #If export button -> export data to csv
+    if 'export' in request.GET:
+        return export_csv(queryset=groups, obj_type='itsmgroup')
+
+    context = {
+        'filter' : group_filter,
+        'groups' : groups,
+        'collapse_filter' : collapse_filter,
+    }
+
+    return render(request, 'access/group-search.html', context)

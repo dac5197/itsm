@@ -121,3 +121,8 @@ def get_all_location_choices():
     choices = [(loc.id, loc.__str__()) for loc in  locations]
     return choices
 
+#Return all roles in list for select dropdown menu
+def get_all_role_choices():
+    roles = Role.objects.all().order_by('name')
+    choices = [(role.id, role.__str__()) for role in  roles]
+    return choices

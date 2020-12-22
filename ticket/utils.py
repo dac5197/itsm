@@ -180,8 +180,8 @@ def export_csv(queryset, obj_type):
 	}
 
     #Ignore these fields in queryset
-    EXCLUDE_FIELDS = ['id','sysID','ticket_ptr', 'profile_image']
-    EXCLUDE_FIELD_NAMES = ['id','sysID_id','ticket_ptr_id', 'profile_image']
+    EXCLUDE_FIELDS = ['id', 'sysID', 'ticket_ptr', 'profile_image', 'group_ptr',]
+    EXCLUDE_FIELD_NAMES = ['id', 'sysID_id', 'ticket_ptr_id', 'profile_image', 'group_ptr_id']
 
     #For forieign keys and fields where the name is different than the model or field
     FK_REPLACE_FIELD_NAMES = {
@@ -204,7 +204,6 @@ def export_csv(queryset, obj_type):
     #Get field names
     #Ignore field names in EXCLUDE_FIELDS list
     field_names = [field.name for field in queryset.model._meta.fields if not (field.name in EXCLUDE_FIELDS)]
-    print(field_names)
 
     #Replace header row field names with names from dictionary HEADER_ROW_REPLACE_FIELD_NAMES
     field_names = [field.replace(field, HEADER_ROW_REPLACE_FIELD_NAMES[field]) if field in HEADER_ROW_REPLACE_FIELD_NAMES else field for field in field_names ]
@@ -222,7 +221,6 @@ def export_csv(queryset, obj_type):
 
         value_list = []
         for field, value in instance.items():
-
             #Ignore fields in the EXCLUDE_FIELD_NAMES dict
             if not (field in EXCLUDE_FIELD_NAMES):
 

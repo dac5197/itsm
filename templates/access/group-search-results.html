@@ -1,0 +1,76 @@
+<div id="accordion-search-results">
+    <div class="card shadow-sm">
+        <div class="card-header" id="headingSearchResults">
+            <h5 class="mb-0">
+                <button class="btn" data-toggle="collapse" data-target="#collapseSearchResults" aria-expanded="true" aria-controls="collapseSearchResults">
+                    <h5>Search Results</h5>
+                </button>
+            </h5>
+        </div>
+        <div id="collapseSearchResults" class="collapse show" aria-labelledby="headingSearchResults" data-parent="#accordion-search-results">
+            <div class="card-body">
+                <div class="row">                    
+                    <div class="col-lg-12">
+                        <div>
+                            <table class="table table-sm small"
+                                data-toggle="table"
+                                data-sort-class="table-active"
+                                data-sortable="true"
+                                data-pagination="true"
+                                data-pagination-h-align="left"
+                                data-pagination-detail-h-align="right"
+                            >
+                                <thead class="bg-light">
+                                    <tr>
+                                        <th data-field="name" data-sortable="true">Name</th>
+                                        <th data-field="path" data-sortable="true">Path</th>
+                                        <th data-field="manager" data-sortable="true">Manager</th>
+                                        <th data-field="active" data-sortable="true">Active</th>
+                                        <th data-field="is_assignment" data-sortable="true">Is Assignment Group?</th>
+                                        <th data-field="is_approval" data-sortable="true">Is Approval Group?</th>
+                                        <th data-field="is_heirarchal" data-sortable="true">Is Heirarchal Group?</th>
+                                        <th data-field="members" data-sortable="true">Members</th>
+                                        <th data-field="roles" data-sortable="true">Roles</th>
+                                    </tr>
+                                </thead>
+                                {% for group in groups %}
+                                    <tr>
+                                        <td><a href="/access/group-detail/{{group.id}}">{{group.name}}</a></td>
+                                        <td>{{group.path}}</td>
+                                        <td>{{group.manager}}</td>
+                                        <td>{{group.active}}</td>
+                                        <td>{{group.is_assignment}}</td>
+                                        <td>{{group.is_approval}}</td>
+                                        <td>{{group.is_heirarchal}}</td>
+                                        <td>
+                                            {% for member in group.members.all %}
+                                                {{member.display_name}}
+                                                {% if not forloop.last %}
+                                                    ,
+                                                {% endif %}
+                                            {% endfor %}
+                                        </td>
+                                        <td>
+                                            {% for role in group.roles.all %}
+                                                {{role.name}}
+                                                {% if not forloop.last %}
+                                                    ,
+                                                {% endif %}
+                                            {% endfor %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <!-- Export button -->
+                <div class="row">
+                    <div class="col-lg-2">                           
+                        <button class="btn btn-primary btn-sm" name="export" value="export" type="submit"><strong>Export</strong></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 

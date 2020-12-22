@@ -34,3 +34,19 @@ class CustomerFilter(django_filters.FilterSet):
         
     def username_filter(self, queryset, name, value):
         return Customer.objects.filter(user__username__icontains=value)
+
+class GroupFilter(django_filters.FilterSet):
+    active = ChoiceFilter(field_name='active', label='Active', choices=BOOLEAN_FILTER_CHOICES)
+    is_assignment = ChoiceFilter(field_name='is_assignment', label='Is Assignment Group?', choices=BOOLEAN_FILTER_CHOICES)
+    is_approval = ChoiceFilter(field_name='is_approval', label='Is Approval Group?', choices=BOOLEAN_FILTER_CHOICES)
+    is_heirarchal = ChoiceFilter(field_name='is_heirarchal', label='Is Heirarchal Group?', choices=BOOLEAN_FILTER_CHOICES)
+
+    #Set choices for select fields
+    manager = MultipleChoiceFilter(choices=get_all_customer_choices())
+    members = MultipleChoiceFilter(choices=get_all_customer_choices())
+    roles = MultipleChoiceFilter(choices=get_all_role_choices())
+
+    class Meta:
+        model = ITSMGroup
+        fields = '__all__'
+        exclude = ['sysID', 'permissions',]

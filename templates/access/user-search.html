@@ -10,128 +10,127 @@ User Search
 {% block content %}
     <div class="container-fluid px-0 mx-0">
         <form method="GET" action="">
-        {% csrf_token %}
-        <div class="card mb-3 border-0">
-            <div class="card-header">
-                <h3>User Search</h3>
-            </div>
-            <div class="card-body">
-                <div id="accordion-search-filters">
-                    <div class="card shadow-sm">
-                        <div class="card-header" id="headingSearchFilters">
-                            <h5 class="mb-0">
-                                <button class="btn" data-toggle="collapse" data-target="#collapseSearchFilters" aria-expanded="true" aria-controls="collapseSearchFilters">
-                                    <h5>Search Filters</h5>
-                                </button>
-                            </h5>
-                        </div>
-                        {% if collapse_filter %}
-                            <div id="collapseSearchFilters" class="collapse" aria-labelledby="headingSearchFilters" data-parent="#accordion-search-filters">
-                        {% else %}
-                            <div id="collapseSearchFilters" class="collapse show" aria-labelledby="headingSearchFilters" data-parent="#accordion-search-filters">
-                        {% endif %}
-                                <form method="GET">
-                                    <div class="card-body">
-                                        <div class="row">                    
-                                            <div class="col-lg-4">
-                                                <label for="{{filter.form.username.id_for_label}}"><strong>{{filter.form.username.label}}:</strong></label>
-                                                {{filter.form.username|add_class:'form-control'}}
-                                            </div>
-                                            <div class="col-lg-4">
-                                                <label for="{{filter.form.first_name.id_for_label}}"><strong>{{filter.form.first_name.label}}:</strong></label>
-                                                {{filter.form.first_name|add_class:'form-control'}}
-                                            </div> 
-                                            <div class="col-lg-4">
-                                                <label for="{{filter.form.last_name.id_for_label}}"><strong>{{filter.form.last_name.label}}:</strong></label>
-                                                {{filter.form.last_name|add_class:'form-control'}}
-                                            </div>
-                                        </div>
-                                        <hr>
-                                        <div class="row">   
-                                            <div class="col-lg-4">
-                                                <label for="{{filter.form.email.id_for_label}}"><strong>{{filter.form.email.label}}:</strong></label>
-                                                {{filter.form.email|add_class:'form-control'}}
-                                            </div>
-                                            <div class="col-lg-4">
-                                                <label for="{{filter.form.phone.id_for_label}}"><strong>{{filter.form.phone.label}}:</strong></label>
-                                                {{filter.form.phone|add_class:'form-control'}}
-                                            </div> 
-                                            <div class="col-lg-4">
-                                                <label for="{{filter.form.location.id_for_label}}"><strong>{{filter.form.location.label}}:</strong></label>
-                                                {{filter.form.location|add_class:'form-control form-control-chosen'}}
-                                            </div>
-                                        </div>
-                                        <hr>
-                                        <div class="row">                    
-                                            <div class="col-lg-4">
-                                                <label for="{{filter.form.organization.id_for_label}}"><strong>{{filter.form.organization.label}}:</strong></label>
-                                                {{filter.form.organization|add_class:'form-control'}}
-                                            </div>
-                                            <div class="col-lg-4">
-                                                <label for="{{filter.form.department.id_for_label}}"><strong>{{filter.form.department.label}}:</strong></label>
-                                                {{filter.form.department|add_class:'form-control'}}
-                                            </div> 
-                                            <div class="col-lg-4">
-                                                <label for="{{filter.form.title.id_for_label}}"><strong>{{filter.form.title.label}}:</strong></label>
-                                                {{filter.form.title|add_class:'form-control'}}
-                                            </div>
-                                        </div>
-                                        <hr>
-                                        <div class="row">                    
-                                            <div class="col-lg-4">
-                                                <label for="{{filter.form.manager.id_for_label}}"><strong>{{filter.form.manager.label}}:</strong></label>
-                                                {{filter.form.manager|add_class:'form-control form-control-chosen'}}
-                                            </div>
-                                            <div class="col-lg-4">
-                                                <label for="{{filter.form.active.id_for_label}}"><strong>{{filter.form.active.label}}:</strong></label>
-                                                {{filter.form.active|add_class:'form-control'}}
-                                            </div> 
-                                           
-                                        </div>
-                                        <hr>
-                                        <div class="row">                    
-                                            <div class="col-lg-3">
-                                                <label for="{{filter.form.created.id_for_label}}"><strong>{{filter.form.created.label}}:</strong></label>
-                                                {{filter.form.created|add_class:'form-control'}}
-                                            </div>
-                                            <div class="col-lg-9">
-                                                <label for="{{filter.form.created_range.id_for_label}}"><strong>{{filter.form.created_range.label}}:</strong></label>
-                                                <div class="form-inline">
-                                                    {{filter.form.created_range|add_class:'form-control'}}
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <hr>
-                                        <div class="row">                    
-                                            <div class="col-lg-3">
-                                                <label for="{{filter.form.updated.id_for_label}}"><strong>{{filter.form.updated.label}}:</strong></label>
-                                                {{filter.form.updated|add_class:'form-control'}}
-                                            </div>
-                                            <div class="col-lg-9">
-                                                <label for="{{filter.form.updated_range.id_for_label}}"><strong>{{filter.form.updated_range.label}}:</strong></label>
-                                                <div class="form-inline">
-                                                    {{filter.form.updated_range|add_class:'form-control'}}
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <hr>
-                                        <div class="row">                    
-                                            <div class="col-lg-12">
-                                                <button class="btn btn-primary" name="search" value="search" type="submit"><strong>Search</strong></button>
-                                                <a class="btn btn-info" href="{% url 'user-search' %}"><strong>Clear</strong></a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </form>
+            <div class="card mb-3 border-0">
+                <div class="card-header">
+                    <h3>User Search</h3>
+                </div>
+                <div class="card-body">
+                    <div id="accordion-search-filters">
+                        <div class="card shadow-sm">
+                            <div class="card-header" id="headingSearchFilters">
+                                <h5 class="mb-0">
+                                    <button class="btn" data-toggle="collapse" data-target="#collapseSearchFilters" aria-expanded="true" aria-controls="collapseSearchFilters">
+                                        <h5>Search Filters</h5>
+                                    </button>
+                                </h5>
                             </div>
+                            {% if collapse_filter %}
+                                <div id="collapseSearchFilters" class="collapse" aria-labelledby="headingSearchFilters" data-parent="#accordion-search-filters">
+                            {% else %}
+                                <div id="collapseSearchFilters" class="collapse show" aria-labelledby="headingSearchFilters" data-parent="#accordion-search-filters">
+                            {% endif %}
+                                    <form method="GET">
+                                        <div class="card-body">
+                                            <div class="row">                    
+                                                <div class="col-lg-4">
+                                                    <label for="{{filter.form.username.id_for_label}}"><strong>{{filter.form.username.label}}:</strong></label>
+                                                    {{filter.form.username|add_class:'form-control'}}
+                                                </div>
+                                                <div class="col-lg-4">
+                                                    <label for="{{filter.form.first_name.id_for_label}}"><strong>{{filter.form.first_name.label}}:</strong></label>
+                                                    {{filter.form.first_name|add_class:'form-control'}}
+                                                </div> 
+                                                <div class="col-lg-4">
+                                                    <label for="{{filter.form.last_name.id_for_label}}"><strong>{{filter.form.last_name.label}}:</strong></label>
+                                                    {{filter.form.last_name|add_class:'form-control'}}
+                                                </div>
+                                            </div>
+                                            <hr>
+                                            <div class="row">   
+                                                <div class="col-lg-4">
+                                                    <label for="{{filter.form.email.id_for_label}}"><strong>{{filter.form.email.label}}:</strong></label>
+                                                    {{filter.form.email|add_class:'form-control'}}
+                                                </div>
+                                                <div class="col-lg-4">
+                                                    <label for="{{filter.form.phone.id_for_label}}"><strong>{{filter.form.phone.label}}:</strong></label>
+                                                    {{filter.form.phone|add_class:'form-control'}}
+                                                </div> 
+                                                <div class="col-lg-4">
+                                                    <label for="{{filter.form.location.id_for_label}}"><strong>{{filter.form.location.label}}:</strong></label>
+                                                    {{filter.form.location|add_class:'form-control form-control-chosen'}}
+                                                </div>
+                                            </div>
+                                            <hr>
+                                            <div class="row">                    
+                                                <div class="col-lg-4">
+                                                    <label for="{{filter.form.organization.id_for_label}}"><strong>{{filter.form.organization.label}}:</strong></label>
+                                                    {{filter.form.organization|add_class:'form-control'}}
+                                                </div>
+                                                <div class="col-lg-4">
+                                                    <label for="{{filter.form.department.id_for_label}}"><strong>{{filter.form.department.label}}:</strong></label>
+                                                    {{filter.form.department|add_class:'form-control'}}
+                                                </div> 
+                                                <div class="col-lg-4">
+                                                    <label for="{{filter.form.title.id_for_label}}"><strong>{{filter.form.title.label}}:</strong></label>
+                                                    {{filter.form.title|add_class:'form-control'}}
+                                                </div>
+                                            </div>
+                                            <hr>
+                                            <div class="row">                    
+                                                <div class="col-lg-4">
+                                                    <label for="{{filter.form.manager.id_for_label}}"><strong>{{filter.form.manager.label}}:</strong></label>
+                                                    {{filter.form.manager|add_class:'form-control form-control-chosen'}}
+                                                </div>
+                                                <div class="col-lg-4">
+                                                    <label for="{{filter.form.active.id_for_label}}"><strong>{{filter.form.active.label}}:</strong></label>
+                                                    {{filter.form.active|add_class:'form-control'}}
+                                                </div> 
+                                            
+                                            </div>
+                                            <hr>
+                                            <div class="row">                    
+                                                <div class="col-lg-3">
+                                                    <label for="{{filter.form.created.id_for_label}}"><strong>{{filter.form.created.label}}:</strong></label>
+                                                    {{filter.form.created|add_class:'form-control'}}
+                                                </div>
+                                                <div class="col-lg-9">
+                                                    <label for="{{filter.form.created_range.id_for_label}}"><strong>{{filter.form.created_range.label}}:</strong></label>
+                                                    <div class="form-inline">
+                                                        {{filter.form.created_range|add_class:'form-control'}}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <hr>
+                                            <div class="row">                    
+                                                <div class="col-lg-3">
+                                                    <label for="{{filter.form.updated.id_for_label}}"><strong>{{filter.form.updated.label}}:</strong></label>
+                                                    {{filter.form.updated|add_class:'form-control'}}
+                                                </div>
+                                                <div class="col-lg-9">
+                                                    <label for="{{filter.form.updated_range.id_for_label}}"><strong>{{filter.form.updated_range.label}}:</strong></label>
+                                                    <div class="form-inline">
+                                                        {{filter.form.updated_range|add_class:'form-control'}}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <hr>
+                                            <div class="row">                    
+                                                <div class="col-lg-12">
+                                                    <button class="btn btn-primary" name="search" value="search" type="submit"><strong>Search</strong></button>
+                                                    <a class="btn btn-info" href="{% url 'user-search' %}"><strong>Clear</strong></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                        </div>
+                    </div>
+                    <!-- Display search results -->
+                    <br>
+                    {% include 'access/user-search-results.html' with customers=customers %}
                     </div>
                 </div>
-                <!-- Display search results -->
-                <br>
-                {% include 'access/user-search-results.html' with customers=customers %}
-                </div>
             </div>
-        </div>
         </form>
     </div>
 

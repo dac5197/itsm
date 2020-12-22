@@ -5,6 +5,7 @@ from django.db import models
 from django.db.models import CharField
 from django.db.models.functions import Length
 from django.contrib.auth.models import Group as DjangoGroup, User
+from django.utils import timezone
 
 from .mpt_utils import create_tree_list
 
@@ -61,8 +62,8 @@ class Customer(models.Model):
     organization = models.CharField(max_length=100, null=True, blank=True)
     department = models.CharField(max_length=100, null=True, blank=True)
     title = models.CharField(max_length=100, null=True, blank=True)
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now_add=True)
+    created = models.DateTimeField(default=timezone.now, null=False, blank=False)
+    updated = models.DateTimeField(default=timezone.now, null=False, blank=False)
     active = models.BooleanField(default=True)
     location = models.ForeignKey(Location, on_delete=models.SET_NULL, null=True, blank=True)
     profile_image = models.ImageField(max_length=255, upload_to=get_profile_image, null=True, blank=True, default=get_default_profile_image)
@@ -140,13 +141,15 @@ class ITSMGroup(DjangoGroup):
     is_assignment = models.BooleanField(default=False)
     is_approval = models.BooleanField(default=False)
     is_heirarchal = models.BooleanField(default=False)
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now_add=True)
+    created = models.DateTimeField(default=timezone.now, null=False, blank=False)
+    updated = models.DateTimeField(default=timezone.now, null=False, blank=False)
     active = models.BooleanField(default=True)
     roles = models.ManyToManyField(Role, related_name='role_membership', blank=True)
     
     def __str__(self):
         return self.name
+
+
 
 
 class SidebarItem(models.Model):

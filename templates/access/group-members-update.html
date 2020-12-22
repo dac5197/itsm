@@ -1,0 +1,51 @@
+{% extends 'base\main_header.html' %}
+{% load static %}
+{% load tracking_tags %}
+{% load widget_tweaks %}
+
+{% block title %}
+Update Membership - {{group.name}}
+{% endblock %}
+
+{% block content %}
+<form method="POST" action="">
+    {% csrf_token %}
+    <div class="container-fluid px-0 mx-0">
+        <div class="card mb-3 border-0">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="d-flex justify-content-start">
+                            <h4>Update Membership - {{group.name}}</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <!--Show any errors from a previous form submission-->
+                {% include 'base/form-errors.html' with form=form %}
+                <div class="card mb-3 shadow-sm">
+                    <div class="card-body">
+                        <!-- Display form fields -->
+                        <div class="row mb-3">
+                            <div class="col-lg-12">
+                                <label for="{{form.members.id_for_label}}"><strong>{{form.members.label}}:</strong></label>
+                                {{form.members|add_class:'form-control form-control-chosen'}}
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row mb-3">
+                            <div class="col-lg-2">
+                                <a class="btn btn-primary btn-block" href="{% url 'group-detail' group.id %}"><i class="fas fa-chevron-left"></i><strong class="ml-2">Return</strong></a>
+                            </div>
+                            <div class="col-lg-2">
+                                <button class="btn btn-info btn-block" name="update" value="update" type="submit"><strong>Update</strong></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+{% endblock %}

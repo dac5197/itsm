@@ -1,0 +1,99 @@
+{% extends 'base\main_header.html' %}
+{% load static %}
+{% load tracking_tags %}
+{% load widget_tweaks %}
+
+{% block title %}
+Group Search
+{% endblock %}
+
+{% block content %}
+    <div class="container-fluid px-0 mx-0">
+        <form method="GET" action="">
+            <div class="card mb-3 border-0">
+                <div class="card-header">
+                    <h3>Group Search</h3>
+                </div>
+                <div class="card-body">
+                    <div id="accordion-search-filters">
+                        <div class="card shadow-sm">
+                            <div class="card-header" id="headingSearchFilters">
+                                <h5 class="mb-0">
+                                    <button class="btn" data-toggle="collapse" data-target="#collapseSearchFilters" aria-expanded="true" aria-controls="collapseSearchFilters">
+                                        <h5>Search Filters</h5>
+                                    </button>
+                                </h5>
+                            </div>
+                            {% if collapse_filter %}
+                                <div id="collapseSearchFilters" class="collapse" aria-labelledby="headingSearchFilters" data-parent="#accordion-search-filters">
+                            {% else %}
+                                <div id="collapseSearchFilters" class="collapse show" aria-labelledby="headingSearchFilters" data-parent="#accordion-search-filters">
+                            {% endif %}
+                                    <form method="GET">
+                                        <div class="card-body">
+                                            <div class="row">                    
+                                                <div class="col-lg-4">
+                                                    <label for="{{filter.form.name.id_for_label}}"><strong>{{filter.form.name.label}}:</strong></label>
+                                                    {{filter.form.name|add_class:'form-control'}}
+                                                </div>
+                                                <div class="col-lg-4">
+                                                    <label for="{{filter.form.manager.id_for_label}}"><strong>{{filter.form.manager.label}}:</strong></label>
+                                                    {{filter.form.manager|add_class:'form-control form-control-chosen'}}
+                                                </div>
+                                                <div class="col-lg-4">
+                                                    <label for="{{filter.form.path.id_for_label}}"><strong>{{filter.form.path.label}}:</strong></label>
+                                                    {{filter.form.path|add_class:'form-control'}}
+                                                </div> 
+                                            </div>
+                                            <hr>
+                                            <div class="row">   
+                                                <div class="col-lg-3">
+                                                    <label for="{{filter.form.active.id_for_label}}"><strong>{{filter.form.active.label}}:</strong></label>
+                                                    {{filter.form.active|add_class:'form-control'}}
+                                                </div>
+                                                <div class="col-lg-3">
+                                                    <label for="{{filter.form.is_assignment.id_for_label}}"><strong>{{filter.form.is_assignment.label}}:</strong></label>
+                                                    {{filter.form.is_assignment|add_class:'form-control'}}
+                                                </div>
+                                                <div class="col-lg-3">
+                                                    <label for="{{filter.form.is_approval.id_for_label}}"><strong>{{filter.form.is_approval.label}}:</strong></label>
+                                                    {{filter.form.is_approval|add_class:'form-control'}}
+                                                </div>
+                                                <div class="col-lg-3">
+                                                    <label for="{{filter.form.is_heirarchal.id_for_label}}"><strong>{{filter.form.is_heirarchal.label}}:</strong></label>
+                                                    {{filter.form.is_heirarchal|add_class:'form-control'}}
+                                                </div>                                            
+                                            </div>
+                                            <hr>
+                                            <div class="row">                    
+                                                <div class="col-lg-6">
+                                                    <label for="{{filter.form.members.id_for_label}}"><strong>{{filter.form.members.label}}:</strong></label>
+                                                    {{filter.form.members|add_class:'form-control form-control-chosen'}}
+                                                </div>
+                                                <div class="col-lg-6">
+                                                    <label for="{{filter.form.roles.id_for_label}}"><strong>{{filter.form.roles.label}}:</strong></label>
+                                                    {{filter.form.roles|add_class:'form-control form-control-chosen'}}
+                                                </div> 
+                                            </div>
+                                            <hr>
+                                            <div class="row">                    
+                                                <div class="col-lg-12">
+                                                    <button class="btn btn-primary" name="search" value="search" type="submit"><strong>Search</strong></button>
+                                                    <a class="btn btn-info" href="{% url 'group-search' %}"><strong>Clear</strong></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                        </div>
+                    </div>
+                    <!-- Display search results -->
+                    <br>
+                    {% include 'access/group-search-results.html' with groups=groups %}
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+{% endblock %}

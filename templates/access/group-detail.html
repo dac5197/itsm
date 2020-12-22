@@ -1,0 +1,175 @@
+{% extends 'base\main_header.html' %}
+{% load static %}
+{% load tracking_tags %}
+{% load widget_tweaks %}
+
+{% block title %}
+Group Details - {{group.name}}
+{% endblock %}
+
+{% block content %}
+<form method="POST" action="">
+    {% csrf_token %}
+    <div class="container-fluid px-0 mx-0">
+        <div class="card mb-3 border-0">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="d-flex justify-content-start">
+                            <h4>Group Details</h4>
+                        </div>
+                    </div>
+                    {% if 'TSM Admin' in request.user.customer.roles %}
+                        <div class="col-lg-8">
+                            <div class="d-flex justify-content-end">
+                                <a class="btn btn-info" href="{% url 'group-admin-update' group.id %}"><strong>Update</strong></a>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="card-body">
+                <!--Show any errors from a previous form submission-->
+                {% include 'base/form-errors.html' with form=form %}
+                <!-- Display form fields -->
+                <div class="row mb-3">
+                    <div class="col-lg-12">
+                        <div class="card shadow-sm">
+                            <div class="card-header pt-2 pb-1">
+                                <div class="text-center"><h5>{{group.name}}</h5></div>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <label for="{{group.name|cut:' '}}_id"><strong>Name:</strong></label>
+                                        <input type="text" class="form-control" value="{{group.name}}" id="{{group.name|cut:' '}}_id" readonly>
+                                        
+
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <label for="{{group.manager|cut:' '}}_id"><strong>Manager:</strong></label>
+                                        <input type="text" class="form-control" value="{{group.manager}}" id="{{group.manager|cut:' '}}_id" readonly>
+                                    </div>
+
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <label for="{{group.active|cut:' '}}_id"><strong>Active:</strong></label>
+                                                <input type="text" class="form-control" value="{{group.active}}" id="{{group.active|cut:' '}}_id" readonly>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <label for="{{group.is_assignment|cut:' '}}_id"><strong>Is Assignment Group?</strong></label>
+                                                <input type="text" class="form-control" value="{{group.is_assignment}}" id="{{group.is_assignment|cut:' '}}_id" readonly>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <label for="{{group.is_approval|cut:' '}}_id"><strong>Is Approval Group?</strong></label>
+                                                <input type="text" class="form-control" value="{{group.is_approval}}" id="{{group.is_approval|cut:' '}}_id" readonly>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <label for="{{group.is_heirarchal|cut:' '}}_id"><strong>Is Heirarchal Group?</strong></label>
+                                                <input type="text" class="form-control" value="{{group.is_heirarchal}}" id="{{group.is_heirarchal|cut:' '}}_id" readonly>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 mt-4">
+                                        <table class="table table-sm"
+                                            data-toggle="table"
+                                            data-sort-class="table-active"
+                                            data-sortable="true"
+                                        >
+                                            <thead class="bg-light">
+                                                <tr>
+                                                    <th data-field="name" data-sortable="true">Roles</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for role in group.roles.all %}
+                                                    <tr>
+                                                        <td>{{role}}</td>
+                                                    </tr>
+                                        
+                                                {% endfor %}
+                        
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        
+                                        
+                                    </div>
+
+
+
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+                <div class="row mb-3">
+                    <div class="col-lg-12">
+                        <div class="card shadow-sm">
+                            <div class="card-header pt-2 pb-1">
+                                <div class="text-center"><h5>Members</h5></div>
+                            </div>
+                            <div class="card-body">
+                                <div class="row mb-3">
+                                    <div class="col-lg-12">
+                                        <table class="table table-sm"
+                                            data-toggle="table"
+                                            data-sort-class="table-active"
+                                            data-sortable="true"
+                                            data-pagination="true"
+                                            data-pagination-h-align="left"
+                                            data-pagination-detail-h-align="right"
+                                        >
+                                            <thead class="bg-light">
+                                                <tr>
+                                                    <th data-field="name" data-sortable="true">Name</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for member in group.members.all %}
+                                                    <tr>
+                                                        <td>{{member}}</td>
+                                                    </tr>
+                                        
+                                                {% endfor %}
+                        
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                {% if can_edit_members %}
+                                    <div class="row">
+                                        <div class="col-lg-3">
+                                            <a class="btn btn-info btn-block" href="{% url 'group-members-update' group.id %}"><strong>Update Members</strong></a>
+                                        </div>
+
+                                    </div>
+                                {% endif %}
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+        
+
+
+
+    </div>
+</form>
+
+
+{% endblock %}

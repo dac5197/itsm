@@ -5,7 +5,10 @@ from . import views, utils
 
 
 urlpatterns = [
-    #path('login', views.login, name="login"),
+    path('group-detail/<str:id>', views.group_detail, name='group-detail'),
+    path('group-admin-update/<str:id>', views.group_admin_update, name='group-admin-update'),
+    path('group-members-update/<str:id>', views.group_members_update, name='group-members-update'),
+    path('group-search', views.group_search, name='group-search'),
     path('group-tree', views.group_tree, name='group-tree'),
     path('homepage', views.homepage, name='homepage'),
     path('homepage-assignedtome', views.homepage_assigned_to_me, name='homepage-assignedtome'),

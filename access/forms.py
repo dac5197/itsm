@@ -6,6 +6,7 @@ from django.forms import Form, ModelForm
 from crispy_forms.helper import FormHelper
 
 from .models import *
+from .utils import get_all_customer_choices
 
 class CustomerForm(forms.ModelForm):
     profile_image = forms.ImageField(label='Profile Image',required=False, error_messages ={'invalid': "Image files only"}, widget=forms.FileInput)
@@ -29,5 +30,19 @@ class CreateUserForm(UserCreationForm):
         #Change form label names
         self.fields['password2'].label = 'Confirm Password'
 
-class GroupForm(forms.Form):
-    tsm_group = forms.ChoiceField(choices=[(group.id, group.name) for group in ITSMGroup.objects.all().order_by('path')])
+class GroupForm(forms.ModelForm):
+    class Meta:
+        model = ITSMGroup
+        fields = ['members']
+
+class GroupAdminForm(forms.ModelForm):
+    class Meta:
+        model = ITSMGroup
+        fields = '__all__'
+        exclude = ['permissions', 'sysID']
+
+        widgets = {     
+            #Set fields to readonly (disabled)
+            'created' : forms.DateTimeInput(attrs={'readonly':'readonly'}, format='%m/%d/%Y %H:%M'),
+            'updated' : forms.DateTimeInput(attrs={'readonly':'readonly'}, format='%m/%d/%Y %H:%M'),           
+        }
