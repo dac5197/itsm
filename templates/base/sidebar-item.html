@@ -13,7 +13,7 @@
             {% if '?' in item.url %}
                 {% if 'group' in item.url %}
                 <li>
-                    <a href="{{item.url}}{% for group in request.user.customer.group_memberof %}{{group.name}}{% if not forloop.last %}&assingment_group={% endif %}{% endfor %}">{{item.name}}</a>
+                    <a href="{{item.url}}{% for group in request.user.customer.group_memberof %}{{group.id}}{% if not forloop.last %}&assignment_group={% endif %}{% endfor %}">{{item.name}}</a>
                 </li>          
                 {% else %}
                     <li>
