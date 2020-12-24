@@ -12,35 +12,40 @@ def increment_ticket_number(prefix, id):
 
 def increment_inc_number():
     try:
-        last_inc_id = Incident.objects.all().order_by('id').last().id
-        last_inc_id += 1
+        number = Incident.objects.all().order_by('number').last().number
+        last_id = int(number[-7:])
+        last_id += 1
     except:
-        last_inc_id = 1
-    return increment_ticket_number('INC', last_inc_id)  
+        last_id = 1
+    return increment_ticket_number('INC', last_id)  
 
 def increment_pwrst_number():
     try:
-        last_pwrst_id = PasswordReset.objects.all().order_by('id').last().id
-        last_pwrst_id += 1
+        number = PasswordReset.objects.all().order_by('number').last().number
+        last_id = int(number[-7:])
+        last_id += 1
     except:
-        last_pwrst_id = 1
-    return increment_ticket_number('PWRST', last_pwrst_id)  
+        last_id = 1
+    return increment_ticket_number('PWRST', last_id)
 
 def increment_req_number():
     try:
-        last_id = Request.objects.all().order_by('id').last().id
+        number = Request.objects.all().order_by('number').last().number
+        last_id = int(number[-7:])
         last_id += 1
     except:
         last_id = 1
-    return increment_ticket_number('REQ', last_id)  
+    return increment_ticket_number('REQ', last_id) 
 
 def increment_out_number():
     try:
-        last_id = Outage.objects.all().order_by('id').last().id
+        number = Outage.objects.all().order_by('number').last().number
+        last_id = int(number[-7:])
         last_id += 1
     except:
         last_id = 1
-    return increment_ticket_number('OUT', last_id)  
+    return increment_ticket_number('OUT', last_id)
+
 
 # Create your models here.
 

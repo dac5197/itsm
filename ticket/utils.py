@@ -147,9 +147,7 @@ def create_tsm_object(customer, obj_app, obj_model, copy_obj_id=None):
     if copy_obj_id:
         copy_obj = model.objects.get(id=copy_obj_id)
         for field in CopyList.objects.get(name__iexact=obj_model).fields:
-            #obj.__dict__[field] = copy_obj.__dict__[field]
             setattr(obj, field, getattr(copy_obj, field))
-            print(field)
 
     #Save new incident
     obj.save()

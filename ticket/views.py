@@ -327,8 +327,8 @@ def request_detail(request, number):
 
             #Redirect url based on submit button
             if 'create_copy' in request.POST:
-                new_incident = create_incident(customer=request.user.customer, obj_app='ticket', obj_model='incident', copy_obj_id=instance.id)
-                return redirect('request-detail', number=new_incident.number)
+                new_ticket = create_tsm_object(customer=request.user.customer, obj_app='ticket', obj_model='request', copy_obj_id=instance.id)
+                return redirect('request-detail', number=new_ticket.number)
             elif 'save_stay' in request.POST:
                 return redirect('request-detail', number=number) 
             elif 'save_return' in request.POST:
