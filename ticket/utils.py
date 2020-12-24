@@ -318,16 +318,26 @@ def set_ticket_form_defaults(form, ticket_type_id):
 
     return form
 
-#Throw error if ticket will be in resolved status and completion_field has not data
-def validate_completion_notes(form, cleaned_data, completion_field, ticket_type_id):
+#Throw error if ticket will be in resolved status and completion_field has no data OR assignee is not selected
+def validate_completion_fields(form, cleaned_data, completion_field, ticket_type_id):
     
     status = cleaned_data.get('status')
     completion_field_value = cleaned_data.get(f'{completion_field}')
-
+    assignee = cleaned_data.get('assignee')
+    customer = cleaned_data.get('customer')
     resolved_status = get_status_resolved(id=ticket_type_id)
 
     if status == resolved_status and  completion_field_value == '':
-        msg = "This field is required when resolving an incident."
+        msg = f'This field is required when resolving a {TicketType.objects.get(id=ticket_type_id).name}.'
         form.add_error(f'{completion_field}', msg)
+
+    if status == resolved_status and  assignee == None:
+        msg = f'This field is required when resolving a {TicketType.objects.get(id=ticket_type_id).name}.'
+        form.add_error('assignee', msg)
+
+    if status == resolved_status and  customer == None:
+        msg = f'This field is required when resolving a {TicketType.objects.get(id=ticket_type_id).name}.'
+        form.add_error('customer', msg)
+
 
     return form

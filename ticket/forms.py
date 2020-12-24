@@ -22,7 +22,7 @@ class IncidentForm(forms.ModelForm):
     #On form save, if status is resolved and resolution is empty, then throw error
     def clean(self):
         cleaned_data = super().clean()
-        self = validate_completion_notes(form=self, cleaned_data=cleaned_data, completion_field='resolved', ticket_type_id=1)
+        self = validate_completion_fields(form=self, cleaned_data=cleaned_data, completion_field='resolved', ticket_type_id=1)
 
         return self.cleaned_data
          
@@ -48,7 +48,7 @@ class RequestForm(forms.ModelForm):
     #On form save, if status is resolved and resolution is empty, then throw error
     def clean(self):
         cleaned_data = super().clean()
-        self = validate_completion_notes(form=self, cleaned_data=cleaned_data, completion_field='fulfillment_notes', ticket_type_id=2)
+        self = validate_completion_fields(form=self, cleaned_data=cleaned_data, completion_field='fulfillment_notes', ticket_type_id=2)
 
         return self.cleaned_data
            
