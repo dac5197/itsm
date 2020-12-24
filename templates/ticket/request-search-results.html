@@ -1,0 +1,64 @@
+<div id="accordion-search-results">
+    <div class="card shadow-sm">
+        <div class="card-header" id="headingSearchResults">
+            <h5 class="mb-0">
+                <button class="btn" type="button" data-toggle="collapse" data-target="#collapseSearchResults" aria-expanded="true" aria-controls="collapseSearchResults">
+                    <h5>Search Results</h5>
+                </button>
+            </h5>
+        </div>
+        <div id="collapseSearchResults" class="collapse show" aria-labelledby="headingSearchResults" data-parent="#accordion-search-results">
+            <div class="card-body">
+                <div class="row">                    
+                    <div class="col-lg-12">
+                        <div>
+                            <table class="table table-sm small"
+                                data-toggle="table"
+                                data-sort-class="table-active"
+                                data-sortable="true"
+                                data-pagination="true"
+                                data-pagination-h-align="left"
+                                data-pagination-detail-h-align="right"
+                            >
+                                <thead class="bg-light">
+                                    <tr>
+                                        <th data-field="number" data-sortable="true">Number</th>
+                                        <th data-field="status" data-sortable="true">Status</th>
+                                        <th data-field="priority" data-sortable="true">Priority</th>
+                                        <th data-width="15" data-width-unit="%"data-field="created" data-sortable="true">Created</th>
+                                        <th data-width="15" data-width-unit="%" data-field="resolved" data-sortable="true">Fulfilled</th>
+                                        <th data-field="reopened" data-sortable="true">Reopnd</th>
+                                        <th data-width="15" data-width-unit="%" data-field="customer" data-sortable="true">Customer</th>
+                                        <th data-field="assignment_group" data-sortable="true">Assignment Group</th>
+                                        <th data-width="15" data-width-unit="%" data-field="assignee" data-sortable="true">Assignee</th>
+                                        <th data-width="20" data-width-unit="%" data-field="desc_short" data-sortable="true">Desc Short</th>
+                                    </tr>
+                                </thead>
+                                {% for req in reqs %}
+                                    <tr>
+                                        <td><a href="/ticket/request-detail/{{req.number}}">{{req.number}}</a></td>
+                                        <td>{{req.status}}</td>
+                                        <td>{{req.priority}}</td>
+                                        <td>{{req.created}}</td>
+                                        <td>{{req.fulfilled}}</td>
+                                        <td>{{req.reopened}}</td>
+                                        <td>{{req.customer}}</td>
+                                        <td>{{req.assignment_group}}</td>
+                                        <td>{{req.assignee}}</td>
+                                        <td>{{req.desc_short}}</td>
+                                    </tr>
+                                {% endfor %}
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <!-- Export button -->
+                <div class="row">
+                    <div class="col-lg-2">                           
+                        <button class="btn btn-primary btn-sm" name="export" value="export" type="submit"><strong>Export</strong></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 

@@ -10,6 +10,7 @@ urlpatterns = [
     path('incident-search/', views.incident_search, name='incident-search'),
     path('request-create', views.request_create, name='request-create'),
     path('request-detail/<str:number>', views.request_detail, name='request-detail'),
+    path('request-search/', views.request_search, name='request-search'),
     path('export-csv/', views.export_csv, name='export-csv'),
     path('load-assignees/', views.load_assignees, name='load-assignees'),
 ]

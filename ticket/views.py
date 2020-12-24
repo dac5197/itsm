@@ -355,3 +355,38 @@ def request_detail(request, number):
     return render(request, 'ticket/request-detail.html', context)
     
 
+@login_required(login_url='/access/login')
+def request_search(request):
+
+    reqs = Request.objects.all()
+    req_filter = RequestFilter(request.GET, queryset=reqs)
+    collapse_filter = False
+    
+    #Set search results to filter queryset if search args passed in GET
+    #Else set queryset to blank
+    if request.GET:
+        reqs = req_filter.qs
+    
+        #If assignee__isnull is in request.GET parameters then filter qs where assignee is null
+        assignee_isnull = request.GET.get('assignee_isnull')
+        if assignee_isnull:
+            reqs = reqs.filter(assignee__isnull=True)
+    
+        #If collapse_filter, then set to GET parameter
+        #Set to True will set the Search Filters accordion to collapse on page load
+        collapse_filter = request.GET.get('collapse_filter')
+
+    else:
+        reqs = ''
+
+    #If export button -> export data to csv
+    if 'export' in request.GET:
+        return export_csv(queryset=reqs, obj_type='request')
+
+    context = {
+        'filter' : req_filter,
+        'reqs' : reqs,
+        'collapse_filter' : collapse_filter,
+    }
+
+    return render(request, 'ticket/request-search.html', context)

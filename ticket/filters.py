@@ -34,4 +34,27 @@ class IncidentFilter(django_filters.FilterSet):
             'sysID',
             'ticket_type',
             ]
-        
+
+class RequestFilter(django_filters.FilterSet):
+    created = DateFilter(field_name='created', lookup_expr='icontains', label='Created', widget=DateInput(attrs={'type': 'date'}))
+    created_range = DateTimeFromToRangeFilter(field_name='created', lookup_expr='icontains', label='Created Range', widget=RangeWidget(attrs={'type': 'datetime-local'}))
+    fulfilled = DateFilter(field_name='fulfilled', lookup_expr='icontains', label='Fulfilled', widget=DateInput(attrs={'type': 'date'}))
+    fulfilled_range = DateTimeFromToRangeFilter(field_name='fulfilled', lookup_expr='icontains', label='Fulfilled Range', widget=RangeWidget(attrs={'type': 'datetime-local'}))
+    reopened = NumberFilter(field_name='reopened', lookup_expr='exact', label='Reopened Count')
+    reopened_range = RangeFilter(field_name='reopened', lookup_expr='icontains', label='Reopened Count Range')
+
+    #Set choices for select fields
+    assignee = MultipleChoiceFilter(choices=get_all_customer_choices())
+    assignment_group = MultipleChoiceFilter(choices=get_assignment_group_choices())
+    customer = MultipleChoiceFilter(choices=get_all_customer_choices())
+    location = MultipleChoiceFilter(choices=get_all_location_choices())
+    priority = MultipleChoiceFilter(choices=get_priority_choices())
+    status = MultipleChoiceFilter(choices=get_status_choices(id=2))
+
+    class Meta:
+        model = Request
+        fields = '__all__'
+        exclude = [
+            'sysID',
+            'ticket_type',
+            ]
