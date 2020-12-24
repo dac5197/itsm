@@ -51,7 +51,7 @@
                                     <h6 class="card-title">Requests</h6>
                                 </div>
                                 <div class="col">
-                                    <h5 class="card-title">#</h5>
+                                    <h5 class="card-title">{{new_req.count}}</h5>
                                 </div>
                             </div>
                         </div>
@@ -85,7 +85,7 @@
                                 <h6 class="card-title">Requests</h6>
                             </div>
                             <div class="col">
-                                <h5 class="card-title">#</h5>
+                                <h5 class="card-title">{{open_req.count}}</h5>
                             </div>
                         </div>
                     </div>
@@ -119,7 +119,7 @@
                                 <h6 class="card-title">Requests</h6>
                             </div>
                             <div class="col">
-                                <h5 class="card-title">#</h5>
+                                <h5 class="card-title">{{resolved_req.count}}</h5>
                             </div>
                         </div>
                     </div>
@@ -177,9 +177,9 @@
                                             <td><a href="#">{{v1.PasswordReset.new}}</a></td>
                                             <td><a href="#">{{v1.PasswordReset.open}}</a></td>
                                             <td><a href="#">{{v1.PasswordReset.resolved}}</a></td>
-                                            <td><a href="#">{{v1.Request.new}}</a></td>
-                                            <td><a href="#">{{v1.Request.open}}</a></td>
-                                            <td><a href="#">{{v1.Request.resolved}}</a></td>
+                                            <td><a href="/ticket/{{v1.Request.new_url}}">{{v1.Request.new}}</a></td>
+                                            <td><a href="/ticket/{{v1.Request.open_url}}">{{v1.Request.open}}</a></td>
+                                            <td><a href="/ticket/{{v1.Request.resolved_url}}">{{v1.Request.resolved}}</a></td>
                                             <td><a href="#">{{v1.Outage.new}}</a></td>
                                             <td><a href="#">{{v1.Outage.open}}</a></td>
                                             <td><a href="#">{{v1.Outage.resolved}}</a></td>
@@ -244,9 +244,9 @@
                                                 <td><a href="#">{{v2.PasswordReset.new}}</td>
                                                 <td><a href="#">{{v2.PasswordReset.open}}</a></td>
                                                 <td><a href="#">{{v2.PasswordReset.resolved}}</a></td>
-                                                <td><a href="#">{{v2.Request.new}}</a></td>
-                                                <td><a href="#">{{v2.Request.open}}</a></td>
-                                                <td><a href="#">{{v2.Request.resolved}}</a></td>
+                                                <td><a href="/ticket/{{v2.Request.new_url}}">{{v2.Request.new}}</a></td>
+                                                <td><a href="/ticket/{{v2.Request.open_url}}">{{v2.Request.open}}</a></td>
+                                                <td><a href="/ticket/{{v2.Request.resolved_url}}">{{v2.Request.resolved}}</a></td>
                                                 <td><a href="#">{{v2.Outage.new}}</a></td>
                                                 <td><a href="#">{{v2.Outage.open}}</a></td>
                                                 <td><a href="#">{{v2.Outage.resolved}}</a></td>

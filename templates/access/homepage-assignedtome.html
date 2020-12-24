@@ -49,7 +49,7 @@
                                     <h6 class="card-title">Requests</h6>
                                 </div>
                                 <div class="col">
-                                    <h5 class="card-title">#</h5>
+                                    <h5 class="card-title">{{new_req.count}}</h5>
                                 </div>
                             </div>
                         </div>
@@ -83,7 +83,7 @@
                                 <h6 class="card-title">Requests</h6>
                             </div>
                             <div class="col">
-                                <h5 class="card-title">#</h5>
+                                <h5 class="card-title">{{open_req.count}}</h5>
                             </div>
                         </div>
                     </div>
@@ -117,7 +117,7 @@
                                 <h6 class="card-title">Requests</h6>
                             </div>
                             <div class="col">
-                                <h5 class="card-title">#</h5>
+                                <h5 class="card-title">{{resolved_req.count}}</h5>
                             </div>
                         </div>
                     </div>
@@ -147,7 +147,7 @@
                                 <!-- New Password Resets Details -->
                                 {% include 'access/homepage-collapse-ticket-table.html' with tickets='' type='passwordreset' state='new' %}
                                 <!-- New Requests Details -->
-                                {% include 'access/homepage-collapse-ticket-table.html' with tickets='' type='request' state='new' %}
+                                {% include 'access/homepage-collapse-ticket-table.html' with tickets=new_req type='request' state='new' %}
                             </div>
                             </div>
                         </div>
@@ -177,7 +177,7 @@
                                 <!-- New Password Resets Details -->
                                 {% include 'access/homepage-collapse-ticket-table.html' with tickets='' type='passwordreset' state='open' %}
                                 <!-- New Requests Details -->
-                                {% include 'access/homepage-collapse-ticket-table.html' with tickets='' type='request' state='open' %}
+                                {% include 'access/homepage-collapse-ticket-table.html' with tickets=open_req type='request' state='open' %}
                             </div>
                             </div>
                         </div>
@@ -207,7 +207,7 @@
                                 <!-- New Password Resets Details -->
                                 {% include 'access/homepage-collapse-ticket-table.html' with tickets='' type='passwordreset' state='resolved' %}
                                 <!-- New Requests Details -->
-                                {% include 'access/homepage-collapse-ticket-table.html' with tickets='' type='request' state='resolved' %}
+                                {% include 'access/homepage-collapse-ticket-table.html' with tickets=resolved_req type='request' state='resolved' %}
                             </div>
                             </div>
                         </div>

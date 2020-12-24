@@ -21,7 +21,11 @@
                                 <th>Status</th>
                                 <th>Priority</th>
                                 <th>Created</th>
-                                <th>Resolved</th>
+                                {% if type == 'request' %}
+                                    <th>Fulfilled</th>
+                                {% else %}
+                                    <th>Resolved</th>
+                                {% endif %}
                                 <th>Reopened</th>
                                 <th>Assignment Group</th>
                                 <th>Assignee</th>
@@ -34,7 +38,11 @@
                                         <td>{{ticket.status}}</td>
                                         <td>{{ticket.priority}}</td>
                                         <td>{{ticket.created}}</td>
-                                        <td>{{ticket.resolved}}</td>
+                                        {% if type == 'request' %}
+                                            <td>{{ticket.fulfilled}}</td>
+                                        {% else %}
+                                            <td>{{ticket.resolved}}</td>
+                                        {% endif %}
                                         <td>{{ticket.reopened}}</td>
                                         <td>{{ticket.assignment_group}}</td>
                                         <td>{{ticket.assignee.full_name}}</td>

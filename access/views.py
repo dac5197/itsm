@@ -106,17 +106,25 @@ def homepage(request):
     new_start_date = get_new_ticket_start_date()
 
     #Get tickets for the logged in user
-    #New tickets are entered after the start date (3 days ago)
-    #Open tickets are not in 'resoled' or 'closed' status
-    #Resolved tickets are in 'resolved' status
+    #   New tickets are entered after the start date (3 days ago)
+    #   Open tickets are not in 'resoled' or 'closed' status
+    #   Resolved tickets are in 'resolved' status
+    #Incidents
     new_inc = Incident.objects.filter(customer=request.user.customer, created__gt=new_start_date)
     open_inc = Incident.objects.filter(customer=request.user.customer, status__in=get_status_open(id=1))
     resolved_inc = Incident.objects.filter(customer=request.user.customer, status__in=get_status_resolved(id=1, return_qs=True))
+    #Requests
+    new_req = Request.objects.filter(customer=request.user.customer, created__gt=new_start_date)
+    open_req = Request.objects.filter(customer=request.user.customer, status__in=get_status_open(id=2))
+    resolved_req = Request.objects.filter(customer=request.user.customer, status__in=get_status_resolved(id=2, return_qs=True))
 
     context = {
         'new_inc' : new_inc,
         'open_inc' : open_inc,
         'resolved_inc' : resolved_inc,
+        'new_req' : new_req,
+        'open_req' : open_req,
+        'resolved_req' : resolved_req,
     }
 
     return render(request, 'access/homepage.html', context)
@@ -129,14 +137,22 @@ def homepage_assigned_to_me(request):
     new_start_date = get_new_ticket_start_date()
 
     #Get tickets assigned to the logged in user
+    #Incidents
     new_inc = Incident.objects.filter(assignee=request.user.customer, created__gt=new_start_date)
     open_inc = Incident.objects.filter(assignee=request.user.customer, status__in=get_status_open(id=1))
     resolved_inc = Incident.objects.filter(assignee=request.user.customer, status__in=get_status_resolved(id=1, return_qs=True))
+    #Requests
+    new_req = Request.objects.filter(assignee=request.user.customer, created__gt=new_start_date)
+    open_req = Request.objects.filter(assignee=request.user.customer, status__in=get_status_open(id=2))
+    resolved_req = Request.objects.filter(assignee=request.user.customer, status__in=get_status_resolved(id=2, return_qs=True))
 
     context = {
         'new_inc' : new_inc,
         'open_inc' : open_inc,
         'resolved_inc' : resolved_inc,
+        'new_req' : new_req,
+        'open_req' : open_req,
+        'resolved_req' : resolved_req,
     }
 
     return render(request, 'access/homepage-assignedtome.html', context)
@@ -153,9 +169,14 @@ def homepage_assigned_to_my_groups(request):
     #Get all ticket types
     ticket_types = TicketType.objects.all()
     #Get tickets assigned to logged in user's assignment groups
+    #Incidents
     new_inc = Incident.objects.filter(assignment_group__in=user_groups, created__gt=new_start_date)
     open_inc = Incident.objects.filter(assignment_group__in=user_groups, status__in=get_status_open(id=1))
     resolved_inc = Incident.objects.filter(assignment_group__in=user_groups, status__in=get_status_resolved(id=1, return_qs=True))
+    #Requests
+    new_req = Request.objects.filter(assignment_group__in=user_groups, created__gt=new_start_date)
+    open_req = Request.objects.filter(assignment_group__in=user_groups, status__in=get_status_open(id=2))
+    resolved_req = Request.objects.filter(assignment_group__in=user_groups, status__in=get_status_resolved(id=2, return_qs=True))
     
 
     #Create a dictionary go groups, users, , ticket types, and ticket counts
@@ -263,6 +284,9 @@ def homepage_assigned_to_my_groups(request):
         'new_inc' : new_inc,
         'open_inc' : open_inc,
         'resolved_inc' : resolved_inc,
+        'new_req' : new_req,
+        'open_req' : open_req,
+        'resolved_req' : resolved_req,
         'user_groups' : user_groups,
         'group_dict' : group_dict,
         'group_assignee_dict' : group_assignee_dict,
