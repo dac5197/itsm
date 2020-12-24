@@ -17,3 +17,4 @@ class SysIDAdmin(admin.ModelAdmin):
 
 admin.site.register(SysID, SysIDAdmin)
 admin.site.register(Attachment)
+admin.site.register(CopyList)

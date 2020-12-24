@@ -3,6 +3,7 @@ import random
 import string
 
 from django.conf import settings
+from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from django.utils import timezone
 
@@ -63,3 +64,9 @@ class Attachment(models.Model):
     def __str__(self):
         return self.doc_name
 
+class CopyList(models.Model):
+    name = models.CharField(max_length=100, unique=True, null=False, blank=False)
+    fields = ArrayField(models.CharField(max_length=20), null=True, blank=True)
+
+    def __str__(self):
+        return self.name

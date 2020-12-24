@@ -1,10 +1,10 @@
 import csv
+from crispy_forms.helper import FormHelper
 
 from django.apps import apps
 from django.http import HttpResponse
 from django.utils import timezone
 from django.utils.dateformat import format
-
 
 from .models import *
 
@@ -15,8 +15,9 @@ from base.utils import set_sysID_relationship_fields
 from tracking.utils import *
 
 #Return status objects for a ticket type
-def get_status_choices(id):
-    ticket_type = TicketType.objects.get(id=id)
+def get_status_choices(id=None, ticket_type=None):
+    if id and not ticket_type:
+        ticket_type = TicketType.objects.get(id=id)
     statuses = Status.objects.filter(ticket_type=ticket_type).order_by('order_value')
     choices = [(status.id, status.value) for status in statuses]
     return choices
@@ -129,41 +130,40 @@ def set_resolved_tickets_closed():
                     ticket = close_ticket(ticket=ticket, ticket_type=ticket_type)
                     print(f'Ticket {ticket.number} set to closed')
 
-#Create incident
-def create_incident(customer, copy_inc_id=None):
-    #Create new incident
-    incident = Incident.objects.create()
+#Create object based on the app and model
+def create_tsm_object(customer, obj_app, obj_model, copy_obj_id=None):
+    #Create new object
+    model = apps.get_model(obj_app, obj_model)
+    obj = model.objects.create()
 
     #Set default values not in model
-    incident.status = get_status_default(id=1)
-    incident.priority = get_priority_default()
-    incident.ticket_type = TicketType.objects.get(id=1)
+    if obj_app == 'ticket':
+        ticket_type = TicketType.objects.get(name__iexact=obj_model)
+        obj.status = get_status_default(id=ticket_type.id)
+        obj.priority = get_priority_default()
+        obj.ticket_type = ticket_type
 
-    if copy_inc_id:
-        copy_inc = Incident.objects.get(id=copy_inc_id)
-        incident.customer = copy_inc.customer
-        incident.phone = copy_inc.phone
-        incident.location = copy_inc.location
-        incident.priority = copy_inc.priority
-        incident.assignment_group = copy_inc.assignment_group
-        incident.assignee = copy_inc.assignee
-        incident.desc_short = copy_inc.desc_short
-        incident.desc_long = copy_inc.desc_long
-        incident.resolution = copy_inc.resolution
+    #If new object is a copy, then loop through the field list and set the initial values for the new object
+    if copy_obj_id:
+        copy_obj = model.objects.get(id=copy_obj_id)
+        for field in CopyList.objects.get(name__iexact=obj_model).fields:
+            #obj.__dict__[field] = copy_obj.__dict__[field]
+            setattr(obj, field, getattr(copy_obj, field))
+            print(field)
 
     #Save new incident
-    incident.save()
+    obj.save()
     
     #Set the relationship fields on the matching sysID
-    set_sysID_relationship_fields(incident)
+    set_sysID_relationship_fields(obj)
 
     #Create work note
-    if copy_inc_id:
-        work_note = create_work_note(sysID=incident.sysID, newly_created=True, customer=customer, copied_ticket=copy_inc)
+    if copy_obj_id:
+        work_note = create_work_note(sysID=obj.sysID, newly_created=True, customer=customer, copied_ticket=copy_obj)
     else:
-        work_note = create_work_note(sysID=incident.sysID, newly_created=True, customer=customer)
+        work_note = create_work_note(sysID=obj.sysID, newly_created=True, customer=customer)
 
-    return incident
+    return obj
 
 
 def export_csv(queryset, obj_type):
@@ -245,6 +245,91 @@ def export_csv(queryset, obj_type):
                 value_list.append(value)
             
         #Write row
-        writer.writerow(value_list)
+        writer.writerow(value_list, )
 
     return response
+
+#Set form widget attributes
+def set_ticket_form_widgets(completion_field_name):
+    widget_dict = {
+         #Set fields to readonly (disabled)
+            'number' : forms.TextInput(attrs={'readonly':'readonly'}),
+            'closed' : forms.DateTimeInput(attrs={'readonly':'readonly'}, format='%m/%d/%Y %H:%M'),
+            'created' : forms.DateTimeInput(attrs={'readonly':'readonly'}, format='%m/%d/%Y %H:%M'),
+            'created_by' : forms.TextInput(attrs={'readonly':'readonly'}),
+            'reopened' : forms.TextInput(attrs={'readonly':'readonly'}),
+            f'{completion_field_name}' : forms.DateTimeInput(attrs={'readonly':'readonly'}, format='%m/%d/%Y %H:%M'),
+            'updated' : forms.DateTimeInput(attrs={'readonly':'readonly'}, format='%m/%d/%Y %H:%M'),
+            
+            #Set 'active' boolean to a readonly textbox
+            'active' : forms.TextInput(attrs={'readonly':'readonly'}),    
+    }
+
+    return widget_dict
+
+#Set form field labels, select choices, and required attribute
+def set_ticket_form_defaults(form, ticket_type_id):
+    form.helper = FormHelper()
+    form.helper.form_method = 'POST'
+
+    #Change form label names
+    form.fields['desc_short'].label = 'Short Description'
+    form.fields['desc_long'].label = 'Detailed Description'
+    form.fields['reopened'].label = 'Reopened Count'
+
+    #Set values for status select fields from database
+    form.fields['status'].choices = get_status_choices(id=ticket_type_id)
+    form.fields['priority'].choices = get_priority_choices()
+    form.fields['assignment_group'].choices = get_assignment_group_choices()
+
+    #Set required fields
+    form.fields['customer'].required = True
+    form.fields['status'].required = True
+    form.fields['priority'].required = True
+    form.fields['assignment_group'].required = True
+
+    #Set not required fields
+    form.fields['assignee'].required = False
+
+    #Remove select default (empty label) option
+    form.fields['priority'].empty_label = None
+
+
+    #Clear values for the assignee select
+    form.fields['assignee'].queryset = Customer.objects.none()
+
+    #Set values for the assignee select:
+    #   If POST, get assignment group ID from request data
+    #   Else, get assignment group ID from form instance
+    #Get group membership and populated assignee select
+    #https://simpleisbetterthancomplex.com/tutorial/2018/01/29/how-to-implement-dependent-or-chained-dropdown-list-with-django.html
+    if 'assignment_group' in form.data:
+        try:
+            assignment_group_id = int(form.data.get('assignment_group'))
+            grp = ITSMGroup.objects.get(id=assignment_group_id)
+            form.fields['assignee'].queryset = Customer.objects.filter(itsm_group_membership=grp).order_by('last_name')
+        except (ValueError, TypeError):
+            pass  # invalid input from the client; ignore and fallback to empty City queryset
+    elif form.instance.pk:
+        assignment_group = form.instance.assignment_group
+        if assignment_group:
+            grp = ITSMGroup.objects.get(id=assignment_group.id)
+            form.fields['assignee'].queryset = Customer.objects.filter(itsm_group_membership=grp).order_by('last_name')
+        else:
+            form.fields['assignment_group'].initial = '---------'
+
+    return form
+
+#Throw error if ticket will be in resolved status and completion_field has not data
+def validate_completion_notes(form, cleaned_data, completion_field, ticket_type_id):
+    
+    status = cleaned_data.get('status')
+    completion_field_value = cleaned_data.get(f'{completion_field}')
+
+    resolved_status = get_status_resolved(id=ticket_type_id)
+
+    if status == resolved_status and  completion_field_value == '':
+        msg = "This field is required when resolving an incident."
+        form.add_error(f'{completion_field}', msg)
+
+    return form

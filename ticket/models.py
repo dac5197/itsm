@@ -116,7 +116,6 @@ class Ticket(models.Model):
 
 
 class Incident(Ticket):
-    #number = models.CharField(max_length=20, default=increment_inc_number, unique=True, editable=False)
     number = models.CharField(max_length=20, default=increment_inc_number, unique=True)
     resolved = models.DateTimeField(null=True, blank=True) 
     resolution = models.TextField(null=True, blank=True)
@@ -125,7 +124,6 @@ class Incident(Ticket):
         return self.number
 
 class PasswordReset(Ticket):
-    #number = models.CharField(max_length=20, default=increment_pwrst_number, unique=True, editable=False)
     number = models.CharField(max_length=20, default=increment_pwrst_number, unique=True)
     resolved = models.DateTimeField(null=True, blank=True)
     res_reset_pw = models.BooleanField(default=False)
@@ -135,15 +133,15 @@ class PasswordReset(Ticket):
         return self.number
 
 class Request(Ticket):
-    number = models.CharField(max_length=20, default=increment_req_number, unique=True, editable=False)
+    number = models.CharField(max_length=20, default=increment_req_number, unique=True)
     fulfilled = models.DateTimeField(null=True, blank=True) 
-    fullfillment_notes = models.TextField(null=True, blank=True)
+    fulfillment_notes = models.TextField(null=True, blank=True)
     
     def __str__(self):
         return self.number
 
 class Outage(Ticket):
-    number = models.CharField(max_length=20, default=increment_out_number, unique=True, editable=False)
+    number = models.CharField(max_length=20, default=increment_out_number, unique=True)
     incidents = models.ManyToManyField(Incident, blank=False)
     severity = models.IntegerField(null=False, blank=False)
     start_time = models.DateTimeField(auto_now_add=True)
