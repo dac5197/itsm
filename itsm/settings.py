@@ -51,8 +51,9 @@ INSTALLED_APPS = [
     'base.apps.BaseConfig',
     'rest_api.apps.RestApiConfig',
     'tracking.apps.TrackingConfig',
-
     'ticket.apps.TicketConfig',
+
+    'kanban.apps.KanbanConfig',
 ]
 
 MIDDLEWARE = [
