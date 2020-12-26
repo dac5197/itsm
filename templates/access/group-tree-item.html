@@ -16,6 +16,7 @@
             <li>
                 <button class="btn btn-primary my-1" type="button" data-toggle="collapse" data-target="#{{group.path}}" aria-controls="{{group.path}}" aria-expanded="false"><strong>{{group.name}}</strong></button>
                 {% if group.is_assignment or group.is_approval %}
+                    <a class="btn btn-success" href="{% url 'group-detail' group.id %}"><i class="fas fa-plus"></i></a>
                     <div class="collapse show" id="{{group.path}}">
                         <div class="row">
                             <div class="col-lg-6">

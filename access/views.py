@@ -93,7 +93,7 @@ def group_tree(request):
     group_list = ITSMGroup.objects.all()
    
     group_tree = create_tree_list(qs=group_list, max_depth=5)
-    print(group_tree)
+    
     context = {
         'group_tree' : group_tree
     }
@@ -167,7 +167,7 @@ def homepage_assigned_to_my_groups(request):
     #Get all groups logged in user is a member of
     user_groups = ITSMGroup.objects.filter(members=request.user.customer)
     #Get all ticket types
-    ticket_types = TicketType.objects.all()
+    ticket_types = TicketType.objects.filter(name='Incident') | TicketType.objects.filter(name='Request')
     #Get tickets assigned to logged in user's assignment groups
     #Incidents
     new_inc = Incident.objects.filter(assignment_group__in=user_groups, created__gt=new_start_date)
