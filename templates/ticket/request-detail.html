@@ -128,10 +128,10 @@
         </div>
 
         <!-- Show attachments -->
-        {% include 'base/attachments.html' with attachments=attachments ticket=incident %}
+        {% include 'base/attachments.html' with attachments=attachments ticket=req %}
 
         <!-- Show work notes -->
-        {% include 'tracking/work_notes.html' with wn_form=wn_form work_notes=work_notes ticket=incident %}
+        {% include 'tracking/work_notes.html' with wn_form=wn_form work_notes=work_notes ticket=req %}
 
     </form>
 

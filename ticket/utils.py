@@ -1,6 +1,7 @@
 import csv
 from crispy_forms.helper import FormHelper
 
+from django import forms
 from django.apps import apps
 from django.http import HttpResponse
 from django.utils import timezone
@@ -73,10 +74,20 @@ def get_status_open(id):
     statuses = Status.objects.filter(ticket_type=ticket_type, closed_value=False, resolved_value=False)
     return statuses
 
+#get_select_value()
+
 #Set all fields in a form as disabled
-def disable_form_fields(form):
+#Except for fields in the excluded_fields list
+def disable_form_fields(form, excluded_fields=''):
     for field, field_type in form.fields.items():
-        form.fields[field].widget.attrs['disabled'] = True
+        if field not in excluded_fields:
+            form.fields[field].widget.attrs['disabled'] = True
+            #print(f'field: {field}')
+            #print(form.fields[field].widget)
+            ##print(form.fields[field])
+            #form.fields[field].widget = forms.TextInput(attrs={'readonly':'readonly'})
+            #print(form.fields[field].widget)
+            #form.fields[field].widget.attrs['readonly'] = 'readonly'
     
     return form
 
@@ -99,7 +110,7 @@ def close_ticket(ticket, ticket_type):
 
     return ticket
 
-#Set all resolved tickets to cloed with resolved date older than 3 days
+#Set all resolved tickets to closed with resolved date older than 3 days
 def set_resolved_tickets_closed():
     print(timezone.now())
     #Get resolved status

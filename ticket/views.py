@@ -158,8 +158,8 @@ def incident_detail(request, number):
     #If ticket in closed status OR 
     #If user is NOT a member of the assignment group, does NOT have the Service Desk role, and is NOT an admin:
     #   Then disable all fields
-    if incident.status == get_status_closed(id=1) or not (incident.assignment_group in ITSMGroup.objects.filter(members=request.user.customer) or 'Service Desk' in request.user.customer.roles or 'TSM Admin' in request.user.customer.roles or request.user.is_staff):
-        form = disable_form_fields(form)
+    if incident.status == get_status_closed(id=1) or not (incident.assignment_group in ITSMGroup.objects.filter(members=request.user.customer) or incident.assignment_group is None or 'Service Desk' in request.user.customer.roles or 'TSM Admin' in request.user.customer.roles or request.user.is_staff):
+        form = disable_form_fields(form=form)
 
     context = {
         'incident' : incident,
@@ -340,8 +340,8 @@ def request_detail(request, number):
     #If ticket in closed status OR 
     #If user is NOT a member of the assignment group, does NOT have the Service Desk role, and is NOT an admin:
     #   Then disable all fields
-    if req.status == get_status_closed(id=1) or not (req.assignment_group in ITSMGroup.objects.filter(members=request.user.customer) or 'Service Desk' in request.user.customer.roles or 'TSM Admin' in request.user.customer.roles or request.user.is_staff):
-        form = disable_form_fields(form)
+    if req.status == get_status_closed(id=1) or not (req.assignment_group in ITSMGroup.objects.filter(members=request.user.customer) or req.assignment_group is None or 'Service Desk' in request.user.customer.roles or 'TSM Admin' in request.user.customer.roles or request.user.is_staff):
+        form = disable_form_fields(form=form)
 
     context = {
         'req' : req,
