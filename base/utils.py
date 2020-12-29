@@ -45,6 +45,9 @@ def set_all_sysIDs_relationship_fields():
         'passwordreset' : 'ticket',
         'request' : 'ticket',
         'outage' : 'ticket',
+        'board' : 'kanban',
+        'lane' : 'kanban',
+        'card' : 'kanban',
 	}
 
     #For each model, app in dict, get the model and then get a queryset of all objects
