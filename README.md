@@ -77,7 +77,7 @@ Tutorials and other videos I watched to learn Python and Django.  All of these v
 
 ## License
 
-MIT License
+GNU General Public License v3.0
 
 Copyright (c) [2020] [Don Chaney]
 
