@@ -25,8 +25,6 @@ class CustomerFilter(django_filters.FilterSet):
     location = MultipleChoiceFilter(choices=get_all_location_choices())
     manager = MultipleChoiceFilter(choices=get_all_customer_choices())
 
-
-
     class Meta:
         model = Customer
         fields = '__all__'
@@ -34,6 +32,7 @@ class CustomerFilter(django_filters.FilterSet):
         
     def username_filter(self, queryset, name, value):
         return Customer.objects.filter(user__username__icontains=value)
+
 
 class GroupFilter(django_filters.FilterSet):
     active = ChoiceFilter(field_name='active', label='Active', choices=BOOLEAN_FILTER_CHOICES)

@@ -24,6 +24,16 @@ class SidebarItemAdmin(admin.ModelAdmin):
     list_filter = ()
     fieldsets = ()
 
+class ITSMGroupAdmin(admin.ModelAdmin):
+    list_display = ('name', 'path','manager', 'active','is_assignment', 'is_approval')
+    list_filter = ('name', 'path','manager', 'active','is_assignment', 'is_approval')
+    search_fields = ('name', 'path','manager', 'active','is_assignment', 'is_approval')
+    readonly_fields = ()
+
+    filter_horizontal = ()
+    list_filter = ()
+    fieldsets = ()
+
 # Register your models here.
 
 #admin.site.register(Account, AccountAdmin)
@@ -31,6 +41,6 @@ class SidebarItemAdmin(admin.ModelAdmin):
 admin.site.register(Location)
 admin.site.register(Customer, CustomerAdmin)
 admin.site.register(Group)
-admin.site.register(ITSMGroup)
+admin.site.register(ITSMGroup, ITSMGroupAdmin)
 admin.site.register(Role)
 admin.site.register(SidebarItem, SidebarItemAdmin)

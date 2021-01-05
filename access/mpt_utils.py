@@ -7,9 +7,9 @@ def create_tree_list(qs, max_depth, depth=1, leaf=None):
     
     #Filter queryset based on path level (length) and starting characters from the parent
     if leaf:
-        result = qs.filter(path__length=depth, path__startswith=leaf).distinct()
+        result = qs.filter(path__length=depth, path__startswith=leaf).distinct().order_by('path')
     else:
-        result = qs.filter(path__length=depth)
+        result = qs.filter(path__length=depth).order_by('path')
 
     #Increment depth 
     depth += 1
