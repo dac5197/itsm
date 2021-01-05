@@ -22,8 +22,8 @@ class CustomerFilter(django_filters.FilterSet):
     updated_range = DateTimeFromToRangeFilter(field_name='updated', lookup_expr='icontains', label='Updated Range', widget=RangeWidget(attrs={'type': 'datetime-local'}))
     
     #Set choices for select fields
-    location = MultipleChoiceFilter(choices=get_all_location_choices())
-    manager = MultipleChoiceFilter(choices=get_all_customer_choices())
+    location = MultipleChoiceFilter()
+    manager = MultipleChoiceFilter()
 
     class Meta:
         model = Customer
@@ -33,6 +33,12 @@ class CustomerFilter(django_filters.FilterSet):
     def username_filter(self, queryset, name, value):
         return Customer.objects.filter(user__username__icontains=value)
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        #Set values for status select fields from database
+        self.fields['location'].choices = get_all_location_choices()
+        self.fields['manager'].choices = get_all_customer_choices()
 
 class GroupFilter(django_filters.FilterSet):
     active = ChoiceFilter(field_name='active', label='Active', choices=BOOLEAN_FILTER_CHOICES)
