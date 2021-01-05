@@ -26,7 +26,6 @@ urlpatterns = [
     path('rest-api/', include('rest_api.urls')),
 ]
 
-#If DEBUG add media dir for downloads
-#https://www.youtube.com/watch?v=Zx09vcYq1oc
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+#Add static and media dirs
+urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
