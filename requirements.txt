@@ -14,7 +14,6 @@ lazy-object-proxy==1.4.3
 mccabe==0.6.1
 phonenumberslite==8.12.12
 Pillow==8.0.1
-psycopg2==2.8.6
 pylint==2.6.0
 pylint-django==2.3.0
 pylint-plugin-utils==0.6
