@@ -352,3 +352,14 @@ def validate_completion_fields(form, cleaned_data, completion_field, ticket_type
 
 
     return form
+
+#Set values for status select fields from database
+def get_ticket_filter_choices(filter_form, ticket_type_id):
+    filter_form.fields['assignee'].choices = get_all_customer_choices()
+    filter_form.fields['assignment_group'].choices = get_assignment_group_choices()
+    filter_form.fields['customer'].choices = get_all_customer_choices()
+    filter_form.fields['location'].choices = get_all_location_choices()
+    filter_form.fields['priority'].choices = get_priority_choices()
+    filter_form.fields['status'].choices = get_status_choices(id=ticket_type_id)
+
+    return filter_form

@@ -20,12 +20,12 @@ class IncidentFilter(django_filters.FilterSet):
     reopened_range = RangeFilter(field_name='reopened', lookup_expr='icontains', label='Reopened Count Range')
 
     #Set choices for select fields
-    assignee = MultipleChoiceFilter(choices=get_all_customer_choices())
-    assignment_group = MultipleChoiceFilter(choices=get_assignment_group_choices())
-    customer = MultipleChoiceFilter(choices=get_all_customer_choices())
-    location = MultipleChoiceFilter(choices=get_all_location_choices())
-    priority = MultipleChoiceFilter(choices=get_priority_choices())
-    status = MultipleChoiceFilter(choices=get_status_choices(id=1))
+    assignee = MultipleChoiceFilter()
+    assignment_group = MultipleChoiceFilter()
+    customer = MultipleChoiceFilter()
+    location = MultipleChoiceFilter()
+    priority = MultipleChoiceFilter()
+    status = MultipleChoiceFilter()
 
     class Meta:
         model = Incident
@@ -34,6 +34,12 @@ class IncidentFilter(django_filters.FilterSet):
             'sysID',
             'ticket_type',
             ]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        #Set values for status select fields from database
+        self = get_ticket_filter_choices(filter_form=self, ticket_type_id=1)
 
 class RequestFilter(django_filters.FilterSet):
     created = DateFilter(field_name='created', lookup_expr='icontains', label='Created', widget=DateInput(attrs={'type': 'date'}))
@@ -44,12 +50,12 @@ class RequestFilter(django_filters.FilterSet):
     reopened_range = RangeFilter(field_name='reopened', lookup_expr='icontains', label='Reopened Count Range')
 
     #Set choices for select fields
-    assignee = MultipleChoiceFilter(choices=get_all_customer_choices())
-    assignment_group = MultipleChoiceFilter(choices=get_assignment_group_choices())
-    customer = MultipleChoiceFilter(choices=get_all_customer_choices())
-    location = MultipleChoiceFilter(choices=get_all_location_choices())
-    priority = MultipleChoiceFilter(choices=get_priority_choices())
-    status = MultipleChoiceFilter(choices=get_status_choices(id=2))
+    assignee = MultipleChoiceFilter()
+    assignment_group = MultipleChoiceFilter()
+    customer = MultipleChoiceFilter()
+    location = MultipleChoiceFilter()
+    priority = MultipleChoiceFilter()
+    status = MultipleChoiceFilter()
 
     class Meta:
         model = Request
@@ -58,3 +64,9 @@ class RequestFilter(django_filters.FilterSet):
             'sysID',
             'ticket_type',
             ]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        #Set values for status select fields from database
+        self = get_ticket_filter_choices(filter_form=self, ticket_type_id=2)

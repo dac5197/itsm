@@ -47,11 +47,19 @@ class GroupFilter(django_filters.FilterSet):
     is_heirarchal = ChoiceFilter(field_name='is_heirarchal', label='Is Heirarchal Group?', choices=BOOLEAN_FILTER_CHOICES)
 
     #Set choices for select fields
-    manager = MultipleChoiceFilter(choices=get_all_customer_choices())
-    members = MultipleChoiceFilter(choices=get_all_customer_choices())
-    roles = MultipleChoiceFilter(choices=get_all_role_choices())
+    manager = MultipleChoiceFilter()
+    members = MultipleChoiceFilter()
+    roles = MultipleChoiceFilter()
 
     class Meta:
         model = ITSMGroup
         fields = '__all__'
         exclude = ['sysID', 'permissions',]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        #Set values for status select fields from database
+        self.fields['manager'].choices = get_all_customer_choices()
+        self.fields['members'].choices = get_all_customer_choices()
+        self.fields['roles'].choices = get_all_roles_choices()
