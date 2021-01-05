@@ -71,7 +71,13 @@ ROOT_URLCONF = 'itsm.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS': [
+            os.path.join(BASE_DIR, 'templates'),
+            os.path.join(BASE_DIR, 'templates', 'access'),
+            os.path.join(BASE_DIR, 'templates', 'base'),
+            os.path.join(BASE_DIR, 'templates', 'ticket'),
+            os.path.join(BASE_DIR, 'templates', 'tracking'),
+            ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
