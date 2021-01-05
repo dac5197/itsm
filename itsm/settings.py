@@ -28,7 +28,7 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', cast=bool)
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['dacme-tsm.com', 'www.dacme-tsm.com', '34.226.210.156','127.0.0.1', 'localhost',]
 
 
 # Application definition
@@ -188,7 +188,7 @@ LOGGING = {
         'file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': 'portfolio.log',
+            'filename': 'itsm.log',
             'formatter': 'verbose'
         },
     },
@@ -198,7 +198,7 @@ LOGGING = {
             'propagate': True,
             'level':'DEBUG',
         },
-        'portfolio': {
+        'itsm': {
             'handlers': ['file'],
             'level': 'DEBUG',
         },
