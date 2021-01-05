@@ -68,6 +68,7 @@ class Priority(models.Model):
     def __str__(self):
         return self.priority
 
+
 class TicketType(models.Model):
     sysID = models.OneToOneField(SysID, on_delete=models.CASCADE, default=SysID.add_new)
     name = models.CharField(max_length=100, unique=True, null=False, blank=False)
@@ -78,6 +79,7 @@ class TicketType(models.Model):
 
     def __str__(self):
         return self.name
+
 
 class Status(models.Model):
     sysID = models.OneToOneField(SysID, on_delete=models.CASCADE, default=SysID.add_new, editable=False)
@@ -99,12 +101,12 @@ class Status(models.Model):
     class Meta:
         verbose_name_plural = "Statuses"
 
+
 class Ticket(models.Model):
     sysID = models.OneToOneField(SysID, on_delete=models.CASCADE, default=SysID.add_new, editable=False)
     ticket_type = models.ForeignKey(TicketType, on_delete=models.SET_NULL, null=True, blank=True)
     customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, null=True, blank=False)
     phone = models.CharField(max_length=20, null=True, blank=True)
-    #delegates = 
     location = models.ForeignKey(Location, on_delete=models.SET_NULL, null=True, blank=True)
     desc_short = models.CharField(max_length=100, null=False, blank=False)
     desc_long = models.TextField(null=True, blank=True)
@@ -128,6 +130,7 @@ class Incident(Ticket):
     def __str__(self):
         return self.number
 
+
 class PasswordReset(Ticket):
     number = models.CharField(max_length=20, default=increment_pwrst_number, unique=True)
     resolved = models.DateTimeField(null=True, blank=True)
@@ -137,6 +140,7 @@ class PasswordReset(Ticket):
     def __str__(self):
         return self.number
 
+
 class Request(Ticket):
     number = models.CharField(max_length=20, default=increment_req_number, unique=True)
     fulfilled = models.DateTimeField(null=True, blank=True) 
@@ -144,6 +148,7 @@ class Request(Ticket):
     
     def __str__(self):
         return self.number
+
 
 class Outage(Ticket):
     number = models.CharField(max_length=20, default=increment_out_number, unique=True)
@@ -155,7 +160,7 @@ class Outage(Ticket):
     resolution = models.TextField(null=True, blank=True)
     root_cause_set = models.DateTimeField(null=True, blank=True) 
     root_cause_desc = models.TextField(null=True, blank=True)
-    root_cause_group = models.ForeignKey(Group, on_delete=models.SET_NULL, related_name="root_cause_group", null=True, blank=True)
+    root_cause_group = models.ForeignKey(ITSMGroup, on_delete=models.SET_NULL, related_name="root_cause_group", null=True, blank=True)
     root_cause_assignee = models.ForeignKey(Customer, on_delete=models.SET_NULL, related_name="root_cause_assignee", null=True, blank=True)
 
     def __str__(self):

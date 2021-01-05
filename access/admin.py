@@ -40,7 +40,6 @@ class ITSMGroupAdmin(admin.ModelAdmin):
 
 admin.site.register(Location)
 admin.site.register(Customer, CustomerAdmin)
-admin.site.register(Group)
 admin.site.register(ITSMGroup, ITSMGroupAdmin)
 admin.site.register(Role)
 admin.site.register(SidebarItem, SidebarItemAdmin)

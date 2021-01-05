@@ -19,7 +19,6 @@ def get_random_alphanumeric_string(length=32):
 
     return result_str
 
-
 class SysID(models.Model):
     id = models.AutoField(primary_key=True)
     sysID = models.CharField(max_length=32, unique=True, default=get_random_alphanumeric_string, editable=False)
@@ -63,6 +62,7 @@ class Attachment(models.Model):
 
     def __str__(self):
         return self.doc_name
+
 
 class CopyList(models.Model):
     name = models.CharField(max_length=100, unique=True, null=False, blank=False)

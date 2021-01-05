@@ -35,6 +35,7 @@ class Location(models.Model):
     def __str__(self):
         return self.name
 
+
 def get_profile_image(self, filename):
     save_dir = f'{settings.MEDIA_ROOT}/images/profile_images/{self.pk}'
     save_filename = f'{save_dir}/{"profile_image.png"}'
@@ -109,21 +110,6 @@ class Customer(models.Model):
         
         return sidebar_items_tree_list
 
-class Group(models.Model):
-    sysID = models.OneToOneField(SysID, on_delete=models.CASCADE, default=SysID.add_new)
-    name = models.CharField(max_length=100, unique=True, null=False, blank=False)
-    parent = models.ForeignKey('Group', on_delete=models.SET_NULL, null=True, blank=True)
-    manager = models.ForeignKey(Customer, on_delete=models.SET_NULL, null=True, blank=True, related_name='group_manager')
-    members = models.ManyToManyField(Customer, related_name='group_membership', blank=True)
-    is_assignment = models.BooleanField(default=False)
-    is_approval = models.BooleanField(default=False)
-    is_heirarchal = models.BooleanField(default=False)
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now_add=True)
-    active = models.BooleanField(default=True)
-    
-    def __str__(self):
-        return self.name
 
 class Role(models.Model):
     sysID = models.OneToOneField(SysID, on_delete=models.CASCADE, default=SysID.add_new)
@@ -132,6 +118,7 @@ class Role(models.Model):
 
     def __str__(self):
         return self.name
+
 
 class ITSMGroup(DjangoGroup):
     sysID = models.OneToOneField(SysID, on_delete=models.CASCADE, default=SysID.add_new)
