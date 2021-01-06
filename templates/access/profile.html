@@ -39,7 +39,7 @@ My Profile
                             </div>
                             <div class="card-body">
                                 <!-- Profile Image -->
-                                {% if customer.image_filename == 'default.png' %}
+                                {% if request.user.customer.image_filename == 'default.png' %}
                                     <img class="img-fluid rounded mb-3" src="/media/images/profile_images/{{request.user.customer.image_filename}}">
                                 {% else %}
                                     <img class="img-fluid rounded mb-3" src="/media/images/profile_images/{{request.user.customer.id}}/{{request.user.customer.image_filename}}?modified={{profile_image_modtimestamp}}">
