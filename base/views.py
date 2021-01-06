@@ -31,7 +31,8 @@ def create_sysid(request):
 @allowed_users(allowed_roles=['TSM User'])
 def remove_attachment(request, id, number, url, sysID):
     attachment = Attachment.objects.get(id=id)
-    
+    attachment_dir = f'{settings.BASE_DIR}/media/attachments/{attachment.foreign_sysID.rel_obj_name}'
+    print(attachment_dir)
     #Delete attachment from media/attachments
     if os.path.exists(attachment.document.path):
         os.remove(attachment.document.path)
@@ -45,6 +46,10 @@ def remove_attachment(request, id, number, url, sysID):
 
     #Delete attachment object
     attachment.delete()
+
+    #Remove attachment dir if it is empty
+    if not os.listdir(attachment_dir):
+        os.rmdir(attachment_dir)
 
     #Then redirect back to ticket
     return redirect(url, number=number) 
