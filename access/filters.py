@@ -22,8 +22,8 @@ class CustomerFilter(django_filters.FilterSet):
     updated_range = DateTimeFromToRangeFilter(field_name='updated', lookup_expr='icontains', label='Updated Range', widget=RangeWidget(attrs={'type': 'datetime-local'}))
     
     #Set choices for select fields
-    location = MultipleChoiceFilter(get_all_location_choices())
-    manager = MultipleChoiceFilter(get_all_customer_choices())
+    location = MultipleChoiceFilter(choices=get_all_location_choices())
+    manager = MultipleChoiceFilter(choices=get_all_customer_choices())
 
     class Meta:
         model = Customer
