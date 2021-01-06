@@ -57,7 +57,7 @@ def register_profile(request, id):
         request.POST['user'] = user
         request.POST['active'] = True
         
-        form = CustomerForm(request.POST)
+        form = CustomerRegisterForm(request.POST)
     
         if form.is_valid():
             instance = form.save()
@@ -74,7 +74,7 @@ def register_profile(request, id):
             #Registration complete - redirect to login page
             return redirect('/access/login')
     else:
-        form = CustomerForm(initial={'email':user.email})
+        form = CustomerRegisterForm()
 
     context = {
         'form' : form,

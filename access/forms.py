@@ -23,6 +23,13 @@ class CustomerForm(forms.ModelForm):
         }
 
 
+class CustomerRegisterForm(forms.ModelForm):
+    class Meta:
+        model = Customer
+        fields = '__all__'
+        exclude = ['sysID']
+
+
 class CreateUserForm(UserCreationForm):
     class Meta:
         model = User
