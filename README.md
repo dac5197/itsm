@@ -67,7 +67,9 @@ Tutorials and other videos I watched to learn Python and Django.  All of these v
 
 ### Shogi P P
 [In Depth tutorial on deploying a Django application to AWS (for free) - Part 1](https://www.youtube.com/watch?v=u0oEIqQV_-E)
+
 [In Depth tutorial on deploying a Django application to AWS (for free) - Part 2 - Static File serving](https://www.youtube.com/watch?v=_TBw7ALJp0Y&t=782s)
+
 [How to Deploy a django app into aws with RDS - Part 3](https://www.youtube.com/watch?v=PCjeBQ2636Y&t=1568s)
 
 ### Tech With Tim
