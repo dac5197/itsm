@@ -50,7 +50,7 @@ def get_profile_image(self, filename):
     return save_filename
 
 def get_default_profile_image():
-    return f'images/profile_images/default.png'
+    return f'{settings.MEDIA_ROOT}/images/profile_images/default.png'
 
 class Customer(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, blank=True, null=True)
