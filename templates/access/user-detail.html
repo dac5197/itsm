@@ -38,7 +38,7 @@ User Details - {{customer.user.username}}
                             </div>
                             <div class="card-body">
                                 <!-- Profile Image -->
-                                <img class="img-fluid rounded mb-3" src="/media/images/profile_images/{{customer.id}}/{{customer.image_filename}}">
+                                <img class="img-fluid rounded mb-3" src="{{customer.profile_image.path}}">
                                 {% if 'TSM Admin' in request.user.customer.roles %}
                                     <div class="input-group mb-4">
                                         <div class="input-group-prepend">
