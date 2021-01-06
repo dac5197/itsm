@@ -126,3 +126,9 @@ def get_all_role_choices():
     roles = Role.objects.all().order_by('name')
     choices = [(role.id, role.__str__()) for role in  roles]
     return choices
+
+#Return all groups in list for select dropdown menu
+def get_all_group_choices():
+    groups = ITSMGroup.objects.all().order_by('name')
+    choices = [(group.id, group.__str__()) for group in  groups]
+    return choices

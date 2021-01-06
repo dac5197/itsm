@@ -8,7 +8,7 @@ from .models import *
 from .utils import set_all_sysIDs_relationship_fields
 
 from access.decorators import admin_only, allowed_users
-from access.forms import GroupForm
+from access.forms import GroupCascadeRolesForm
 from access.models import ITSMGroup
 from access.utils import cascade_roles, get_sidebar_items
 from ticket.utils import set_resolved_tickets_closed
@@ -70,7 +70,7 @@ def admin_panel(request):
             return redirect('admin-panel')
 
 
-    form = GroupForm()
+    form = GroupCascadeRolesForm()
     #Get user sidebar items
     sidebar_items = get_sidebar_items(customer=request.user.customer)
 
