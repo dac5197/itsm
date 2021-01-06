@@ -43,7 +43,7 @@ class GroupFilter(django_filters.FilterSet):
     #Set choices for select fields
     manager = MultipleChoiceFilter(get_all_customer_choices())
     members = MultipleChoiceFilter(get_all_customer_choices())
-    roles = MultipleChoiceFilter(get_all_roles_choices())
+    roles = MultipleChoiceFilter(get_all_role_choices())
 
     class Meta:
         model = ITSMGroup
