@@ -211,15 +211,15 @@ LOGGING = {
 #Deployment checklist
 
 #Cookie settings - force browsers to use secure cookies
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = config('SESSION_COOKIE_SECURE', cast=bool)
+CSRF_COOKIE_SECURE = config('CSRF_COOKIE_SECURE', cast=bool)
 #HSTS (Http Strick Transport Security) - instruct browsers app is https only
-SECURE_HSTS_SECONDS = 31536000 #1 Year
-SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-SECURE_HSTS_PRELOAD = True
+SECURE_HSTS_SECONDS = config('SECURE_HSTS_SECONDS')
+SECURE_HSTS_INCLUDE_SUBDOMAINS = config('SECURE_HSTS_INCLUDE_SUBDOMAINS', cast=bool)
+SECURE_HSTS_PRELOAD = config('SECURE_HSTS_PRELOAD', cast=bool)
 #Redirect http non-secure requests to https
-SECURE_SSL_REDIRECT = True
+SECURE_SSL_REDIRECT = config('SECURE_SSL_REDIRECT', cast=bool)
 #Send only top domain as referred when linked from app to another site
-SECURE_REFERRER_POLICY = 'strict-origin'
+SECURE_REFERRER_POLICY = config('SECURE_REFERRER_POLICY')
 #Cross-site scripting protection
-SECURE_BROWSER_XSS_FILTER = True
+SECURE_BROWSER_XSS_FILTER = config('SECURE_BROWSER_XSS_FILTER', cast=bool)
