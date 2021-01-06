@@ -7,14 +7,6 @@ from django.utils import timezone
 from .models import *
 from .mpt_utils import create_tree_list
 
-#Display random background image on page load 
-#Image must be in static\images directory or subdirectory
-def get_random_bg_img(img_dir):
-    bg_dir = 'static\images\\'+img_dir
-    random_file=random.choice(os.listdir(bg_dir))
-    static_bg_path = 'images/backgrounds/'
-    bg_img = static_bg_path+random_file
-    return bg_img
 
 #Get only the children of a group one level down
 def get_group_direct_descendants(grp):
