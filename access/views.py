@@ -40,11 +40,8 @@ def register_account(request):
                 return redirect(f'/access/register-profile/{user.id}')
     else:
         form = CreateUserForm(initial={'username': create_sso()})
-    
-    bg_img = get_random_bg_img('backgrounds')
 
     context = {
-        'bg_img' : bg_img, 
         'form' : form
     }
 
@@ -79,10 +76,7 @@ def register_profile(request, id):
     else:
         form = CustomerForm(initial={'email':user.email})
 
-    bg_img = get_random_bg_img('backgrounds')
-
     context = {
-        'bg_img' : bg_img, 
         'form' : form,
     }
     
