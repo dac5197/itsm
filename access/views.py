@@ -1,9 +1,11 @@
 import os
 
 from django.apps import apps
+from django.conf import settings
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
+from django.core.mail import send_mail, BadHeaderError
 from django.db.models import Count
 from django.shortcuts import render, redirect
 from django.utils import timezone
@@ -71,6 +73,21 @@ def register_profile(request, id):
             instance.save()
             set_sysID_relationship_fields(instance)
 
+            #Send email notification of new account
+            subject = f'New Account Created for {instance.full_name}'
+            #Create string for email body
+            email_body = f'''
+            New Account Created
+            Username: {user.username}
+            Name: {instance.full_name}
+            Email: {instance.email}
+            '''
+            #Send email
+            try:
+                send_mail(subject=subject, message=email_body, from_email=settings.EMAIL_HOST_USER, recipient_list=['dac5197@live.com'])
+            except BadHeaderError:
+                pass
+            
             #Registration complete - redirect to login page
             return redirect('/access/login')
     else:
