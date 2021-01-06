@@ -206,3 +206,20 @@ LOGGING = {
         },
     }
 }
+
+
+#Deployment checklist
+
+#Cookie settings - force browsers to use secure cookies
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+#HSTS (Http Strick Transport Security) - instruct browsers app is https only
+SECURE_HSTS_SECONDS = 31536000 #1 Year
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
+#Redirect http non-secure requests to https
+SECURE_SSL_REDIRECT = True
+#Send only top domain as referred when linked from app to another site
+SECURE_REFERRER_POLICY = 'strict-origin'
+#Cross-site scripting protection
+SECURE_BROWSER_XSS_FILTER = True
