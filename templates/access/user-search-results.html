@@ -37,7 +37,7 @@
                                 </thead>
                                 {% for customer in customers %}
                                     <tr>
-                                        <td><a href="/access/user-detail/{{customer.user.id}}">{{customer.user.username}}</a></td>
+                                        <td><a href="/access/user-detail/{{customer.id}}">{{customer.user.username}}</a></td>
                                         <td>{{customer.first_name}}</td>
                                         <td>{{customer.last_name}}</td>
                                         <td>{{customer.email}}</td>
