@@ -81,6 +81,7 @@ def register_profile(request, id):
             Username: {user.username}
             Name: {instance.full_name}
             Email: {instance.email}
+            Instance: {settings.BASE_DIR}
             '''
             #Send email
             try:
