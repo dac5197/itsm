@@ -60,7 +60,7 @@
                                             <div class="note-header">
                                                 {% if note.note_taker %}
                                                     <div class="media" style="flex: 2">
-                                                        <img class="d-inline-block mb-2 mr-2 rounded" src="{{note.note_taker.profile_image.url}}" height="45" width="45">
+                                                        <img class="d-inline-block mb-2 mr-2 rounded" src="/media/images/profile_images/{{note.note_taker.id}}/{{note.note_taker.image_filename}}" height="45" width="45">
                                                         <p class="mt-2">{{note.note_taker}}</p>
                                                     </div>
                                                 {% else %}
@@ -85,7 +85,7 @@
                                         <div class="note-header">
                                             {% if note.note_taker %}
                                                 <div class="media" style="flex: 2">
-                                                    <img class="d-inline-block mb-2 mr-2 rounded" src="{{note.note_taker.profile_image.url}}" height="45" width="45">
+                                                    <img class="d-inline-block mb-2 mr-2 rounded" src="/media/images/profile_images/{{note.note_taker.id}}/{{note.note_taker.image_filename}}" height="45" width="45">
                                                     <p class="mt-2">{{note.note_taker}}</p>
                                                 </div>
                                             {% else %}
