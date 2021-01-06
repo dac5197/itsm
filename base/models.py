@@ -63,6 +63,10 @@ class Attachment(models.Model):
     def __str__(self):
         return self.doc_name
 
+    @property
+    def filename(self):
+        return os.path.basename(self.document.name)
+
 
 class CopyList(models.Model):
     name = models.CharField(max_length=100, unique=True, null=False, blank=False)
