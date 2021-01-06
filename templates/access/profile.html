@@ -39,7 +39,7 @@ My Profile
                             </div>
                             <div class="card-body">
                                 <!-- Profile Image -->
-                                <img class="img-fluid rounded mb-3" src="{{request.user.customer.profile_image.url}}?modified={{profile_image_modtimestamp}}">
+                                <img class="img-fluid rounded mb-3" src="/media/images/profile_images/{{request.user.customer.id}}/{{request.user.customer.image_filename}}?modified={{profile_image_modtimestamp}}">
                                 <div class="input-group mb-4">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text" id="inputGroupFileAddon01">{{form.profile_image.label}}</span>

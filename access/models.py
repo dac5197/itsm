@@ -110,6 +110,10 @@ class Customer(models.Model):
         
         return sidebar_items_tree_list
 
+    @property
+    def image_filename(self):
+        return os.path.basename(self.profile_image.name)
+
 
 class Role(models.Model):
     sysID = models.OneToOneField(SysID, on_delete=models.CASCADE, default=SysID.add_new)
