@@ -22,8 +22,8 @@ class CustomerFilter(django_filters.FilterSet):
     updated_range = DateTimeFromToRangeFilter(field_name='updated', lookup_expr='icontains', label='Updated Range', widget=RangeWidget(attrs={'type': 'datetime-local'}))
     
     #Set choices for select fields
-    location = MultipleChoiceFilter()
-    manager = MultipleChoiceFilter()
+    location = MultipleChoiceFilter(get_all_location_choices())
+    manager = MultipleChoiceFilter(get_all_customer_choices())
 
     class Meta:
         model = Customer
@@ -33,12 +33,6 @@ class CustomerFilter(django_filters.FilterSet):
     def username_filter(self, queryset, name, value):
         return Customer.objects.filter(user__username__icontains=value)
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-        #Set values for status select fields from database
-        self.fields['location'].choices = get_all_location_choices()
-        self.fields['manager'].choices = get_all_customer_choices()
 
 class GroupFilter(django_filters.FilterSet):
     active = ChoiceFilter(field_name='active', label='Active', choices=BOOLEAN_FILTER_CHOICES)
@@ -47,19 +41,11 @@ class GroupFilter(django_filters.FilterSet):
     is_heirarchal = ChoiceFilter(field_name='is_heirarchal', label='Is Heirarchal Group?', choices=BOOLEAN_FILTER_CHOICES)
 
     #Set choices for select fields
-    manager = MultipleChoiceFilter()
-    members = MultipleChoiceFilter()
-    roles = MultipleChoiceFilter()
+    manager = MultipleChoiceFilter(get_all_customer_choices())
+    members = MultipleChoiceFilter(get_all_customer_choices())
+    roles = MultipleChoiceFilter(get_all_roles_choices())
 
     class Meta:
         model = ITSMGroup
         fields = '__all__'
         exclude = ['sysID', 'permissions',]
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-        #Set values for status select fields from database
-        self.fields['manager'].choices = get_all_customer_choices()
-        self.fields['members'].choices = get_all_customer_choices()
-        self.fields['roles'].choices = get_all_roles_choices()
